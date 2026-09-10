@@ -1,0 +1,377 @@
+{
+  "info": {
+    "_postman_id": "3f56ad8f-44ce-4ea1-b57a-nava-agent-v2",
+    "name": "NAVA Helpdesk Agent v2.4.0",
+    "description": "LangChain Agent + DeepSeek + MongoDB Hybrid Vector RAG",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3000"
+    },
+    {
+      "key": "sessionId",
+      "value": "customer-001"
+    }
+  ],
+  "item": [
+    {
+      "name": "Chat - Sapaan Identitas NAVA v2.3",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"session_id\": \"test-hallo-v23\",\n  \"question\": \"halloo\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/chat",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "chat"
+          ]
+        }
+      }
+    },
+    {
+      "name": "Chat - Sapaan NAVA Identity",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"session_id\": \"test-hallo-v22\",\n  \"question\": \"halloo\"\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/api/chat",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "chat"
+          ]
+        }
+      }
+    },
+    {
+      "name": "Chat - Regression Struk To The Point",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"session_id\": \"test-struk-v22\",\n  \"question\": \"terus aku beres penjualan, struknya gak keluar\"\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/api/chat",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "chat"
+          ]
+        }
+      }
+    },
+    {
+      "name": "01 - Health",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/health",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "health"
+          ]
+        }
+      }
+    },
+    {
+      "name": "Reset Chat Session",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/api/chat/customer-001",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "chat",
+            "customer-001"
+          ]
+        },
+        "description": "Hapus history chat dan agent trace untuk session test. Gunakan sebelum regression test jika session_id lama pernah menghasilkan jawaban yang salah."
+      },
+      "response": []
+    },
+    {
+      "name": "02 - Direct Knowledge Search - Struk",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"query\": \"struk nota faktur penjualan tidak muncul tidak keluar download\",\n  \"top_k\": 5\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/knowledge/search",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "knowledge",
+            "search"
+          ]
+        }
+      }
+    },
+    {
+      "name": "03 - Agent Chat - Struk Tidak Muncul",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"session_id\": \"{{sessionId}}\",\n  \"question\": \"aku udh beres penjualan, kenapa struknya gak muncul ya?\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/chat",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "chat"
+          ]
+        }
+      }
+    },
+    {
+      "name": "04 - Agent Follow-up - Sudah Allow Popup",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"session_id\": \"{{sessionId}}\",\n  \"question\": \"popupnya udah aku allow tapi masih gak muncul\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/chat",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "chat"
+          ]
+        }
+      }
+    },
+    {
+      "name": "05 - Agent Chat - Timbangan Semantic",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"session_id\": \"customer-timbangan-001\",\n  \"question\": \"pas input barang angka berat dari alatnya gak masuk ke program\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/chat",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "chat"
+          ]
+        }
+      }
+    },
+    {
+      "name": "06 - Agent Chat - Unknown Knowledge",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"session_id\": \"customer-unknown-001\",\n  \"question\": \"gimana cara deploy kubernetes dari menu NAVA?\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/chat",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "chat"
+          ]
+        }
+      }
+    },
+    {
+      "name": "Chat - Struk Tidak Muncul v2.1",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"session_id\": \"customer-struk-v21\",\n  \"question\": \"aku udh beres penjualan, kenapa struknya gak muncul ya?\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/api/chat",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "chat"
+          ]
+        },
+        "description": "Regression test v2.1. primary_article diharapkan: Tidak keluar file download nota penjualan atau pembelian."
+      },
+      "response": []
+    },
+    {
+      "name": "Cross Session - 1. Masalah Timbangan",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"session_id\": \"cross-session-A\",\n  \"customer_id\": \"CUST-DEMO-001\",\n  \"question\": \"pas input barang angka berat dari timbangan gak masuk\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/chat",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "chat"
+          ]
+        }
+      }
+    },
+    {
+      "name": "Cross Session - 2. Lanjut Session Baru",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"session_id\": \"cross-session-B\",\n  \"customer_id\": \"CUST-DEMO-001\",\n  \"question\": \"yang kemarin kambuh lagi\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/chat",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "chat"
+          ]
+        }
+      }
+    },
+    {
+      "name": "Cross Session - 3. Preview Context Customer",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/customer/CUST-DEMO-001/context?session_id=cross-session-B",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "customer",
+            "CUST-DEMO-001",
+            "context"
+          ],
+          "query": [
+            {
+              "key": "session_id",
+              "value": "cross-session-B"
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

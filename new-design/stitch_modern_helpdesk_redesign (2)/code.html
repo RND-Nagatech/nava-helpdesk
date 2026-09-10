@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+
+<html lang="id"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,400;0,500;0,600;1,400&amp;family=JetBrains+Mono:wght@400;500&amp;family=Manrope:wght@500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base { html, body { margin: 0; padding: 0; } body { overscroll-behavior: none; } main > :first-child { margin-top: 0 !important; } main > :last-child { margin-bottom: 0 !important; } } ::-webkit-scrollbar { display: none; }</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { colors: { "primary-fixed": "#d0e4ff", "inverse-on-surface": "#f0f1f4", "surface-container-high": "#e7e8eb", "tertiary": "#7b4200", "error": "#ba1a1a", "tertiary-container": "#9e5700", "secondary-container": "#cce7f4", "on-tertiary": "#ffffff", "surface-bright": "#f8f9fc", "on-primary-fixed": "#001d35", "on-surface": "#191c1e", "on-error": "#ffffff", "primary-fixed-dim": "#acc9ec", "on-tertiary-fixed-variant": "#6d3a00", "on-tertiary-fixed": "#2e1500", "inverse-primary": "#acc9ec", "surface-container-highest": "#e1e2e6", "on-background": "#191c1e", "on-tertiary-container": "#ffe5d2", "surface-container-low": "#f3f3f7", "secondary": "#49626d", "primary": "#365371", "on-secondary-fixed-variant": "#324a55", "surface-variant": "#e1e2e6", "secondary-fixed-dim": "#b0cad8", "on-secondary-fixed": "#031e28", "on-secondary-container": "#4f6874", "outline-variant": "#c3c7ce", "inverse-surface": "#2e3133", "secondary-fixed": "#cce7f4", "surface-tint": "#45617f", "on-primary-container": "#dceaff", "error-container": "#ffdad6", "surface-container": "#edeef1", "background": "#f8f9fc", "tertiary-fixed-dim": "#ffb77a", "outline": "#73777e", "surface": "#f8f9fc", "primary-container": "#4f6b8a", "on-error-container": "#93000a", "tertiary-fixed": "#ffdcc2", "surface-dim": "#d9dadd", "on-primary-fixed-variant": "#2c4966", "surface-container-lowest": "#ffffff", "on-secondary": "#ffffff", "on-surface-variant": "#43474d", "on-primary": "#ffffff" }, borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" }, spacing: { "panel-list-width": "22rem", "panel-meta-width": "20rem", "space-2xl": "2rem", "space-xl": "1.5rem", "space-3xl": "2.5rem", "space-xxs": "0.125rem", "space-xs": "0.25rem", "space-base": "1rem", "space-4xl": "3rem", "chat-max-bubble-width": "80%", "space-lg": "1.25rem", "panel-nav-width": "16rem", "space-md": "0.75rem", "space-sm": "0.5rem" }, fontFamily: { "label-md": ["Hanken Grotesk"], "label-sm": ["Hanken Grotesk"], "headline-md": ["Manrope"], "code-sm": ["JetBrains Mono"], "body-sm": ["Hanken Grotesk"], "display-lg": ["Manrope"], "body-md": ["Hanken Grotesk"], "display-lg-mobile": ["Manrope"], "label-lg": ["Hanken Grotesk"], "body-lg": ["Hanken Grotesk"], "headline-lg": ["Manrope"], "headline-sm": ["Manrope"] }, fontSize: { "label-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0.015em", "fontWeight": "500" }], "label-sm": ["11px", { "lineHeight": "14px", "letterSpacing": "0.02em", "fontWeight": "500" }], "headline-md": ["20px", { "lineHeight": "28px", "letterSpacing": "-0.005em", "fontWeight": "600" }], "code-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0em", "fontWeight": "400" }], "body-sm": ["13px", { "lineHeight": "18px", "letterSpacing": "0.005em", "fontWeight": "400" }], "display-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "600" }], "body-md": ["14px", { "lineHeight": "22px", "letterSpacing": "0em", "fontWeight": "400" }], "display-lg-mobile": ["26px", { "lineHeight": "34px", "letterSpacing": "-0.015em", "fontWeight": "600" }], "label-lg": ["13px", { "lineHeight": "18px", "letterSpacing": "0.01em", "fontWeight": "600" }], "body-lg": ["15px", { "lineHeight": "24px", "letterSpacing": "0em", "fontWeight": "400" }], "headline-lg": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600" }], "headline-sm": ["16px", { "lineHeight": "24px", "letterSpacing": "0em", "fontWeight": "600" }] } } } };</script></head><body class="bg-background font-body-md text-on-surface min-h-screen"><header class="fixed top-0 w-full z-50 bg-surface-container-lowest/90 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="h-16 w-full px-space-xl flex items-center justify-between gap-space-base"><div class="flex items-center gap-space-md"><img alt="Brand logo. - Primary color: #0f172a
+- Font: plusJakartaSans
+- Mode: light
+- Roundness: rounded-md
+" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1XM-ly19vU7JHJoCWuhOGQ-H7LxQOMWwx1q1crzEjM21muZlW8v-NmFEmID0toU9_IlfLA_O_UZgvVAzDuOxYe2qJtqqjhVvROwTAWe2v0BSqwI4J3Uuz7U2pdpGJJ7qqUOFy6plxGUqT7lDZJb_5RZ7SKNO7JiIVvEw3x30jBDYkn7IpYMk8TbkLq4Va-HFgLrZ3YB42zmOH7dLFB8yXs7BJ2YMJBfGiEdBgn-pFBmOg3j69MgQePwSHVZ"/><div class="flex flex-col"><span class="font-headline-sm text-headline-sm text-on-surface leading-tight">NAVA Helpdesk</span><span class="font-label-sm text-label-sm text-on-surface-variant">Sistem Dukungan &amp; Operasional</span></div></div><nav class="flex items-center gap-space-xs p-space-xxs rounded-xl bg-surface-container-low" data-active-classes="bg-primary-container text-on-primary-container shadow-sm"><a class="px-space-md py-space-xs rounded-lg font-label-md text-label-md text-on-surface-variant hover:text-on-surface transition-all" data-path="chat-&amp;-tiket" href="#">Chat &amp; Tiket</a><a aria-current="page" class="px-space-md py-space-xs rounded-lg font-label-md transition-all bg-primary-container text-on-primary-container shadow-sm" data-path="daftar-tiket" href="#">Daftar Tiket</a><a class="px-space-md py-space-xs rounded-lg font-label-md text-label-md text-on-surface-variant hover:text-on-surface transition-all" data-path="dashboard" href="#">Dashboard</a></nav><div class="flex items-center gap-space-base"><div class="flex items-center gap-space-xs px-space-sm py-space-xxs rounded-full bg-surface-container-low"><span class="relative flex h-2 w-2"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-secondary-fixed-dim opacity-75"></span><span class="relative inline-flex rounded-full h-2 w-2 bg-primary"></span></span><span class="font-label-sm text-label-sm text-on-surface-variant">Online</span></div><div class="relative flex items-center justify-center"><button class="w-9 h-9 rounded-xl flex items-center justify-center text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low transition-colors"><span class="material-symbols-outlined text-[20px]">notifications</span></button><span class="absolute top-1 right-1 flex h-4 w-4 items-center justify-center rounded-full bg-error text-on-error font-label-sm text-[10px]">3</span></div><div class="flex items-center gap-space-md pl-space-sm"><div class="flex flex-col text-right hidden lg:flex"><span class="font-label-md text-label-md text-on-surface leading-snug">Arya Pratama</span><span class="font-label-sm text-label-sm text-on-surface-variant leading-snug">Tier 2 Helpdesk</span></div><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></div></div></header><main class="w-full pt-16 bg-background min-h-[calc(100vh-4rem)]"><div class="flex flex-col w-full pb-space-4xl">
+<!-- Top Ambient Banner Layer -->
+<div class="w-full bg-surface-container-low px-space-xl py-space-2xl">
+<div class="max-w-7xl mx-auto flex flex-col md:flex-row md:items-end justify-between gap-space-lg">
+<div class="flex flex-col gap-space-xs max-w-2xl">
+<div class="flex items-center gap-space-sm">
+<span class="px-space-sm py-space-xxs rounded-full bg-secondary-container text-on-secondary-container font-label-sm text-label-sm uppercase tracking-wider">Queue Routing Engine</span>
+<span class="flex items-center gap-1 text-on-surface-variant font-code-sm text-code-sm">
+<span class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span>
+            Sync Real-time Active
+          </span>
+</div>
+<h1 class="font-headline-lg text-headline-lg text-on-surface tracking-tight">Tiket &amp; Antrean Handover</h1>
+<p class="font-body-md text-body-md text-on-surface-variant leading-relaxed">
+          Kelola antrean tiket customer, pantau eskalasi bot secara real-time, dan delegasikan penanganan kendala ke petugas terkait.
+        </p>
+</div>
+<!-- Quick Metrics Counter Group -->
+<div class="flex items-center gap-space-md">
+<div class="bg-surface-container-lowest shadow-sm rounded-xl px-space-lg py-space-sm flex items-center gap-space-md">
+<div class="w-10 h-10 rounded-lg bg-tertiary-fixed flex items-center justify-center text-tertiary">
+<span class="material-symbols-outlined text-[22px]">pending_actions</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface-variant">Menunggu Tindakan</span>
+<span class="font-headline-md text-headline-md text-on-surface leading-tight">1 <span class="font-label-md text-label-md text-error font-medium">(Kritis)</span></span>
+</div>
+</div>
+<div class="bg-surface-container-lowest shadow-sm rounded-xl px-space-lg py-space-sm flex items-center gap-space-md">
+<div class="w-10 h-10 rounded-lg bg-secondary-container flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[22px]">check_circle</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface-variant">Selesai Hari Ini</span>
+<span class="font-headline-md text-headline-md text-on-surface leading-tight">3 <span class="font-label-md text-label-md text-on-surface-variant font-medium">/ 4</span></span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="max-w-7xl w-full mx-auto px-space-xl flex flex-col gap-space-2xl -mt-4">
+<!-- Main Workbench Area -->
+<div class="bg-surface-container-lowest rounded-xl shadow-sm flex flex-col overflow-hidden">
+<!-- Controls & Filter Toolbar -->
+<div class="p-space-lg flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-space-md bg-surface-container-lowest">
+<!-- Filter Tabs -->
+<div class="flex items-center gap-space-xs p-1 bg-surface-container-low rounded-lg overflow-x-auto">
+<button class="px-space-md py-space-xs rounded-md font-label-md text-label-md bg-surface-container-lowest text-on-surface shadow-xs transition-all flex items-center gap-1.5 whitespace-nowrap">
+<span>Semua Status</span>
+<span class="px-1.5 py-0.2 rounded-full bg-surface-container-high text-on-surface-variant font-code-sm text-[11px]">4</span>
+</button>
+<button class="px-space-md py-space-xs rounded-md font-label-md text-label-md text-on-surface-variant hover:text-on-surface transition-all flex items-center gap-1.5 whitespace-nowrap">
+<span>Baru / Menunggu</span>
+<span class="px-1.5 py-0.2 rounded-full bg-tertiary-fixed text-tertiary font-code-sm text-[11px] font-semibold">1</span>
+</button>
+<button class="px-space-md py-space-xs rounded-md font-label-md text-label-md text-on-surface-variant hover:text-on-surface transition-all flex items-center gap-1.5 whitespace-nowrap">
+<span>Ditangani</span>
+<span class="px-1.5 py-0.2 rounded-full bg-surface-container text-on-surface-variant font-code-sm text-[11px]">0</span>
+</button>
+<button class="px-space-md py-space-xs rounded-md font-label-md text-label-md text-on-surface-variant hover:text-on-surface transition-all flex items-center gap-1.5 whitespace-nowrap">
+<span>Selesai</span>
+<span class="px-1.5 py-0.2 rounded-full bg-surface-container text-on-surface-variant font-code-sm text-[11px]">3</span>
+</button>
+</div>
+<!-- Search & Auxiliary Actions -->
+<div class="flex items-center gap-space-sm flex-wrap sm:flex-nowrap">
+<div class="relative flex-1 sm:w-72">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-[18px]">search</span>
+<input class="w-full bg-surface-container-low focus:bg-surface-container-lowest text-on-surface rounded-lg pl-9 pr-space-md py-space-xs font-body-sm text-body-sm outline-none transition-all placeholder:text-outline" placeholder="Cari tiket, customer, subject..." type="text"/>
+</div>
+<div class="relative">
+<select class="appearance-none bg-surface-container-low text-on-surface font-label-md text-label-md rounded-lg pl-space-md pr-8 py-space-xs outline-none cursor-pointer hover:bg-surface-container transition-all">
+<option value="">Prioritas: Semua</option>
+<option value="high">Tinggi</option>
+<option selected="" value="normal">Normal</option>
+<option value="low">Rendah</option>
+</select>
+<span class="material-symbols-outlined absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none text-on-surface-variant text-[18px]">expand_more</span>
+</div>
+<button class="px-space-md py-space-xs rounded-lg bg-surface-container-low hover:bg-surface-container text-on-surface font-label-md text-label-md flex items-center gap-1.5 transition-all whitespace-nowrap">
+<span class="material-symbols-outlined text-[18px] text-secondary">file_download</span>
+            Export CSV
+          </button>
+</div>
+</div>
+<!-- Data Table -->
+<div class="w-full overflow-x-auto">
+<table class="w-full text-left font-body-sm text-body-sm text-on-surface border-collapse">
+<thead>
+<tr class="bg-surface-container-low text-on-surface-variant font-label-sm text-label-sm tracking-wider">
+<th class="py-space-md px-space-lg">Kode Tiket</th>
+<th class="py-space-md px-space-md">Customer</th>
+<th class="py-space-md px-space-lg min-w-[320px]">Subjek &amp; Kendala</th>
+<th class="py-space-md px-space-md">Prioritas &amp; Status</th>
+<th class="py-space-md px-space-md">Handover Status</th>
+<th class="py-space-md px-space-md">Assigned Helpdesk</th>
+<th class="py-space-md px-space-md">Waktu</th>
+<th class="py-space-md px-space-lg text-right">Aksi</th>
+</tr>
+</thead>
+<tbody class="divide-none">
+<!-- Row 1: Attention Required -->
+<tr class="bg-surface-container-lowest hover:bg-surface-container-low/70 transition-colors group relative">
+<td class="py-space-lg px-space-lg">
+<div class="flex items-center gap-space-xs">
+<span class="w-1.5 h-6 rounded-full bg-tertiary"></span>
+<div class="flex flex-col">
+<span class="font-code-sm text-code-sm font-medium text-primary hover:underline cursor-pointer">TCK-20260909-8DB322</span>
+<span class="font-label-sm text-[10px] text-on-surface-variant uppercase">Eskalasi Bot</span>
+</div>
+</div>
+</td>
+<td class="py-space-lg px-space-md">
+<div class="flex items-center gap-space-sm">
+<div class="w-8 h-8 rounded-full bg-secondary-container text-secondary flex items-center justify-center font-headline-sm text-headline-sm uppercase">A</div>
+<div class="flex flex-col">
+<span class="font-label-lg text-label-lg text-on-surface">aan</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Italy Store</span>
+</div>
+</div>
+</td>
+<td class="py-space-lg px-space-lg">
+<div class="flex flex-col gap-0.5">
+<span class="font-label-md text-label-md text-on-surface line-clamp-1 font-semibold">User meminta bantuan petugas manusia untuk menangani kendala login</span>
+<p class="font-body-sm text-body-sm text-on-surface-variant line-clamp-2 leading-relaxed">
+                    Tidak bisa masuk karena muncul notifikasi user id sedang digunakan di perangkat lain padahal sesi sebelumnya telah ditutup.
+                  </p>
+</div>
+</td>
+<td class="py-space-lg px-space-md">
+<div class="flex flex-col gap-1 items-start">
+<span class="px-2 py-0.5 rounded-full bg-surface-container-high text-on-surface font-label-sm text-label-sm">Normal</span>
+<span class="px-2 py-0.5 rounded-full bg-tertiary-fixed text-tertiary font-label-sm text-label-sm font-semibold flex items-center gap-1">
+<span class="w-1 h-1 rounded-full bg-tertiary animate-ping"></span>
+                    Baru
+                  </span>
+</div>
+</td>
+<td class="py-space-lg px-space-md">
+<span class="px-2.5 py-1 rounded-full bg-tertiary-fixed text-on-tertiary-fixed-variant font-label-sm text-label-sm font-medium inline-flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">hourglass_top</span>
+                  Menunggu Petugas
+                </span>
+</td>
+<td class="py-space-lg px-space-md">
+<span class="font-body-sm text-body-sm text-outline italic">Belum ditugaskan</span>
+</td>
+<td class="py-space-lg px-space-md">
+<div class="flex flex-col">
+<span class="font-code-sm text-code-sm text-on-surface">14:12</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">9/9/2026</span>
+</div>
+</td>
+<td class="py-space-lg px-space-lg text-right">
+<div class="flex items-center justify-end gap-space-xs">
+<button class="px-space-md py-1.5 rounded-lg bg-primary hover:bg-primary-container text-on-primary font-label-md text-label-md shadow-xs transition-all flex items-center gap-1 whitespace-nowrap">
+<span class="material-symbols-outlined text-[16px]">assignment_ind</span>
+                    Ambil Tiket
+                  </button>
+<button class="p-1.5 rounded-lg bg-surface-container-low hover:bg-surface-container text-on-surface-variant hover:text-on-surface transition-all" title="Buka Chat">
+<span class="material-symbols-outlined text-[18px]">chat</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 2: Resolved -->
+<tr class="bg-surface-bright hover:bg-surface-container-low/70 transition-colors">
+<td class="py-space-lg px-space-lg">
+<div class="flex items-center gap-space-xs">
+<span class="w-1.5 h-6 rounded-full bg-surface-container-highest"></span>
+<div class="flex flex-col">
+<span class="font-code-sm text-code-sm text-secondary hover:underline cursor-pointer">TCK-20260909-91B146</span>
+<span class="font-label-sm text-[10px] text-on-surface-variant uppercase">Resolusi Kilat</span>
+</div>
+</div>
+</td>
+<td class="py-space-lg px-space-md">
+<div class="flex items-center gap-space-sm">
+<div class="w-8 h-8 rounded-full bg-surface-container text-on-surface-variant flex items-center justify-center font-headline-sm text-headline-sm uppercase">A</div>
+<div class="flex flex-col">
+<span class="font-label-lg text-label-lg text-on-surface">aan</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Direct Client</span>
+</div>
+</div>
+</td>
+<td class="py-space-lg px-space-lg">
+<div class="flex flex-col gap-0.5">
+<span class="font-label-md text-label-md text-on-surface line-clamp-1 font-semibold">User tidak bisa login karena muncul notifikasi user id sedang digunakan</span>
+<p class="font-body-sm text-body-sm text-on-surface-variant line-clamp-1">
+                    Sesi zombie di-clear oleh operator via panel otorisasi SSO. Selesai teratasi.
+                  </p>
+</div>
+</td>
+<td class="py-space-lg px-space-md">
+<div class="flex flex-col gap-1 items-start">
+<span class="px-2 py-0.5 rounded-full bg-surface-container-high text-on-surface font-label-sm text-label-sm">Normal</span>
+<span class="px-2 py-0.5 rounded-full bg-secondary-container text-on-secondary-container font-label-sm text-label-sm">Selesai</span>
+</div>
+</td>
+<td class="py-space-lg px-space-md">
+<span class="px-2.5 py-1 rounded-full bg-secondary-fixed text-on-secondary-fixed font-label-sm text-label-sm font-medium inline-flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">done_all</span>
+                  Selesai
+                </span>
+</td>
+<td class="py-space-lg px-space-md">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px] text-primary">support_agent</span>
+<span class="font-body-sm text-body-sm text-on-surface">Petugas Helpdesk</span>
+</div>
+</td>
+<td class="py-space-lg px-space-md">
+<div class="flex flex-col">
+<span class="font-code-sm text-code-sm text-on-surface">14:06</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">9/9/2026</span>
+</div>
+</td>
+<td class="py-space-lg px-space-lg text-right">
+<button class="px-space-md py-1.5 rounded-lg bg-surface-container-low hover:bg-surface-container text-on-surface font-label-md text-label-md transition-all inline-flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px] text-secondary">chat_bubble_outline</span>
+                  Buka Chat
+                </button>
+</td>
+</tr>
+<!-- Row 3: Resolved -->
+<tr class="bg-surface-container-lowest hover:bg-surface-container-low/70 transition-colors">
+<td class="py-space-lg px-space-lg">
+<div class="flex items-center gap-space-xs">
+<span class="w-1.5 h-6 rounded-full bg-surface-container-highest"></span>
+<div class="flex flex-col">
+<span class="font-code-sm text-code-sm text-secondary hover:underline cursor-pointer">TCK-20260909-71FDC0</span>
+<span class="font-label-sm text-[10px] text-on-surface-variant uppercase">Umum</span>
+</div>
+</div>
+</td>
+<td class="py-space-lg px-space-md">
+<div class="flex items-center gap-space-sm">
+<div class="w-8 h-8 rounded-full bg-surface-container text-on-surface-variant flex items-center justify-center font-headline-sm text-headline-sm uppercase">C</div>
+<div class="flex flex-col">
+<span class="font-label-lg text-label-lg text-on-surface">Customer NAVA</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Verified</span>
+</div>
+</div>
+</td>
+<td class="py-space-lg px-space-lg">
+<div class="flex flex-col gap-0.5">
+<span class="font-label-md text-label-md text-on-surface line-clamp-1 font-semibold">Permintaan bantuan helpdesk</span>
+<p class="font-body-sm text-body-sm text-on-surface-variant line-clamp-1">
+                    Pertanyaan panduan integrasi webhook katalog produk untuk cabang baru.
+                  </p>
+</div>
+</td>
+<td class="py-space-lg px-space-md">
+<div class="flex flex-col gap-1 items-start">
+<span class="px-2 py-0.5 rounded-full bg-surface-container-high text-on-surface font-label-sm text-label-sm">Normal</span>
+<span class="px-2 py-0.5 rounded-full bg-secondary-container text-on-secondary-container font-label-sm text-label-sm">Selesai</span>
+</div>
+</td>
+<td class="py-space-lg px-space-md">
+<span class="px-2.5 py-1 rounded-full bg-secondary-fixed text-on-secondary-fixed font-label-sm text-label-sm font-medium inline-flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">done_all</span>
+                  Selesai
+                </span>
+</td>
+<td class="py-space-lg px-space-md">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px] text-primary">support_agent</span>
+<span class="font-body-sm text-body-sm text-on-surface">Petugas Helpdesk</span>
+</div>
+</td>
+<td class="py-space-lg px-space-md">
+<div class="flex flex-col">
+<span class="font-code-sm text-code-sm text-on-surface">13:14</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">9/9/2026</span>
+</div>
+</td>
+<td class="py-space-lg px-space-lg text-right">
+<button class="px-space-md py-1.5 rounded-lg bg-surface-container-low hover:bg-surface-container text-on-surface font-label-md text-label-md transition-all inline-flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px] text-secondary">chat_bubble_outline</span>
+                  Buka Chat
+                </button>
+</td>
+</tr>
+<!-- Row 4: Resolved Smoke Agent -->
+<tr class="bg-surface-bright hover:bg-surface-container-low/70 transition-colors">
+<td class="py-space-lg px-space-lg">
+<div class="flex items-center gap-space-xs">
+<span class="w-1.5 h-6 rounded-full bg-surface-container-highest"></span>
+<div class="flex flex-col">
+<span class="font-code-sm text-code-sm text-secondary hover:underline cursor-pointer">TCK-20260909-5923E2</span>
+<span class="font-label-sm text-[10px] text-on-surface-variant uppercase">QA Internal</span>
+</div>
+</div>
+</td>
+<td class="py-space-lg px-space-md">
+<div class="flex items-center gap-space-sm">
+<div class="w-8 h-8 rounded-full bg-surface-container text-on-surface-variant flex items-center justify-center font-headline-sm text-headline-sm uppercase">S</div>
+<div class="flex flex-col">
+<span class="font-label-lg text-label-lg text-on-surface">Smoke Customer</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Automated Test</span>
+</div>
+</div>
+</td>
+<td class="py-space-lg px-space-lg">
+<div class="flex flex-col gap-0.5">
+<span class="font-label-md text-label-md text-on-surface line-clamp-1 font-semibold">Smoke escalation</span>
+<p class="font-body-sm text-body-sm text-on-surface-variant line-clamp-1">
+                    Pengujian handover bot-ke-manusia siklus rilis sprint build v4.21.
+                  </p>
+</div>
+</td>
+<td class="py-space-lg px-space-md">
+<div class="flex flex-col gap-1 items-start">
+<span class="px-2 py-0.5 rounded-full bg-surface-container-high text-on-surface font-label-sm text-label-sm">Normal</span>
+<span class="px-2 py-0.5 rounded-full bg-secondary-container text-on-secondary-container font-label-sm text-label-sm">Selesai</span>
+</div>
+</td>
+<td class="py-space-lg px-space-md">
+<span class="px-2.5 py-1 rounded-full bg-secondary-fixed text-on-secondary-fixed font-label-sm text-label-sm font-medium inline-flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">done_all</span>
+                  Selesai
+                </span>
+</td>
+<td class="py-space-lg px-space-md">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px] text-secondary">terminal</span>
+<span class="font-body-sm text-body-sm text-on-surface">Smoke Agent</span>
+</div>
+</td>
+<td class="py-space-lg px-space-md">
+<div class="flex flex-col">
+<span class="font-code-sm text-code-sm text-on-surface">12:20</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">9/9/2026</span>
+</div>
+</td>
+<td class="py-space-lg px-space-lg text-right">
+<button class="px-space-md py-1.5 rounded-lg bg-surface-container-low hover:bg-surface-container text-on-surface font-label-md text-label-md transition-all inline-flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px] text-secondary">chat_bubble_outline</span>
+                  Buka Chat
+                </button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Pagination Footer -->
+<div class="px-space-lg py-space-md bg-surface-container-lowest flex items-center justify-between gap-space-md flex-wrap text-on-surface-variant font-label-sm text-label-sm">
+<div class="flex items-center gap-space-sm">
+<span>Menampilkan <strong>4</strong> dari <strong>4</strong> tiket antrean</span>
+<span class="inline-block w-1 h-1 rounded-full bg-outline-variant"></span>
+<span>Buffer: Real-time Webhook ID-JKT</span>
+</div>
+<div class="flex items-center gap-space-xs">
+<button class="p-1 rounded bg-surface-container-low text-outline opacity-50 cursor-not-allowed" disabled="">
+<span class="material-symbols-outlined text-[18px]">chevron_left</span>
+</button>
+<span class="px-2.5 py-1 rounded bg-primary-container text-on-primary-container font-medium">1</span>
+<button class="p-1 rounded bg-surface-container-low text-outline opacity-50 cursor-not-allowed" disabled="">
+<span class="material-symbols-outlined text-[18px]">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Live System Capture Reference Strip -->
+<div class="flex flex-col gap-space-sm">
+<div class="flex items-center justify-between">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-on-surface-variant flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px] text-secondary">photo_camera</span>
+          Referensi Snapshot Audit &amp; Tampilan Konsol
+        </span>
+<span class="font-code-sm text-code-sm text-outline">Cluster Telemetry 2026-09-09</span>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-space-lg">
+<div class="bg-surface-container-lowest p-space-md rounded-xl shadow-sm flex flex-col gap-space-xs">
+<div class="flex items-center justify-between text-on-surface-variant font-label-sm text-label-sm pb-1">
+<span class="font-medium text-on-surface">Snapshot 14.15 WIB (Eskalasi Terbuka)</span>
+<span class="font-code-sm text-code-sm">SRC_LOG_27</span>
+</div>
+<div class="w-full h-36 rounded-lg overflow-hidden bg-surface-container relative">
+<img alt="Audit snapshot 14.15" class="w-full h-full object-cover object-top hover:scale-105 transition-transform duration-300" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBE8CnSLC3qHEHVEpLSPkslDZuAIzTvvlqfFH7nVBqpbjZM6IKQDdsdbXgn-hXnMNfX9No3RFNlu_Ao4nwscb_50nymX6LvXr7wdg9-Agad8RSe-stV5F7taXflEdtLt-HIBmd5cVL4gpFHy50VpdAyk1a0t_QYDxvwEWIK4EBW_Wo7Y7-GOw_oOQW2I-fTu4G7L6PL3VuLbTX8gdKRtYs8cBWbo_QsGowEkgw9RMxpfW8hvvhgx3lVSjHIlZNti0Se5yY"/>
+</div>
+<p class="font-label-sm text-[11px] text-on-surface-variant">Log capture saat customer aan mengirimkan permintaan bantuan manusia dari Italy Store.</p>
+</div>
+<div class="bg-surface-container-lowest p-space-md rounded-xl shadow-sm flex flex-col gap-space-xs">
+<div class="flex items-center justify-between text-on-surface-variant font-label-sm text-label-sm pb-1">
+<span class="font-medium text-on-surface">Snapshot 14.42 WIB (Verifikasi Selesai)</span>
+<span class="font-code-sm text-code-sm">SRC_LOG_05</span>
+</div>
+<div class="w-full h-36 rounded-lg overflow-hidden bg-surface-container relative">
+<img alt="Audit snapshot 14.42" class="w-full h-full object-cover object-top hover:scale-105 transition-transform duration-300" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA9tUfsyeV3bLnEyFRkyZk1kylxSXWnBgPozfFbcxpsCnxechsSo02YNpFlb5xC9qv_IujorEF-o9uVeIUUXRJhZPtGlbQjipKBTf-WAtwNpEDAJpCvAoeHaQ_FatY_nbKpzO7KxHgPUjDVTdjBvAlsgZ5xWKxhyJeWuHZ4cjoj6Sgq7G1s5SNzMmpjU9VMypheeMpl_-QE-avu-ToHPGoWnC76tmr2kGrOCRQpE8iiUqGTd6XCkp5itqX8UFpetwlELug"/>
+</div>
+<p class="font-label-sm text-[11px] text-on-surface-variant">Status tiket tersinkronisasi kembali ke pipeline konsol pusat.</p>
+</div>
+</div>
+</div>
+<!-- Operational Knowledge & SLA Cards -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-space-lg">
+<!-- Auto-Handover Policy -->
+<div class="bg-surface-container-lowest p-space-xl rounded-xl shadow-sm flex flex-col justify-between gap-space-md">
+<div class="flex flex-col gap-space-sm">
+<div class="w-9 h-9 rounded-lg bg-surface-container flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[20px]">smart_toy</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Aturan Auto-Handover</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant leading-relaxed">
+            Bot akan otomatis melepaskan interaksi ke petugas manusia apabila terdeteksi sentimen frustrasi atau kendala autentikasi SSO lebih dari 2 kali percobaan gagal.
+          </p>
+</div>
+<div class="flex items-center gap-space-xs font-label-sm text-label-sm text-primary font-medium">
+<span class="material-symbols-outlined text-[16px]">tune</span>
+          Konfigurasi Ambang Bot
+        </div>
+</div>
+<!-- SLA Tanggap Cepat -->
+<div class="bg-surface-container-lowest p-space-xl rounded-xl shadow-sm flex flex-col justify-between gap-space-md">
+<div class="flex flex-col gap-space-sm">
+<div class="w-9 h-9 rounded-lg bg-secondary-container flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined text-[20px]">timer</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">SLA Tanggap Cepat</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant leading-relaxed">
+            Batas waktu klaim tiket berstatus 'Baru' adalah <strong>3 menit</strong> sejak dialihkan. Saat ini tiket <span class="font-code-sm text-primary">8DB322</span> mendekati threshold peringatan Tier 2.
+          </p>
+</div>
+<div class="w-full bg-surface-container rounded-full h-1.5 overflow-hidden">
+<div class="bg-tertiary h-full w-3/4 rounded-full"></div>
+</div>
+</div>
+<!-- Protokol Helpdesk -->
+<div class="bg-surface-container-lowest p-space-xl rounded-xl shadow-sm flex flex-col justify-between gap-space-md">
+<div class="flex flex-col gap-space-sm">
+<div class="w-9 h-9 rounded-lg bg-surface-container-high flex items-center justify-center text-on-surface-variant">
+<span class="material-symbols-outlined text-[20px]">verified_user</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Standar Keamanan Sesi</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant leading-relaxed">
+            Sebelum mereset sesi aktif pengguna yang terkunci, pastikan telah melakukan verifikasi identitas token customer atau konfirmasi ID toko yang valid.
+          </p>
+</div>
+<span class="font-code-sm text-code-sm text-on-surface-variant">SOP-SEC-2026/09</span>
+</div>
+</div>
+</div>
+</div></main><footer class="w-full bg-surface-container-lowest shadow-[0_-1px_6px_rgba(0,0,0,0.02)]"><div class="w-full px-space-xl py-space-md flex flex-col md:flex-row items-center justify-between gap-space-sm text-on-surface-variant font-label-sm text-label-sm"><span>© 2025 NAVA Operational Ecosystem. Dilindungi Hak Cipta.</span><div class="flex items-center gap-space-lg"><span>Respon SLA: 99.4%</span><span>Server: ID-JKT-02</span></div></div></footer></body></html>

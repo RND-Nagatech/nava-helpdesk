@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+
+<html lang="id"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,400;0,500;0,600;1,400&amp;family=JetBrains+Mono:wght@400;500&amp;family=Manrope:wght@500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base { html, body { margin: 0; padding: 0; } body { overscroll-behavior: none; } main > :first-child { margin-top: 0 !important; } main > :last-child { margin-bottom: 0 !important; } } ::-webkit-scrollbar { display: none; }</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { colors: { "primary-fixed": "#d0e4ff", "inverse-on-surface": "#f0f1f4", "surface-container-high": "#e7e8eb", "tertiary": "#7b4200", "error": "#ba1a1a", "tertiary-container": "#9e5700", "secondary-container": "#cce7f4", "on-tertiary": "#ffffff", "surface-bright": "#f8f9fc", "on-primary-fixed": "#001d35", "on-surface": "#191c1e", "on-error": "#ffffff", "primary-fixed-dim": "#acc9ec", "on-tertiary-fixed-variant": "#6d3a00", "on-tertiary-fixed": "#2e1500", "inverse-primary": "#acc9ec", "surface-container-highest": "#e1e2e6", "on-background": "#191c1e", "on-tertiary-container": "#ffe5d2", "surface-container-low": "#f3f3f7", "secondary": "#49626d", "primary": "#365371", "on-secondary-fixed-variant": "#324a55", "surface-variant": "#e1e2e6", "secondary-fixed-dim": "#b0cad8", "on-secondary-fixed": "#031e28", "on-secondary-container": "#4f6874", "outline-variant": "#c3c7ce", "inverse-surface": "#2e3133", "secondary-fixed": "#cce7f4", "surface-tint": "#45617f", "on-primary-container": "#dceaff", "error-container": "#ffdad6", "surface-container": "#edeef1", "background": "#f8f9fc", "tertiary-fixed-dim": "#ffb77a", "outline": "#73777e", "surface": "#f8f9fc", "primary-container": "#4f6b8a", "on-error-container": "#93000a", "tertiary-fixed": "#ffdcc2", "surface-dim": "#d9dadd", "on-primary-fixed-variant": "#2c4966", "surface-container-lowest": "#ffffff", "on-secondary": "#ffffff", "on-surface-variant": "#43474d", "on-primary": "#ffffff" }, borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" }, spacing: { "panel-list-width": "22rem", "panel-meta-width": "20rem", "space-2xl": "2rem", "space-xl": "1.5rem", "space-3xl": "2.5rem", "space-xxs": "0.125rem", "space-xs": "0.25rem", "space-base": "1rem", "space-4xl": "3rem", "chat-max-bubble-width": "80%", "space-lg": "1.25rem", "panel-nav-width": "16rem", "space-md": "0.75rem", "space-sm": "0.5rem" }, fontFamily: { "label-md": ["Hanken Grotesk"], "label-sm": ["Hanken Grotesk"], "headline-md": ["Manrope"], "code-sm": ["JetBrains Mono"], "body-sm": ["Hanken Grotesk"], "display-lg": ["Manrope"], "body-md": ["Hanken Grotesk"], "display-lg-mobile": ["Manrope"], "label-lg": ["Hanken Grotesk"], "body-lg": ["Hanken Grotesk"], "headline-lg": ["Manrope"], "headline-sm": ["Manrope"] }, fontSize: { "label-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0.015em", "fontWeight": "500" }], "label-sm": ["11px", { "lineHeight": "14px", "letterSpacing": "0.02em", "fontWeight": "500" }], "headline-md": ["20px", { "lineHeight": "28px", "letterSpacing": "-0.005em", "fontWeight": "600" }], "code-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0em", "fontWeight": "400" }], "body-sm": ["13px", { "lineHeight": "18px", "letterSpacing": "0.005em", "fontWeight": "400" }], "display-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "600" }], "body-md": ["14px", { "lineHeight": "22px", "letterSpacing": "0em", "fontWeight": "400" }], "display-lg-mobile": ["26px", { "lineHeight": "34px", "letterSpacing": "-0.015em", "fontWeight": "600" }], "label-lg": ["13px", { "lineHeight": "18px", "letterSpacing": "0.01em", "fontWeight": "600" }], "body-lg": ["15px", { "lineHeight": "24px", "letterSpacing": "0em", "fontWeight": "400" }], "headline-lg": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600" }], "headline-sm": ["16px", { "lineHeight": "24px", "letterSpacing": "0em", "fontWeight": "600" }] } } } };</script></head><body class="bg-background font-body-md text-on-surface min-h-screen"><header class="fixed top-0 w-full z-50 bg-surface-container-lowest/90 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="h-16 w-full px-space-xl flex items-center justify-between gap-space-base"><div class="flex items-center gap-space-md"><img alt="Brand logo. - Primary color: #0f172a
+- Font: plusJakartaSans
+- Mode: light
+- Roundness: rounded-md
+" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1XM-ly19vU7JHJoCWuhOGQ-H7LxQOMWwx1q1crzEjM21muZlW8v-NmFEmID0toU9_IlfLA_O_UZgvVAzDuOxYe2qJtqqjhVvROwTAWe2v0BSqwI4J3Uuz7U2pdpGJJ7qqUOFy6plxGUqT7lDZJb_5RZ7SKNO7JiIVvEw3x30jBDYkn7IpYMk8TbkLq4Va-HFgLrZ3YB42zmOH7dLFB8yXs7BJ2YMJBfGiEdBgn-pFBmOg3j69MgQePwSHVZ"/><div class="flex flex-col"><span class="font-headline-sm text-headline-sm text-on-surface leading-tight">NAVA Helpdesk</span><span class="font-label-sm text-label-sm text-on-surface-variant">Sistem Dukungan &amp; Operasional</span></div></div><nav class="flex items-center gap-space-xs p-space-xxs rounded-xl bg-surface-container-low" data-active-classes="bg-primary-container text-on-primary-container shadow-sm"><a class="px-space-md py-space-xs rounded-lg font-label-md text-label-md text-on-surface-variant hover:text-on-surface transition-all" data-path="chat-&amp;-tiket" href="#">Chat &amp; Tiket</a><a class="px-space-md py-space-xs rounded-lg font-label-md text-label-md text-on-surface-variant hover:text-on-surface transition-all" data-path="daftar-tiket" href="#">Daftar Tiket</a><a aria-current="page" class="px-space-md py-space-xs rounded-lg font-label-md transition-all bg-primary-container text-on-primary-container shadow-sm" data-path="dashboard" href="#">Dashboard</a></nav><div class="flex items-center gap-space-base"><div class="flex items-center gap-space-xs px-space-sm py-space-xxs rounded-full bg-surface-container-low"><span class="relative flex h-2 w-2"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-secondary-fixed-dim opacity-75"></span><span class="relative inline-flex rounded-full h-2 w-2 bg-primary"></span></span><span class="font-label-sm text-label-sm text-on-surface-variant">Online</span></div><div class="relative flex items-center justify-center"><button class="w-9 h-9 rounded-xl flex items-center justify-center text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low transition-colors"><span class="material-symbols-outlined text-[20px]">notifications</span></button><span class="absolute top-1 right-1 flex h-4 w-4 items-center justify-center rounded-full bg-error text-on-error font-label-sm text-[10px]">3</span></div><div class="flex items-center gap-space-md pl-space-sm"><div class="flex flex-col text-right hidden lg:flex"><span class="font-label-md text-label-md text-on-surface leading-snug">Arya Pratama</span><span class="font-label-sm text-label-sm text-on-surface-variant leading-snug">Tier 2 Helpdesk</span></div><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></div></div></header><main class="w-full pt-16 bg-background min-h-[calc(100vh-4rem)]"><div class="flex flex-col w-full">
+<div class="px-space-xl py-space-xl max-w-7xl mx-auto w-full flex flex-col gap-space-2xl">
+<!-- Top Filter Bar & Dashboard Sub-header -->
+<div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-space-lg bg-surface-container-lowest p-space-lg rounded-xl shadow-sm">
+<div class="flex flex-col gap-space-xxs">
+<div class="flex items-center gap-space-sm">
+<span class="w-2.5 h-2.5 rounded-full bg-primary animate-pulse"></span>
+<h1 class="font-headline-lg text-headline-lg text-on-surface">Dashboard Performa &amp; Operasional</h1>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant">Ringkasan performa NAVA dan helpdesk dari MongoDB.</p>
+</div>
+<div class="flex flex-wrap items-center gap-space-sm">
+<div class="flex items-center p-space-xxs rounded-xl bg-surface-container-low" id="time-filter-group">
+<button class="time-btn px-space-md py-space-xs rounded-lg font-label-md text-label-md text-on-surface-variant hover:text-on-surface transition-all bg-primary-container text-on-primary-container shadow-sm" data-range="today" type="button">Hari Ini</button>
+<button class="time-btn px-space-md py-space-xs rounded-lg font-label-md text-label-md text-on-surface-variant hover:text-on-surface transition-all" data-range="7d" type="button">7 Hari Terakhir</button>
+<button class="time-btn px-space-md py-space-xs rounded-lg font-label-md text-label-md text-on-surface-variant hover:text-on-surface transition-all" data-range="30d" type="button">30 Hari</button>
+<button class="time-btn px-space-md py-space-xs rounded-lg font-label-md text-label-md text-on-surface-variant hover:text-on-surface transition-all" data-range="custom" type="button">Kustom</button>
+</div>
+<button class="flex items-center gap-space-xs px-space-md py-space-xs rounded-xl bg-surface-container text-on-surface font-label-md text-label-md hover:bg-surface-container-high transition-all shadow-sm" id="refresh-btn" type="button">
+<span class="material-symbols-outlined text-[18px] text-primary" id="refresh-icon">sync</span>
+<span>Refresh</span>
+</button>
+</div>
+</div>
+<!-- Seksi 1: Performa NAVA (AI Engine) -->
+<div class="flex flex-col gap-space-md">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-sm">
+<div class="w-7 h-7 rounded-lg bg-primary-fixed flex items-center justify-center text-on-primary-fixed">
+<span class="material-symbols-outlined text-[18px]">smart_toy</span>
+</div>
+<div>
+<h2 class="font-headline-sm text-headline-sm text-on-surface">Performa NAVA (AI Engine)</h2>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Metrik otomatisasi dan throughput model kognitif</span>
+</div>
+</div>
+<span class="px-space-sm py-space-xxs rounded-full bg-secondary-container text-on-secondary-container font-label-sm text-label-sm">Active Subsystem</span>
+</div>
+<div class="grid grid-cols-2 md:grid-cols-4 gap-space-md">
+<!-- Card 1: Total Percakapan -->
+<div class="p-space-lg rounded-xl bg-surface-container-lowest shadow-sm flex flex-col justify-between">
+<div class="flex items-center justify-between text-on-surface-variant mb-space-xs">
+<span class="font-label-md text-label-md">Total Percakapan</span>
+<span class="material-symbols-outlined text-[18px] text-primary">chat</span>
+</div>
+<div class="flex items-baseline gap-space-sm">
+<span class="font-display-lg text-display-lg text-on-surface font-semibold">10</span>
+<span class="font-label-sm text-label-sm text-secondary-fixed-dim">Sesi Dialog</span>
+</div>
+<div class="mt-space-sm pt-space-xs bg-surface-container-low/50 rounded p-space-xs">
+<span class="font-code-sm text-code-sm text-on-surface-variant">100% terserap AI node</span>
+</div>
+</div>
+<!-- Card 2: Response NAVA -->
+<div class="p-space-lg rounded-xl bg-surface-container-lowest shadow-sm flex flex-col justify-between">
+<div class="flex items-center justify-between text-on-surface-variant mb-space-xs">
+<span class="font-label-md text-label-md">Response NAVA</span>
+<span class="material-symbols-outlined text-[18px] text-primary">forum</span>
+</div>
+<div class="flex items-baseline gap-space-sm">
+<span class="font-display-lg text-display-lg text-on-surface font-semibold">36</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Pesan keluar</span>
+</div>
+<div class="mt-space-sm pt-space-xs bg-surface-container-low/50 rounded p-space-xs">
+<span class="font-code-sm text-code-sm text-on-surface-variant">Rata-rata 3.6 respon / dialog</span>
+</div>
+</div>
+<!-- Card 3: Rata-rata Latensi -->
+<div class="p-space-lg rounded-xl bg-surface-container-lowest shadow-sm flex flex-col justify-between">
+<div class="flex items-center justify-between text-on-surface-variant mb-space-xs">
+<span class="font-label-md text-label-md">Rata-rata Latensi</span>
+<span class="material-symbols-outlined text-[18px] text-primary">speed</span>
+</div>
+<div class="flex items-baseline gap-space-sm">
+<span class="font-display-lg text-display-lg text-on-surface font-semibold">0 <span class="font-label-md text-label-md font-normal text-on-surface-variant">ms</span></span>
+<span class="px-space-xs py-space-xxs rounded bg-secondary-container text-on-secondary-container font-label-sm text-label-sm">Optimal</span>
+</div>
+<div class="mt-space-sm pt-space-xs bg-surface-container-low/50 rounded p-space-xs">
+<span class="font-code-sm text-code-sm text-on-surface-variant">Batas ambang SLA &lt;500ms</span>
+</div>
+</div>
+<!-- Card 4: Penggunaan Knowledge -->
+<div class="p-space-lg rounded-xl bg-surface-container-lowest shadow-sm flex flex-col justify-between">
+<div class="flex items-center justify-between text-on-surface-variant mb-space-xs">
+<span class="font-label-md text-label-md">Penggunaan Knowledge</span>
+<span class="material-symbols-outlined text-[18px] text-primary">menu_book</span>
+</div>
+<div class="flex items-baseline gap-space-sm">
+<span class="font-display-lg text-display-lg text-on-surface font-semibold">24</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Vector hit</span>
+</div>
+<div class="mt-space-sm pt-space-xs bg-surface-container-low/50 rounded p-space-xs">
+<span class="font-code-sm text-code-sm text-on-surface-variant">Knowledge base sync valid</span>
+</div>
+</div>
+<!-- Card 5: Knowledge Usage Rate -->
+<div class="p-space-lg rounded-xl bg-surface-container-lowest shadow-sm flex flex-col justify-between">
+<div class="flex items-center justify-between text-on-surface-variant mb-space-xs">
+<span class="font-label-md text-label-md">Knowledge Usage Rate</span>
+<span class="material-symbols-outlined text-[18px] text-primary">pie_chart</span>
+</div>
+<div class="flex items-baseline gap-space-sm">
+<span class="font-display-lg text-display-lg text-on-surface font-semibold">53%</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Ref. RAG</span>
+</div>
+<div class="w-full bg-surface-container-high h-1.5 rounded-full mt-space-sm overflow-hidden">
+<div class="bg-primary h-full rounded-full" style="width: 53%;"></div>
+</div>
+</div>
+<!-- Card 6: Jumlah Eskalasi -->
+<div class="p-space-lg rounded-xl bg-surface-container-lowest shadow-sm flex flex-col justify-between">
+<div class="flex items-center justify-between text-on-surface-variant mb-space-xs">
+<span class="font-label-md text-label-md">Jumlah Eskalasi</span>
+<span class="material-symbols-outlined text-[18px] text-tertiary">transfer_within_a_station</span>
+</div>
+<div class="flex items-baseline gap-space-sm">
+<span class="font-display-lg text-display-lg text-tertiary font-semibold">2</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Ke Operator</span>
+</div>
+<div class="mt-space-sm pt-space-xs bg-surface-container-low/50 rounded p-space-xs">
+<span class="font-code-sm text-code-sm text-on-surface-variant">Tercatat di antrean agen</span>
+</div>
+</div>
+<!-- Card 7: Escalation Rate -->
+<div class="p-space-lg rounded-xl bg-surface-container-lowest shadow-sm flex flex-col justify-between">
+<div class="flex items-center justify-between text-on-surface-variant mb-space-xs">
+<span class="font-label-md text-label-md">Escalation Rate</span>
+<span class="material-symbols-outlined text-[18px] text-tertiary">trending_down</span>
+</div>
+<div class="flex items-baseline gap-space-sm">
+<span class="font-display-lg text-display-lg text-on-surface font-semibold">4%</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Rendah</span>
+</div>
+<div class="w-full bg-surface-container-high h-1.5 rounded-full mt-space-sm overflow-hidden">
+<div class="bg-tertiary-container h-full rounded-full" style="width: 4%;"></div>
+</div>
+</div>
+<!-- Card 8: Recursion Fallback -->
+<div class="p-space-lg rounded-xl bg-surface-container-lowest shadow-sm flex flex-col justify-between">
+<div class="flex items-center justify-between text-on-surface-variant mb-space-xs">
+<span class="font-label-md text-label-md">Recursion Fallback</span>
+<span class="material-symbols-outlined text-[18px] text-primary">sync_problem</span>
+</div>
+<div class="flex items-baseline gap-space-sm">
+<span class="font-display-lg text-display-lg text-on-surface font-semibold">0</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Anomali</span>
+</div>
+<div class="mt-space-sm pt-space-xs bg-surface-container-low/50 rounded p-space-xs">
+<span class="font-code-sm text-code-sm text-on-surface-variant">Tidak ada loop recursion</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Seksi 2: Performa Helpdesk (Human Operator & SLA) -->
+<div class="flex flex-col gap-space-md">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-sm">
+<div class="w-7 h-7 rounded-lg bg-secondary-container flex items-center justify-center text-on-secondary-container">
+<span class="material-symbols-outlined text-[18px]">support_agent</span>
+</div>
+<div>
+<h2 class="font-headline-sm text-headline-sm text-on-surface">Performa Helpdesk (Human Operator &amp; SLA)</h2>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Resolusi penanganan tiket dan waktu respon petugas</span>
+</div>
+</div>
+<span class="font-code-sm text-code-sm text-on-surface-variant bg-surface-container-low px-space-sm py-space-xxs rounded">SLA Realtime Sync</span>
+</div>
+<div class="grid grid-cols-2 md:grid-cols-4 gap-space-md">
+<!-- Card: Total Ticket -->
+<div class="p-space-lg rounded-xl bg-surface-container-lowest shadow-sm flex flex-col justify-between">
+<div class="flex items-center justify-between text-on-surface-variant mb-space-xs">
+<span class="font-label-md text-label-md">Total Ticket</span>
+<span class="material-symbols-outlined text-[18px] text-primary">confirmation_number</span>
+</div>
+<div class="flex items-baseline gap-space-sm">
+<span class="font-display-lg text-display-lg text-on-surface font-semibold">4</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Tiket total</span>
+</div>
+<div class="mt-space-sm pt-space-xs bg-surface-container-low/50 rounded p-space-xs">
+<span class="font-code-sm text-code-sm text-on-surface-variant">Semua kategori kasus</span>
+</div>
+</div>
+<!-- Card: Ticket Baru -->
+<div class="p-space-lg rounded-xl bg-surface-container-lowest shadow-sm flex flex-col justify-between">
+<div class="flex items-center justify-between text-on-surface-variant mb-space-xs">
+<span class="font-label-md text-label-md">Ticket Baru</span>
+<span class="material-symbols-outlined text-[18px] text-secondary">mark_email_unread</span>
+</div>
+<div class="flex items-baseline gap-space-sm">
+<span class="font-display-lg text-display-lg text-on-surface font-semibold">1</span>
+<span class="px-space-xs py-space-xxs rounded bg-secondary-container text-on-secondary-container font-label-sm text-label-sm">Perlu Triase</span>
+</div>
+<div class="mt-space-sm pt-space-xs bg-surface-container-low/50 rounded p-space-xs">
+<span class="font-code-sm text-code-sm text-on-surface-variant">Tiket masuk antrean baru</span>
+</div>
+</div>
+<!-- Card: Ticket Pending -->
+<div class="p-space-lg rounded-xl bg-surface-container-lowest shadow-sm flex flex-col justify-between">
+<div class="flex items-center justify-between text-on-surface-variant mb-space-xs">
+<span class="font-label-md text-label-md">Ticket Pending</span>
+<span class="material-symbols-outlined text-[18px] text-tertiary">hourglass_empty</span>
+</div>
+<div class="flex items-baseline gap-space-sm">
+<span class="font-display-lg text-display-lg text-on-surface font-semibold">0</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Tertunda</span>
+</div>
+<div class="mt-space-sm pt-space-xs bg-surface-container-low/50 rounded p-space-xs">
+<span class="font-code-sm text-code-sm text-on-surface-variant">Tidak ada delay respon</span>
+</div>
+</div>
+<!-- Card: Sedang Ditangani -->
+<div class="p-space-lg rounded-xl bg-surface-container-lowest shadow-sm flex flex-col justify-between">
+<div class="flex items-center justify-between text-on-surface-variant mb-space-xs">
+<span class="font-label-md text-label-md">Sedang Ditangani</span>
+<span class="material-symbols-outlined text-[18px] text-primary">pending_actions</span>
+</div>
+<div class="flex items-baseline gap-space-sm">
+<span class="font-display-lg text-display-lg text-on-surface font-semibold">0</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Dalam Progres</span>
+</div>
+<div class="mt-space-sm pt-space-xs bg-surface-container-low/50 rounded p-space-xs">
+<span class="font-code-sm text-code-sm text-on-surface-variant">Kapasitas agen senggang</span>
+</div>
+</div>
+<!-- Card: Ticket Selesai -->
+<div class="p-space-lg rounded-xl bg-surface-container-lowest shadow-sm flex flex-col justify-between">
+<div class="flex items-center justify-between text-on-surface-variant mb-space-xs">
+<span class="font-label-md text-label-md">Ticket Selesai</span>
+<span class="material-symbols-outlined text-[18px] text-primary">check_circle</span>
+</div>
+<div class="flex items-baseline gap-space-sm">
+<span class="font-display-lg text-display-lg text-on-surface font-semibold">3</span>
+<span class="px-space-xs py-space-xxs rounded bg-secondary-container text-on-secondary-container font-label-sm text-label-sm">75% Resolved</span>
+</div>
+<div class="mt-space-sm pt-space-xs bg-surface-container-low/50 rounded p-space-xs">
+<span class="font-code-sm text-code-sm text-on-surface-variant">Kasus tertutup tuntas</span>
+</div>
+</div>
+<!-- Card: First Response Avg -->
+<div class="p-space-lg rounded-xl bg-surface-container-lowest shadow-sm flex flex-col justify-between">
+<div class="flex items-center justify-between text-on-surface-variant mb-space-xs">
+<span class="font-label-md text-label-md">First Response Avg</span>
+<span class="material-symbols-outlined text-[18px] text-primary">timer</span>
+</div>
+<div class="flex items-baseline gap-space-sm">
+<span class="font-display-lg text-display-lg text-on-surface font-semibold">1.5 <span class="font-label-md text-label-md font-normal text-on-surface-variant">menit</span></span>
+</div>
+<div class="mt-space-sm pt-space-xs bg-surface-container-low/50 rounded p-space-xs">
+<span class="font-code-sm text-code-sm text-on-surface-variant">Target SLA: &lt; 5.0 menit</span>
+</div>
+</div>
+<!-- Card: Resolution Avg -->
+<div class="p-space-lg rounded-xl bg-surface-container-lowest shadow-sm flex flex-col justify-between">
+<div class="flex items-center justify-between text-on-surface-variant mb-space-xs">
+<span class="font-label-md text-label-md">Resolution Avg</span>
+<span class="material-symbols-outlined text-[18px] text-primary">published_with_changes</span>
+</div>
+<div class="flex items-baseline gap-space-sm">
+<span class="font-display-lg text-display-lg text-on-surface font-semibold">2.4 <span class="font-label-md text-label-md font-normal text-on-surface-variant">menit</span></span>
+</div>
+<div class="mt-space-sm pt-space-xs bg-surface-container-low/50 rounded p-space-xs">
+<span class="font-code-sm text-code-sm text-on-surface-variant">Efisiensi resolusi tinggi</span>
+</div>
+</div>
+<!-- Card: Chat Manusia -->
+<div class="p-space-lg rounded-xl bg-surface-container-lowest shadow-sm flex flex-col justify-between">
+<div class="flex items-center justify-between text-on-surface-variant mb-space-xs">
+<span class="font-label-md text-label-md">Chat Manusia</span>
+<span class="material-symbols-outlined text-[18px] text-primary">headset_mic</span>
+</div>
+<div class="flex items-baseline gap-space-sm">
+<span class="font-display-lg text-display-lg text-on-surface font-semibold">6</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Interaksi langsung</span>
+</div>
+<div class="mt-space-sm pt-space-xs bg-surface-container-low/50 rounded p-space-xs">
+<span class="font-code-sm text-code-sm text-on-surface-variant">Didistribusikan ke petugas</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Seksi 3: Performa per Petugas & Status Distribusi -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-space-lg">
+<!-- Status Distribusi Tiket -->
+<div class="lg:col-span-6 bg-surface-container-lowest p-space-lg rounded-xl shadow-sm flex flex-col justify-between gap-space-md">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-primary text-[20px]">bar_chart</span>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Distribusi Status Tiket</h3>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">4 Total Tiket</span>
+</div>
+<!-- Segmented bar -->
+<div class="flex flex-col gap-space-sm">
+<div class="w-full h-4 rounded-full overflow-hidden flex bg-surface-container-low">
+<div class="bg-secondary-fixed-dim h-full" style="width: 25%;" title="Baru: 1 (25%)"></div>
+<div class="bg-tertiary-fixed-dim h-full" style="width: 0%;" title="Pending: 0 (0%)"></div>
+<div class="bg-primary h-full" style="width: 0%;" title="Ditangani: 0 (0%)"></div>
+<div class="bg-primary-container h-full" style="width: 75%;" title="Selesai: 3 (75%)"></div>
+</div>
+<!-- Legend metrics -->
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-space-sm pt-space-xs">
+<div class="flex flex-col p-space-xs bg-surface-container-low rounded-lg">
+<div class="flex items-center gap-space-xs">
+<span class="w-2 h-2 rounded-full bg-secondary-fixed-dim"></span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Baru</span>
+</div>
+<span class="font-headline-sm text-headline-sm text-on-surface mt-space-xxs">1 <span class="font-label-sm text-label-sm text-on-surface-variant">(25%)</span></span>
+</div>
+<div class="flex flex-col p-space-xs bg-surface-container-low rounded-lg">
+<div class="flex items-center gap-space-xs">
+<span class="w-2 h-2 rounded-full bg-tertiary-fixed-dim"></span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Pending</span>
+</div>
+<span class="font-headline-sm text-headline-sm text-on-surface mt-space-xxs">0 <span class="font-label-sm text-label-sm text-on-surface-variant">(0%)</span></span>
+</div>
+<div class="flex flex-col p-space-xs bg-surface-container-low rounded-lg">
+<div class="flex items-center gap-space-xs">
+<span class="w-2 h-2 rounded-full bg-primary"></span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Ditangani</span>
+</div>
+<span class="font-headline-sm text-headline-sm text-on-surface mt-space-xxs">0 <span class="font-label-sm text-label-sm text-on-surface-variant">(0%)</span></span>
+</div>
+<div class="flex flex-col p-space-xs bg-surface-container-low rounded-lg">
+<div class="flex items-center gap-space-xs">
+<span class="w-2 h-2 rounded-full bg-primary-container"></span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Selesai</span>
+</div>
+<span class="font-headline-sm text-headline-sm text-on-surface mt-space-xxs">3 <span class="font-label-sm text-label-sm text-on-surface-variant">(75%)</span></span>
+</div>
+</div>
+</div>
+<div class="p-space-sm bg-surface-container-low/70 rounded-lg flex items-center justify-between">
+<span class="font-label-sm text-label-sm text-on-surface-variant">Penyelesaian Tiket Tepat Waktu</span>
+<span class="font-code-sm text-code-sm text-primary font-semibold">100% SLA Met</span>
+</div>
+</div>
+<!-- Tabel Beban Performa Petugas -->
+<div class="lg:col-span-6 bg-surface-container-lowest p-space-lg rounded-xl shadow-sm flex flex-col justify-between gap-space-md">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-primary text-[20px]">badge</span>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Distribusi Chat Petugas</h3>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Total 6 Chat Terdistribusi</span>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left">
+<thead>
+<tr class="text-on-surface-variant font-label-sm text-label-sm bg-surface-container-low rounded-lg">
+<th class="py-space-xs px-space-sm font-medium rounded-l-lg">Petugas</th>
+<th class="py-space-xs px-space-sm font-medium">Role / Status</th>
+<th class="py-space-xs px-space-sm font-medium text-right">Volume</th>
+<th class="py-space-xs px-space-sm font-medium rounded-r-lg text-right">Rasio</th>
+</tr>
+</thead>
+<tbody class="divide-y-0 text-on-surface">
+<tr class="hover:bg-surface-container-low transition-colors">
+<td class="py-space-sm px-space-sm">
+<div class="flex items-center gap-space-sm">
+<div class="w-7 h-7 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center font-label-md text-label-md">
+                      PH
+                    </div>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md font-semibold text-on-surface">Petugas Helpdesk</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">ID: OP-0941</span>
+</div>
+</div>
+</td>
+<td class="py-space-sm px-space-sm">
+<span class="px-space-xs py-space-xxs rounded-full bg-secondary-container text-on-secondary-container font-label-sm text-label-sm">Online</span>
+</td>
+<td class="py-space-sm px-space-sm font-code-sm text-code-sm font-semibold text-right">
+                  5 Chat
+                </td>
+<td class="py-space-sm px-space-sm text-right">
+<div class="flex items-center justify-end gap-space-xs">
+<div class="w-16 bg-surface-container-high h-2 rounded-full overflow-hidden">
+<div class="bg-primary h-full rounded-full" style="width: 83.3%;"></div>
+</div>
+<span class="font-code-sm text-code-sm text-on-surface-variant">83%</span>
+</div>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-low transition-colors">
+<td class="py-space-sm px-space-sm">
+<div class="flex items-center gap-space-sm">
+<div class="w-7 h-7 rounded-full bg-surface-container-high text-on-surface flex items-center justify-center font-label-md text-label-md">
+                      SA
+                    </div>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md font-semibold text-on-surface">Smoke Agent</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">ID: QA-TEST</span>
+</div>
+</div>
+</td>
+<td class="py-space-sm px-space-sm">
+<span class="px-space-xs py-space-xxs rounded-full bg-surface-container text-on-surface-variant font-label-sm text-label-sm">Testing</span>
+</td>
+<td class="py-space-sm px-space-sm font-code-sm text-code-sm font-semibold text-right">
+                  1 Chat
+                </td>
+<td class="py-space-sm px-space-sm text-right">
+<div class="flex items-center justify-end gap-space-xs">
+<div class="w-16 bg-surface-container-high h-2 rounded-full overflow-hidden">
+<div class="bg-primary-container h-full rounded-full" style="width: 16.7%;"></div>
+</div>
+<span class="font-code-sm text-code-sm text-on-surface-variant">17%</span>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="p-space-sm bg-surface-container-low/70 rounded-lg flex items-center justify-between">
+<span class="font-label-sm text-label-sm text-on-surface-variant">Keseimbangan Beban Petugas</span>
+<span class="font-code-sm text-code-sm text-on-surface font-semibold">Terkonsentrasi (Single Active Desk)</span>
+</div>
+</div>
+</div>
+<!-- Visual Snapshot Referensi Sistem NAVA -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-space-md">
+<div class="flex flex-col gap-space-xs bg-surface-container-lowest p-space-md rounded-xl shadow-sm">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-xs text-on-surface">
+<span class="material-symbols-outlined text-[16px] text-primary">visibility</span>
+<span class="font-label-md text-label-md font-semibold">Snapshot Monitoring Sesi</span>
+</div>
+<span class="font-code-sm text-code-sm text-on-surface-variant">Capture 14:15 WIB</span>
+</div>
+<div class="relative w-full rounded-lg overflow-hidden bg-surface-container-high aspect-[2.23]">
+<img alt="Screenshot antarmuka sistem live console helpdesk dan log aktivitas NAVA" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBZ_AV7kdvL-rlWn0Ew7Th_ScUTcoJFeMkJOaQkXG-sCHQRMCqdfb9agdnbMp25ka66NOAYFfq9VcAPwoPzoSiwdsyzdHL6yG6qJYaft6XSRIfKAH8g2z3pr1hDGAzSfRBUliRYBy3QNFt_4V33KwNSTrOHEtBq3Lr06Bu8hyMzjY_tvJpxM1js_g_AlmZzIHuj7Tp0JeuRLrroGRdKiAUCTz_vpqkicWCxnSn9y_9W8LaGOyjxDhfQ-N4bStB7-094uF0"/>
+</div>
+</div>
+<div class="flex flex-col gap-space-xs bg-surface-container-lowest p-space-md rounded-xl shadow-sm">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-xs text-on-surface">
+<span class="material-symbols-outlined text-[16px] text-primary">dashboard</span>
+<span class="font-label-md text-label-md font-semibold">Snapshot Log Tiket &amp; Triase</span>
+</div>
+<span class="font-code-sm text-code-sm text-on-surface-variant">Capture 14:42 WIB</span>
+</div>
+<div class="relative w-full rounded-lg overflow-hidden bg-surface-container-high aspect-[2.18]">
+<img alt="Tangkapan layar data overview operasional tiket dan metrik respon" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCQtUCzK7cbsg0s5XaQi6TI4joOJmRYq0cQe5_4ymToOTxQhcNJaxTDedRuGMD9tkXaalw0Cow_4mRlhINcKGeQE4vdZhnFoXhlSRUAUQjvXOBi8umXHU4sN9UiEs02elf6OfSlji90LfSzpXnrbFOhVKsSRq4fMlI_hNrrQEdOlIsIF_IPsCKNMqkU1GAKGn7t8r_s4AcHt3-MSC6AOxMqe253PwbTRwfw7Y0-D5eZLNNPhsFZ2S86-Ix8PILnEpkx5rI"/>
+</div>
+</div>
+</div>
+<!-- Seksi Footer Status & Integrasi Data Store -->
+<div class="flex flex-col md:flex-row items-center justify-between gap-space-md bg-surface-container-lowest p-space-lg rounded-xl shadow-sm">
+<div class="flex flex-wrap items-center gap-space-md">
+<div class="flex items-center gap-space-xs px-space-sm py-space-xxs rounded-full bg-secondary-container">
+<span class="w-2 h-2 rounded-full bg-primary animate-ping"></span>
+<span class="font-label-sm text-label-sm text-on-secondary-container font-semibold">Data Store: MongoDB cluster-asia-se2 - Connected</span>
+</div>
+<div class="flex items-center gap-space-xs font-code-sm text-code-sm text-on-surface-variant">
+<span class="material-symbols-outlined text-[16px] text-secondary">network_check</span>
+<span>Heartbeat Latency: <strong class="text-on-surface">18ms</strong></span>
+</div>
+</div>
+<div class="flex items-center gap-space-sm w-full md:w-auto justify-end">
+<button class="flex items-center gap-space-xs px-space-md py-space-xs rounded-lg bg-surface-container-low hover:bg-surface-container font-label-md text-label-md text-on-surface transition-all" id="btn-export-csv" type="button">
+<span class="material-symbols-outlined text-[18px]">table_view</span>
+<span>Ekspor CSV</span>
+</button>
+<button class="flex items-center gap-space-xs px-space-md py-space-xs rounded-lg bg-primary text-on-primary hover:bg-primary-container font-label-md text-label-md transition-all shadow-sm" id="btn-download-report" type="button">
+<span class="material-symbols-outlined text-[18px]">download</span>
+<span>Unduh Laporan</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<script>
+  (function() {
+    // Time filter switching logic
+    const timeFilterButtons = document.querySelectorAll('.time-btn');
+    timeFilterButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        timeFilterButtons.forEach(b => {
+          b.classList.remove('bg-primary-container', 'text-on-primary-container', 'shadow-sm');
+          b.classList.add('text-on-surface-variant');
+        });
+        btn.classList.add('bg-primary-container', 'text-on-primary-container', 'shadow-sm');
+        btn.classList.remove('text-on-surface-variant');
+      });
+    });
+
+    // Refresh animation micro-interaction
+    const refreshBtn = document.getElementById('refresh-btn');
+    const refreshIcon = document.getElementById('refresh-icon');
+    if (refreshBtn && refreshIcon) {
+      refreshBtn.addEventListener('click', () => {
+        refreshIcon.classList.add('animate-spin');
+        setTimeout(() => {
+          refreshIcon.classList.remove('animate-spin');
+        }, 750);
+      });
+    }
+
+    // Interactive feedback for actions
+    const exportCsvBtn = document.getElementById('btn-export-csv');
+    const downloadReportBtn = document.getElementById('btn-download-report');
+
+    if (exportCsvBtn) {
+      exportCsvBtn.addEventListener('click', () => {
+        exportCsvBtn.classList.add('opacity-70');
+        setTimeout(() => exportCsvBtn.classList.remove('opacity-70'), 300);
+      });
+    }
+
+    if (downloadReportBtn) {
+      downloadReportBtn.addEventListener('click', () => {
+        downloadReportBtn.classList.add('opacity-70');
+        setTimeout(() => downloadReportBtn.classList.remove('opacity-70'), 300);
+      });
+    }
+  })();
+</script></main><footer class="w-full bg-surface-container-lowest shadow-[0_-1px_6px_rgba(0,0,0,0.02)]"><div class="w-full px-space-xl py-space-md flex flex-col md:flex-row items-center justify-between gap-space-sm text-on-surface-variant font-label-sm text-label-sm"><span>© 2025 NAVA Operational Ecosystem. Dilindungi Hak Cipta.</span><div class="flex items-center gap-space-lg"><span>Respon SLA: 99.4%</span><span>Server: ID-JKT-02</span></div></div></footer></body></html>

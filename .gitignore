@@ -1,0 +1,12 @@
+node_modules/
+api/node_modules/
+web/node_modules/
+.env
+api/.env
+web/.env
+.DS_Store
+npm-debug.log*
+api/uploads/*
+!api/uploads/helpdesk/
+!api/uploads/helpdesk/.gitkeep
+web/dist/

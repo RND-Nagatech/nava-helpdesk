@@ -1,0 +1,26 @@
+[
+  {
+    "question": "terus aku beres penjualan, struknya gak keluar",
+    "expected_title_contains": "Tidak keluar file download nota penjualan",
+    "expected_tool": "search_knowledge",
+    "should_escalate": false
+  },
+  {
+    "question": "habis jualan notanya kok gak muncul",
+    "expected_title_contains": "Tidak keluar file download nota penjualan",
+    "expected_tool": "search_knowledge",
+    "should_escalate": false
+  },
+  {
+    "question": "pas input barang angka berat dari alatnya gak masuk ke program",
+    "expected_title_contains": "Tambah barang dan timbang baki tidak konek timbangan",
+    "expected_tool": "search_knowledge",
+    "should_escalate": false
+  },
+  {
+    "question": "stok di program beda sama barang fisik",
+    "expected_title_contains": "Selisih stock barang",
+    "expected_tool": "search_knowledge",
+    "should_escalate": false
+  }
+]

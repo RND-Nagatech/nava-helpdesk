@@ -1,0 +1,39 @@
+{
+  "name": "nava-langchain-helpdesk-agent",
+  "version": "2.4.3",
+  "private": true,
+  "description": "NAVA AI Helpdesk v2.4.3 with robust conversational retrieval, relevance-filtered long-term memory, escalation flow, LangGraph memory, adaptive summarization, and hybrid vector retrieval.",
+  "type": "module",
+  "main": "src/server.js",
+  "scripts": {
+    "dev": "node src/server.js",
+    "start": "node src/server.js",
+    "knowledge:import": "node scripts/import-knowledge.js",
+    "knowledge:embed": "node scripts/embed-knowledge.js",
+    "knowledge:vector-index": "node scripts/create-vector-index.js",
+    "helpdesk:seed": "node scripts/seed-helpdesk-user.js",
+    "test": "node --test",
+    "check": "find src scripts tests -name '*.js' -print0 | xargs -0 -n1 node --check",
+    "eval:retrieval": "node scripts/eval-retrieval.js",
+    "eval:agent": "node scripts/eval-agent.js",
+    "knowledge:cleanup-clarification": "node scripts/cleanup-clarification.js"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "@huggingface/transformers": "^3.8.1",
+    "@langchain/core": "^1.2.9",
+    "@langchain/deepseek": "^1.1.11",
+    "cors": "^2.8.5",
+    "dotenv": "^17.0.0",
+    "express": "^5.0.0",
+    "helmet": "^8.0.0",
+    "langchain": "^1.5.10",
+    "multer": "^2.0.2",
+    "mongodb": "^6.0.0",
+    "zod": "^4.0.0",
+    "@langchain/langgraph": "^1.4.14",
+    "@langchain/langgraph-checkpoint-mongodb": "^1.4.1"
+  }
+}
