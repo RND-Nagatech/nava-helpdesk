@@ -4,6 +4,7 @@ import {
   createTrainingSession,
   generateTrainingKnowledge,
   getTrainingSession,
+  listTrainingSessions,
   markTrainingMessage,
   saveTrainingDraft,
   sendTrainingCorrection,
@@ -65,6 +66,15 @@ export async function getTrainingSessionHandler(req, res, next) {
   try {
     const session = await getTrainingSession(trainingIdParam(req), req.helpdeskUser);
     res.json({ success: true, data: session });
+  } catch (error) {
+    next(error);
+  }
+}
+
+export async function listTrainingSessionsHandler(req, res, next) {
+  try {
+    const sessions = await listTrainingSessions(req.helpdeskUser);
+    res.json({ success: true, data: sessions });
   } catch (error) {
     next(error);
   }

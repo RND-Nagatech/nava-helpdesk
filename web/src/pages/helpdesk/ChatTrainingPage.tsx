@@ -52,19 +52,20 @@ export function ChatTrainingPage() {
   const [error, setError] = useState("");
   const [notice, setNotice] = useState("");
 
-  async function startNewTraining() {
+  async function createTrainingRoom(noticeMessage = "") {
     try {
       setLoading(true);
-      sessionStorage.removeItem(ACTIVE_TRAINING_SESSION_KEY);
       setError("");
       setNotice("");
+      const nextSession = await api.createTrainingSession();
+      sessionStorage.removeItem(ACTIVE_TRAINING_SESSION_KEY);
+      sessionStorage.setItem(ACTIVE_TRAINING_SESSION_KEY, nextSession.training_id);
+      setSession(nextSession);
       setDraftResult(null);
       setDraft(emptyDraft());
       setDuplicateAction("");
       setDuplicateArticleId("");
-      const nextSession = await api.createTrainingSession();
-      sessionStorage.setItem(ACTIVE_TRAINING_SESSION_KEY, nextSession.training_id);
-      setSession(nextSession);
+      setNotice(noticeMessage);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Gagal membuat training session.");
     } finally {
@@ -72,16 +73,30 @@ export function ChatTrainingPage() {
     }
   }
 
+  async function startNewTraining() {
+    await createTrainingRoom();
+  }
+
   useEffect(() => {
     let cancelled = false;
     async function restoreOrCreateTraining() {
+      let history: TrainingSession[] = [];
+      try {
+        history = await api.trainingSessions();
+      } catch {
+        // Loading history is helpful but should not prevent starting a training session.
+      }
+
       const savedTrainingId = sessionStorage.getItem(ACTIVE_TRAINING_SESSION_KEY);
-      if (savedTrainingId) {
+      const activeTraining = history.find((item) => item.status === "active");
+      const trainingIdToRestore = activeTraining?.training_id || savedTrainingId || "";
+      if (trainingIdToRestore) {
         try {
           setLoading(true);
           setError("");
-          const savedSession = await api.trainingSession(savedTrainingId);
+          const savedSession = await api.trainingSession(trainingIdToRestore);
           if (!cancelled) {
+            sessionStorage.setItem(ACTIVE_TRAINING_SESSION_KEY, savedSession.training_id);
             setSession(savedSession);
             setLoading(false);
           }
@@ -181,7 +196,7 @@ export function ChatTrainingPage() {
       const result = await api.generateTrainingKnowledge(session.training_id);
       setDraftResult(result);
       setDraft(result.draft || emptyDraft());
-      setDuplicateAction(result.duplicate_candidates.length ? "" : "new");
+      setDuplicateAction("new");
       setDuplicateArticleId(result.duplicate_candidates[0]?.article_id || "");
       if (!result.can_save) setNotice("Percakapan belum cukup kuat untuk dijadikan draft knowledge.");
     } catch (err) {
@@ -206,8 +221,7 @@ export function ChatTrainingPage() {
         duplicateAction || "new",
         duplicateArticleId,
       );
-      setSession((current) => current ? { ...current, knowledge_draft_id: article.articleId, updated_at: new Date().toISOString() } : current);
-      setNotice(`Draft tersimpan sebagai ${article.articleId}. Buka menu Artikel untuk review dan publish.`);
+      await createTrainingRoom(`Draft ${article.articleId} tersimpan. Training baru sudah siap digunakan.`);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Gagal menyimpan draft knowledge.");
     } finally {
@@ -355,8 +369,8 @@ export function ChatTrainingPage() {
                           {draftResult.duplicate_candidates.map((candidate) => <option value={candidate.article_id} key={candidate.article_id}>{candidate.title} · {candidate.category || "tanpa kategori"}</option>)}
                         </select>
                         <div className="training-duplicate-actions">
-                          <button className={`button ${duplicateAction === "update_existing" ? "primary" : "secondary"}`} type="button" onClick={() => setDuplicateAction("update_existing")}><CheckCircle2 size={15} /> Buat Draft Update</button>
                           <button className={`button ${duplicateAction === "new" ? "primary" : "secondary"}`} type="button" onClick={() => setDuplicateAction("new")}><Plus size={15} /> Buat Knowledge Baru</button>
+                          <button className={`button ${duplicateAction === "update_existing" ? "primary" : "secondary"}`} type="button" onClick={() => setDuplicateAction("update_existing")}><CheckCircle2 size={15} /> Buat Draft Update</button>
                         </div>
                       </div>
                     )}

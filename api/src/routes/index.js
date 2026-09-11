@@ -43,6 +43,7 @@ import {
   createTrainingSessionHandler,
   generateTrainingKnowledgeHandler,
   getTrainingSessionHandler,
+  listTrainingSessionsHandler,
   saveTrainingDraftHandler,
   sendTrainingCorrectionHandler,
   sendTrainingMessageHandler,
@@ -100,6 +101,7 @@ apiRouter.get("/health", async (req, res) => {
 apiRouter.post("/chat", chat);
 apiRouter.get("/chat/:session_id/messages", getSessionMessages);
 apiRouter.post("/training/session", requireHelpdeskAuth, createTrainingSessionHandler);
+apiRouter.get("/training/sessions", requireHelpdeskAuth, listTrainingSessionsHandler);
 apiRouter.get("/training/:trainingId", requireHelpdeskAuth, getTrainingSessionHandler);
 apiRouter.post("/training/:trainingId/message", requireHelpdeskAuth, sendTrainingMessageHandler);
 apiRouter.post("/training/:trainingId/correction", requireHelpdeskAuth, sendTrainingCorrectionHandler);

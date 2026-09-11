@@ -132,12 +132,14 @@ export function ArticlePage() {
       setError("");
       setNotice("");
       const payload = cleanArticle(selected);
-      const saved = selected.articleId
-        ? await api.updateKnowledgeArticle(selected.articleId, payload, { asDraft: true })
-        : await api.createKnowledgeArticle(payload);
-      setSelected(saved);
+      if (selected.articleId) {
+        await api.updateKnowledgeArticle(selected.articleId, payload, { asDraft: true });
+      } else {
+        await api.createKnowledgeArticle(payload);
+      }
       setNotice("Draft artikel tersimpan.");
-      await Promise.all([load(undefined, saved.articleId), loadCategories()]);
+      setSelected(emptyArticle());
+      await Promise.all([load(undefined, ""), loadCategories()]);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Gagal menyimpan artikel.");
     } finally {
@@ -155,9 +157,9 @@ export function ArticlePage() {
         ? await api.updateKnowledgeArticle(selected.articleId, payload)
         : await api.createKnowledgeArticle(payload);
       const published = await api.publishKnowledgeArticle(saved.articleId);
-      setSelected(published);
       setNotice("Artikel sudah published dan embedding siap dipakai.");
-      await Promise.all([load(undefined, published.articleId), loadCategories()]);
+      setSelected(emptyArticle());
+      await Promise.all([load(undefined, ""), loadCategories()]);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Gagal publish artikel.");
     } finally {
@@ -171,10 +173,10 @@ export function ArticlePage() {
       setPublishing(true);
       setError("");
       setNotice("");
-      const saved = await api.updateKnowledgeArticle(selected.articleId, cleanArticle(selected));
-      setSelected(saved);
+      await api.updateKnowledgeArticle(selected.articleId, cleanArticle(selected));
       setNotice("Perubahan tersimpan dan embedding diperbarui.");
-      await Promise.all([load(undefined, saved.articleId), loadCategories()]);
+      setSelected(emptyArticle());
+      await Promise.all([load(undefined, ""), loadCategories()]);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Gagal menyimpan perubahan artikel.");
     } finally {
@@ -360,7 +362,7 @@ export function ArticlePage() {
                 </button>
               </>
             )}
-            {selected.articleId && selected.status === "published" && (
+            {selected.articleId && selected.status !== "archived" && (
               <button className="button secondary" type="button" onClick={archive} disabled={saving || publishing}>
                 <Archive size={15} /> Archive
               </button>

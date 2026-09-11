@@ -1,13 +1,20 @@
-import { FormEvent, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import { Eye, EyeOff, LockKeyhole, ShieldCheck, UserRound } from "lucide-react";
 import {
   clearRememberedHelpdeskPassword,
+  clearHelpdeskSession,
   getRememberedHelpdeskId,
   getRememberedHelpdeskPassword,
+  getHelpdeskToken,
   saveHelpdeskSession,
   saveRememberedHelpdeskPassword,
 } from "../../lib/helpdeskAuth";
 import { api } from "../../services/api";
+
+function safeNextPath() {
+  const next = new URLSearchParams(window.location.search).get("next") || "/helpdesk/chat";
+  return (next.startsWith("/helpdesk") && next !== "/helpdesk/login") || next === "/chat-training" ? next : "/helpdesk/chat";
+}
 
 export function LoginPage() {
   const [helpdeskId, setHelpdeskId] = useState(() => getRememberedHelpdeskId());
@@ -16,6 +23,30 @@ export function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [checkingSession, setCheckingSession] = useState(() => Boolean(getHelpdeskToken()));
+
+  useEffect(() => {
+    const token = getHelpdeskToken();
+    if (!token) {
+      setCheckingSession(false);
+      return undefined;
+    }
+
+    let cancelled = false;
+    api.helpdeskMe()
+      .then(() => {
+        if (!cancelled) window.location.replace(safeNextPath());
+      })
+      .catch((err) => {
+        if (cancelled) return;
+        if (err?.status === 401) clearHelpdeskSession();
+        setCheckingSession(false);
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   async function submit(event: FormEvent) {
     event.preventDefault();
@@ -26,14 +57,16 @@ export function LoginPage() {
       saveHelpdeskSession(session.token, session.user, remember);
       if (remember) saveRememberedHelpdeskPassword(password);
       else clearRememberedHelpdeskPassword();
-      const next = new URLSearchParams(window.location.search).get("next") || "/helpdesk/chat";
-      const allowedNext = (next.startsWith("/helpdesk") && next !== "/helpdesk/login") || next === "/chat-training";
-      window.location.href = allowedNext ? next : "/helpdesk/chat";
+      window.location.href = safeNextPath();
     } catch (err) {
       setError(err instanceof Error ? err.message : "Login helpdesk gagal.");
     } finally {
       setLoading(false);
     }
+  }
+
+  if (checkingSession) {
+    return <main className="helpdesk-login-page auth-loading">Memeriksa session helpdesk...</main>;
   }
 
   return (

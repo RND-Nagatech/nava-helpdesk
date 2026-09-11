@@ -194,6 +194,9 @@ export const api = {
       body: JSON.stringify({ title }),
     });
   },
+  trainingSessions() {
+    return request<TrainingSession[]>("/api/training/sessions");
+  },
   trainingSession(trainingId: string) {
     return request<TrainingSession>(`/api/training/${encodeURIComponent(trainingId)}`);
   },

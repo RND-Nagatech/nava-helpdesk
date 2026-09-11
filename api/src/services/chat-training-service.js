@@ -128,6 +128,18 @@ async function getOwnedSession(trainingId, helpdeskId) {
   return { db, session };
 }
 
+async function closeActiveTrainingSessions(db, helpdeskId, exceptTrainingId = "") {
+  const filter = {
+    helpdesk_id: helpdeskId,
+    status: "active",
+    ...(exceptTrainingId ? { training_id: { $ne: exceptTrainingId } } : {}),
+  };
+  await db.collection(env.trainingSessionCollection).updateMany(
+    filter,
+    { $set: { status: "closed", updated_at: now() } },
+  );
+}
+
 async function readMessages(db, trainingId) {
   const rows = await db.collection(env.trainingMessageCollection)
     .find({ training_id: trainingId }, { maxTimeMS: 5000 })
@@ -151,6 +163,7 @@ async function appendMessage(db, { trainingId, role, content, metadata = {} }) {
 
 export async function createTrainingSession(helpdeskUser, title = "Training baru") {
   const db = await getDb();
+  await closeActiveTrainingSessions(db, helpdeskUser.helpdesk_id);
   const createdAt = now();
   const doc = {
     training_id: createTrainingId(createdAt),
@@ -169,6 +182,25 @@ export async function createTrainingSession(helpdeskUser, title = "Training baru
 export async function getTrainingSession(trainingId, helpdeskUser) {
   const { db, session } = await getOwnedSession(trainingId, helpdeskUser.helpdesk_id);
   return serializeSession(session, await readMessages(db, trainingId));
+}
+
+export async function listTrainingSessions(helpdeskUser, limit = 50) {
+  const db = await getDb();
+  const activeSessions = await db.collection(env.trainingSessionCollection)
+    .find({ helpdesk_id: helpdeskUser.helpdesk_id, status: "active" }, { maxTimeMS: 5000 })
+    .sort({ updated_at: -1, _id: -1 })
+    .toArray();
+  const currentSession = activeSessions[0];
+  if (currentSession && activeSessions.length > 1) {
+    await closeActiveTrainingSessions(db, helpdeskUser.helpdesk_id, currentSession.training_id);
+  }
+
+  const sessions = await db.collection(env.trainingSessionCollection)
+    .find({ helpdesk_id: helpdeskUser.helpdesk_id }, { maxTimeMS: 5000 })
+    .sort({ status: 1, updated_at: -1, _id: -1 })
+    .limit(Math.min(Math.max(Number(limit) || 50, 1), 100))
+    .toArray();
+  return sessions.map((session) => serializeSession(session, []));
 }
 
 function knowledgeMetadata(result) {
