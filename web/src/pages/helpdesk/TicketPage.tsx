@@ -3,6 +3,7 @@ import { Download, Search } from "lucide-react";
 import { TicketTable } from "../../components/ticket/TicketTable";
 import { HelpdeskLayout } from "../../layouts/HelpdeskLayout";
 import { navigateWithinHelpdesk } from "../../lib/navigation";
+import { subscribeHelpdeskEvent } from "../../lib/helpdeskEvents";
 import { api, type Pagination } from "../../services/api";
 import type { Ticket } from "../../types";
 
@@ -110,16 +111,13 @@ export function TicketPage() {
   }, []);
 
   useEffect(() => {
-    const stream = new EventSource(api.eventsUrl());
     const refresh = () => {
       load(page);
       loadAssignees();
     };
-    stream.addEventListener("new_ticket", refresh);
-    stream.addEventListener("ticket_updated", refresh);
-    stream.addEventListener("handover_started", refresh);
-    stream.addEventListener("handover_resolved", refresh);
-    return () => stream.close();
+    const cleanups = (["new_ticket", "ticket_updated", "handover_started", "handover_resolved"] as const)
+      .map((eventName) => subscribeHelpdeskEvent(eventName, refresh));
+    return () => cleanups.forEach((cleanup) => cleanup());
   }, [search, status, period, customStart, customEnd, helpdeskId, page]);
 
   function applyFilters() {

@@ -3,6 +3,7 @@ import { Bot, CheckCircle2, Search, SlidersHorizontal, X } from "lucide-react";
 import { ChatWindow } from "../../components/chat/ChatWindow";
 import { StatusBadge } from "../../components/common/StatusBadge";
 import { getStoredHelpdeskUser } from "../../lib/helpdeskAuth";
+import { subscribeHelpdeskEvent } from "../../lib/helpdeskEvents";
 import { handleHelpdeskNavigation } from "../../lib/navigation";
 import { HelpdeskLayout } from "../../layouts/HelpdeskLayout";
 import { api } from "../../services/api";
@@ -72,13 +73,10 @@ export function ChatRoomPage({ sessionId }: { sessionId?: string }) {
   }, [sessionId, selectedTicketId]);
 
   useEffect(() => {
-    const stream = new EventSource(api.eventsUrl());
     const refreshQueue = () => loadTicket(sessionId || "");
-    stream.addEventListener("new_ticket", refreshQueue);
-    stream.addEventListener("ticket_updated", refreshQueue);
-    stream.addEventListener("handover_started", refreshQueue);
-    stream.addEventListener("handover_resolved", refreshQueue);
-    return () => stream.close();
+    const cleanups = (["new_ticket", "ticket_updated", "handover_started", "handover_resolved"] as const)
+      .map((eventName) => subscribeHelpdeskEvent(eventName, refreshQueue));
+    return () => cleanups.forEach((cleanup) => cleanup());
   }, [sessionId, selectedTicketId]);
 
   async function resolve() {

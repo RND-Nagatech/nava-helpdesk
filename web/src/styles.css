@@ -690,6 +690,19 @@ input:disabled {
   line-height: 1;
 }
 
+.sidebar-count-slot {
+  width: 28px;
+  min-width: 28px;
+  height: 18px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sidebar-count-slot.is-empty {
+  visibility: hidden;
+}
+
 .ops-userbar {
   justify-content: flex-end;
   gap: 14px;
@@ -3361,6 +3374,54 @@ textarea:focus {
   padding-left: 0;
 }
 
+/* Helpdesk login stays compact and aligned while using the same profile layout. */
+.profile-gate.helpdesk-login-page {
+  width: min(1360px, calc(100% - 48px));
+  height: min(620px, calc(100dvh - 48px));
+  min-height: 0;
+  margin: 24px auto;
+  padding: 0;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr);
+  column-gap: 12px;
+  row-gap: 30px;
+  align-items: stretch;
+}
+
+.helpdesk-login-page .profile-copy,
+.helpdesk-login-page .profile-card {
+  width: 100%;
+  min-width: 0;
+  align-self: stretch;
+}
+
+.helpdesk-login-page .profile-card {
+  padding: 42px 52px;
+}
+
+.helpdesk-login-page .field-with-icon {
+  min-height: 56px;
+}
+
+.helpdesk-login-page .field-with-icon.password-field {
+  grid-template-columns: 20px minmax(0, 1fr) 30px;
+}
+
+.helpdesk-login-page .remember-check {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+  margin: 0 0 14px;
+}
+
+.helpdesk-login-page .remember-check input {
+  flex: 0 0 auto;
+}
+
+.ops-frame:not(.customer-frame) .online-chip {
+  display: none;
+}
+
 .public-profile-error {
   margin: 0 0 12px;
   color: #a51616;
@@ -3846,5 +3907,39 @@ textarea:focus {
 
   .session-form {
     flex-direction: column;
+  }
+}
+
+@media (max-width: 1180px) {
+  .profile-gate.helpdesk-login-page {
+    width: min(760px, calc(100% - 32px));
+    height: auto;
+    min-height: calc(100dvh - 32px);
+    margin: 16px auto;
+    padding: 16px 0;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+    gap: 20px;
+    align-items: center;
+  }
+
+  .helpdesk-login-page .profile-copy,
+  .helpdesk-login-page .profile-card {
+    align-self: center;
+    width: 100%;
+  }
+}
+
+@media (max-width: 760px) {
+  .profile-gate.helpdesk-login-page {
+    width: calc(100% - 28px);
+    min-height: 100dvh;
+    margin: 0 auto;
+    padding: 14px 0;
+    gap: 18px;
+  }
+
+  .helpdesk-login-page .profile-card {
+    padding: 28px;
   }
 }

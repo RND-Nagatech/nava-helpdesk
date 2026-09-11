@@ -1,6 +1,7 @@
 import { useEffect, useState, type ReactNode } from "react";
-import { BookOpenText, Circle, LayoutDashboard, LogOut, MessageSquare, Ticket, UserRound, Users } from "lucide-react";
+import { BookOpenText, LayoutDashboard, LogOut, MessageSquare, Ticket, UserRound, Users } from "lucide-react";
 import { clearHelpdeskSession, getHelpdeskToken, getStoredHelpdeskUser } from "../lib/helpdeskAuth";
+import { subscribeHelpdeskEvent } from "../lib/helpdeskEvents";
 import { handleHelpdeskNavigation } from "../lib/navigation";
 import { ApiError, api } from "../services/api";
 import type { HelpdeskUser } from "../types";
@@ -64,11 +65,9 @@ export function HelpdeskLayout({ children }: { children: ReactNode }) {
       api.handoverCount().then((result) => setHandoverCount(Math.max(0, Number(result.count) || 0))).catch(() => undefined);
     };
     refreshCount();
-    const stream = new EventSource(api.eventsUrl());
-    ["new_ticket", "ticket_updated", "handover_started", "handover_resolved"].forEach((eventName) => {
-      stream.addEventListener(eventName, refreshCount);
-    });
-    return () => stream.close();
+    const unsubscribe = ["new_ticket", "ticket_updated", "handover_started", "handover_resolved"] as const;
+    const cleanups = unsubscribe.map((eventName) => subscribeHelpdeskEvent(eventName, refreshCount));
+    return () => cleanups.forEach((cleanup) => cleanup());
   }, []);
 
   async function logout() {
@@ -103,15 +102,19 @@ export function HelpdeskLayout({ children }: { children: ReactNode }) {
               <a className={active ? "active" : ""} href={item.href} key={item.href} onClick={handleHelpdeskNavigation}>
                 <Icon size={15} />
                 {item.label}
-                {item.href === "/helpdesk/handover" && handoverCount > 0 && (
-                  <span className="sidebar-count-badge" aria-label={`${handoverCount} handover menunggu`}>{handoverCount > 99 ? "99+" : handoverCount}</span>
+                {item.href === "/helpdesk/handover" && (
+                  <span
+                    className={`sidebar-count-slot ${handoverCount > 0 ? "" : "is-empty"}`}
+                    aria-label={handoverCount > 0 ? `${handoverCount} handover menunggu` : undefined}
+                  >
+                    <span className="sidebar-count-badge">{handoverCount > 99 ? "99+" : handoverCount}</span>
+                  </span>
                 )}
               </a>
             );
           })}
         </nav>
         <div className="ops-userbar">
-          <span className="online-chip"><Circle size={9} fill="currentColor" /> Online</span>
           <div className="operator-name">
             <strong>{user?.name || "Helpdesk"}</strong>
             <span>{user?.tier || "Helpdesk"}</span>

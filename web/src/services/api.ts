@@ -4,6 +4,7 @@ import type { Attachment, ChatMessage, DashboardSummary, HelpdeskUser, Knowledge
 const API_URL = import.meta.env.VITE_API_URL as string;
 const REQUEST_TIMEOUT_MS = 15000;
 const TRAINING_GENERATE_TIMEOUT_MS = 200000;
+const inFlightGetRequests = new Map<string, Promise<ApiResponse<unknown>>>();
 
 type ApiResponse<T> = {
   success: boolean;
@@ -53,6 +54,26 @@ async function request<T>(path: string, init: RequestInit = {}, timeoutMs = REQU
 }
 
 async function requestPayload<T>(path: string, init: RequestInit = {}, timeoutMs = REQUEST_TIMEOUT_MS): Promise<ApiResponse<T>> {
+  const token = getHelpdeskToken();
+  const method = String(init.method || "GET").toUpperCase();
+  const requestKey = `${method}:${path}:${token}`;
+  if (method === "GET") {
+    const existing = inFlightGetRequests.get(requestKey);
+    if (existing) return existing as Promise<ApiResponse<T>>;
+
+    const pending = requestPayloadNetwork<T>(path, init, timeoutMs) as Promise<ApiResponse<unknown>>;
+    inFlightGetRequests.set(requestKey, pending);
+    try {
+      return await pending as ApiResponse<T>;
+    } finally {
+      if (inFlightGetRequests.get(requestKey) === pending) inFlightGetRequests.delete(requestKey);
+    }
+  }
+
+  return requestPayloadNetwork<T>(path, init, timeoutMs);
+}
+
+async function requestPayloadNetwork<T>(path: string, init: RequestInit = {}, timeoutMs = REQUEST_TIMEOUT_MS): Promise<ApiResponse<T>> {
   const token = getHelpdeskToken();
   const controller = new AbortController();
   const timeout = window.setTimeout(() => controller.abort(), timeoutMs);

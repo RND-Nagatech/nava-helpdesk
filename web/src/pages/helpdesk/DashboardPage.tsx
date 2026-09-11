@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import type { ReactNode } from "react";
 import { Activity, Bot, BookOpen, CalendarDays, Clock3, Headphones, MessageSquare, RefreshCw, TicketCheck } from "lucide-react";
 import { HelpdeskLayout } from "../../layouts/HelpdeskLayout";
+import { subscribeHelpdeskEvent } from "../../lib/helpdeskEvents";
 import { api } from "../../services/api";
 import type { DashboardSummary, DashboardTimelineItem } from "../../types";
 
@@ -89,14 +90,11 @@ export function DashboardPage() {
         api.dashboard(periodParams).then(setData).catch(() => undefined);
       }, 700);
     };
-    const stream = new EventSource(api.eventsUrl());
-    stream.addEventListener("new_ticket", refresh);
-    stream.addEventListener("new_message", refresh);
-    stream.addEventListener("ticket_updated", refresh);
-    stream.addEventListener("handover_resolved", refresh);
+    const cleanups = (["new_ticket", "new_message", "ticket_updated", "handover_resolved"] as const)
+      .map((eventName) => subscribeHelpdeskEvent(eventName, refresh));
     return () => {
       window.clearTimeout(timeout);
-      stream.close();
+      cleanups.forEach((cleanup) => cleanup());
     };
   }, [periodParams.start_date, periodParams.end_date]);
 

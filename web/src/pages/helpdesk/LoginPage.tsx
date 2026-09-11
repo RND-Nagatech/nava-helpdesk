@@ -1,12 +1,18 @@
 import { FormEvent, useState } from "react";
 import { Eye, EyeOff, LockKeyhole, ShieldCheck, UserRound } from "lucide-react";
-import { getRememberedHelpdeskId, saveHelpdeskSession } from "../../lib/helpdeskAuth";
+import {
+  clearRememberedHelpdeskPassword,
+  getRememberedHelpdeskId,
+  getRememberedHelpdeskPassword,
+  saveHelpdeskSession,
+  saveRememberedHelpdeskPassword,
+} from "../../lib/helpdeskAuth";
 import { api } from "../../services/api";
 
 export function LoginPage() {
   const [helpdeskId, setHelpdeskId] = useState(() => getRememberedHelpdeskId());
-  const [password, setPassword] = useState("");
-  const [remember, setRemember] = useState(() => Boolean(getRememberedHelpdeskId()));
+  const [password, setPassword] = useState(() => getRememberedHelpdeskPassword());
+  const [remember, setRemember] = useState(() => Boolean(getRememberedHelpdeskId() || getRememberedHelpdeskPassword()));
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -18,6 +24,8 @@ export function LoginPage() {
       setError("");
       const session = await api.helpdeskLogin({ helpdesk_id: helpdeskId, password });
       saveHelpdeskSession(session.token, session.user, remember);
+      if (remember) saveRememberedHelpdeskPassword(password);
+      else clearRememberedHelpdeskPassword();
       const next = new URLSearchParams(window.location.search).get("next") || "/helpdesk/chat";
       const allowedNext = (next.startsWith("/helpdesk") && next !== "/helpdesk/login") || next === "/chat-training";
       window.location.href = allowedNext ? next : "/helpdesk/chat";
@@ -73,7 +81,15 @@ export function LoginPage() {
           </div>
         </label>
         <label className="remember-check">
-          <input type="checkbox" checked={remember} onChange={(event) => setRemember(event.target.checked)} />
+          <input
+            type="checkbox"
+            checked={remember}
+            onChange={(event) => {
+              const nextRemember = event.target.checked;
+              setRemember(nextRemember);
+              if (!nextRemember) clearRememberedHelpdeskPassword();
+            }}
+          />
           Ingat Saya
         </label>
         {error && <div className="error-box">{error}</div>}

@@ -1,6 +1,7 @@
 import { FormEvent, useEffect, useRef, useState } from "react";
 import { Bot, Headphones, ImagePlus, SendHorizontal, RefreshCw, Store, UserRound, Wifi } from "lucide-react";
 import { getStoredHelpdeskUser } from "../../lib/helpdeskAuth";
+import { subscribeHelpdeskConnection, subscribeHelpdeskEvent } from "../../lib/helpdeskEvents";
 import { api } from "../../services/api";
 import type { Attachment, ChatMessage, Ticket } from "../../types";
 import { AttachmentGrid, PendingFiles } from "./AttachmentPreview";
@@ -124,6 +125,20 @@ export function ChatWindow({
   }, [sessionId]);
 
   useEffect(() => {
+    if (mode === "helpdesk") {
+      const unsubscribeMessage = subscribeHelpdeskEvent("new_message", (messageEvent) => {
+        const payload = JSON.parse(messageEvent.data || "{}") as { session_id?: string; message?: ChatMessage };
+        if (payload.session_id !== sessionId) return;
+        upsertMessage(payload.message);
+        setLoading(false);
+      });
+      const unsubscribeConnection = subscribeHelpdeskConnection(setReconnecting);
+      return () => {
+        unsubscribeMessage();
+        unsubscribeConnection();
+      };
+    }
+
     const stream = new EventSource(api.eventsUrl());
     stream.addEventListener("open", () => setReconnecting(false));
     stream.addEventListener("error", () => setReconnecting(true));

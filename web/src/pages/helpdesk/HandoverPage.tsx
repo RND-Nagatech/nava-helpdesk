@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { TicketTable } from "../../components/ticket/TicketTable";
 import { HelpdeskLayout } from "../../layouts/HelpdeskLayout";
 import { navigateWithinHelpdesk } from "../../lib/navigation";
+import { subscribeHelpdeskEvent } from "../../lib/helpdeskEvents";
 import { api } from "../../services/api";
 import type { Ticket } from "../../types";
 
@@ -28,12 +29,9 @@ export function HandoverPage() {
   }, []);
 
   useEffect(() => {
-    const stream = new EventSource(api.eventsUrl());
-    stream.addEventListener("new_ticket", load);
-    stream.addEventListener("ticket_updated", load);
-    stream.addEventListener("handover_started", load);
-    stream.addEventListener("handover_resolved", load);
-    return () => stream.close();
+    const cleanups = (["new_ticket", "ticket_updated", "handover_started", "handover_resolved"] as const)
+      .map((eventName) => subscribeHelpdeskEvent(eventName, load));
+    return () => cleanups.forEach((cleanup) => cleanup());
   }, []);
 
   async function accept(ticket: Ticket) {
