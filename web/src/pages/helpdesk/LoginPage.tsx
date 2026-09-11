@@ -19,7 +19,8 @@ export function LoginPage() {
       const session = await api.helpdeskLogin({ helpdesk_id: helpdeskId, password });
       saveHelpdeskSession(session.token, session.user, remember);
       const next = new URLSearchParams(window.location.search).get("next") || "/helpdesk/chat";
-      window.location.href = next.startsWith("/helpdesk") && next !== "/helpdesk/login" ? next : "/helpdesk/chat";
+      const allowedNext = (next.startsWith("/helpdesk") && next !== "/helpdesk/login") || next === "/chat-training";
+      window.location.href = allowedNext ? next : "/helpdesk/chat";
     } catch (err) {
       setError(err instanceof Error ? err.message : "Login helpdesk gagal.");
     } finally {

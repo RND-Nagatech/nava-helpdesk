@@ -2,6 +2,7 @@ import { z } from "zod";
 import {
   archiveKnowledgeArticle,
   createKnowledgeArticle,
+  deleteKnowledgeArticle,
   getKnowledgeArticle,
   listKnowledgeCategories,
   listKnowledgeArticles,
@@ -16,6 +17,14 @@ const stepSchema = z.object({
   expectedResult: z.string().trim().max(1000).optional(),
 });
 
+const sourceSchema = z.object({
+  type: z.string().trim().max(80),
+  training_id: z.string().trim().max(200).optional(),
+  created_by_helpdesk_id: z.string().trim().max(200).optional(),
+  created_by_helpdesk_name: z.string().trim().max(200).optional(),
+  supersedes_article_id: z.string().trim().max(200).optional(),
+}).optional();
+
 const articleSchema = z.object({
   title: z.string().trim().max(300).optional(),
   category: z.string().trim().max(120).optional(),
@@ -27,6 +36,7 @@ const articleSchema = z.object({
   troubleshootingSteps: z.array(stepSchema).max(30).optional(),
   escalationRules: z.array(z.string().trim().max(500)).max(20).optional(),
   internalNotes: z.string().trim().max(4000).optional(),
+  source: sourceSchema,
 });
 
 function articleIdParam(req) {
@@ -107,6 +117,16 @@ export async function archiveKnowledgeArticleHandler(req, res, next) {
     const article = await archiveKnowledgeArticle(articleIdParam(req), req.helpdeskUser);
     if (!article) return res.status(404).json({ success: false, message: "Artikel tidak ditemukan." });
     res.json({ success: true, data: article });
+  } catch (error) {
+    next(error);
+  }
+}
+
+export async function deleteKnowledgeArticleHandler(req, res, next) {
+  try {
+    const result = await deleteKnowledgeArticle(articleIdParam(req));
+    if (!result) return res.status(404).json({ success: false, message: "Artikel tidak ditemukan." });
+    res.json({ success: true, data: result });
   } catch (error) {
     next(error);
   }

@@ -1,8 +1,9 @@
 import { getHelpdeskToken } from "../lib/helpdeskAuth";
-import type { Attachment, ChatMessage, DashboardSummary, HelpdeskUser, KnowledgeArticle, Ticket } from "../types";
+import type { Attachment, ChatMessage, DashboardSummary, HelpdeskUser, KnowledgeArticle, Ticket, TrainingDraft, TrainingGenerateResult, TrainingSession } from "../types";
 
 const API_URL = import.meta.env.VITE_API_URL as string;
 const REQUEST_TIMEOUT_MS = 15000;
+const TRAINING_GENERATE_TIMEOUT_MS = 200000;
 
 type ApiResponse<T> = {
   success: boolean;
@@ -46,15 +47,15 @@ function friendlyApiMessage(payload: ApiResponse<unknown> | null, status: number
   return "Permintaan belum dapat diproses. Silakan coba lagi.";
 }
 
-async function request<T>(path: string, init: RequestInit = {}): Promise<T> {
-  const payload = await requestPayload<T>(path, init);
+async function request<T>(path: string, init: RequestInit = {}, timeoutMs = REQUEST_TIMEOUT_MS): Promise<T> {
+  const payload = await requestPayload<T>(path, init, timeoutMs);
   return payload.data;
 }
 
-async function requestPayload<T>(path: string, init: RequestInit = {}): Promise<ApiResponse<T>> {
+async function requestPayload<T>(path: string, init: RequestInit = {}, timeoutMs = REQUEST_TIMEOUT_MS): Promise<ApiResponse<T>> {
   const token = getHelpdeskToken();
   const controller = new AbortController();
-  const timeout = window.setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
+  const timeout = window.setTimeout(() => controller.abort(), timeoutMs);
 
   let response: Response;
   try {
@@ -165,6 +166,51 @@ export const api = {
   },
   eventsUrl() {
     return `${API_URL}/api/events`;
+  },
+  createTrainingSession(title = "Training baru") {
+    return request<TrainingSession>("/api/training/session", {
+      method: "POST",
+      body: JSON.stringify({ title }),
+    });
+  },
+  trainingSession(trainingId: string) {
+    return request<TrainingSession>(`/api/training/${encodeURIComponent(trainingId)}`);
+  },
+  trainingMessage(trainingId: string, question: string) {
+    return request<{ session: TrainingSession; assistant: TrainingSession["messages"][number] }>(`/api/training/${encodeURIComponent(trainingId)}/message`, {
+      method: "POST",
+      body: JSON.stringify({ question }),
+    });
+  },
+  trainingCorrection(trainingId: string, correction: string, messageId = "") {
+    return request<{ session: TrainingSession; assistant: TrainingSession["messages"][number] }>(`/api/training/${encodeURIComponent(trainingId)}/correction`, {
+      method: "POST",
+      body: JSON.stringify({ correction, message_id: messageId || undefined }),
+    });
+  },
+  trainingFeedback(trainingId: string, messageId: string, verdict: "correct" | "needs_correction" = "correct") {
+    return request<TrainingSession["messages"][number]>(`/api/training/${encodeURIComponent(trainingId)}/feedback`, {
+      method: "POST",
+      body: JSON.stringify({ message_id: messageId, verdict }),
+    });
+  },
+  generateTrainingKnowledge(trainingId: string) {
+    return request<TrainingGenerateResult>(`/api/training/${encodeURIComponent(trainingId)}/generate-knowledge`, {
+      method: "POST",
+      body: JSON.stringify({}),
+    }, TRAINING_GENERATE_TIMEOUT_MS);
+  },
+  saveTrainingDraft(trainingId: string, draft: TrainingDraft, action: "new" | "update_existing" = "new", existingArticleId = "") {
+    return request<KnowledgeArticle>(`/api/training/${encodeURIComponent(trainingId)}/save-draft`, {
+      method: "POST",
+      body: JSON.stringify({ draft, action, existing_article_id: existingArticleId || undefined }),
+    });
+  },
+  closeTrainingSession(trainingId: string) {
+    return request<TrainingSession>(`/api/training/${encodeURIComponent(trainingId)}/close`, {
+      method: "POST",
+      body: JSON.stringify({}),
+    });
   },
   chat(input: {
     question: string;
@@ -311,6 +357,11 @@ export const api = {
     return request<KnowledgeArticle>(`/api/knowledge/articles/${encodeURIComponent(articleId)}/archive`, {
       method: "POST",
       body: JSON.stringify({}),
+    });
+  },
+  deleteKnowledgeArticle(articleId: string) {
+    return request<{ articleId: string; deleted: boolean }>(`/api/knowledge/articles/${encodeURIComponent(articleId)}`, {
+      method: "DELETE",
     });
   },
 };

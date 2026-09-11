@@ -44,6 +44,7 @@ npm run knowledge:vector-index
 ```
 
 Artikel baru yang di-publish dari portal helpdesk otomatis dibuat embedding dan di-upsert ke Qdrant. Artikel draft atau archive dikeluarkan dari vector search.
+Artikel archived dapat dihapus permanen melalui portal setelah konfirmasi; endpoint delete hanya menerima artikel dengan status `archived` dan menghapus point Qdrant sebagai pengaman.
 
 ## Menjalankan Frontend
 
@@ -69,6 +70,7 @@ Seluruh request frontend melewati `web/src/services/api.ts` dan memakai `import.
 - `/helpdesk/tickets` -> Daftar Tiket
 - `/helpdesk/handover` -> Antrian Handover
 - `/helpdesk/chat/:sessionId` -> Chat Room Helpdesk untuk session yang sama
+- `/chat-training` -> Chat Training internal (akses langsung, wajib login Helpdesk)
 
 ## Endpoint Backend Baru
 
@@ -83,6 +85,14 @@ Seluruh request frontend melewati `web/src/services/api.ts` dan memakai `import.
 - `POST /api/tickets/:id/accept`
 - `POST /api/tickets/:id/resolve`
 - `POST /api/helpdesk/reply`
+- `POST /api/training/session`
+- `GET /api/training/:trainingId`
+- `POST /api/training/:trainingId/message`
+- `POST /api/training/:trainingId/correction`
+- `POST /api/training/:trainingId/feedback`
+- `POST /api/training/:trainingId/generate-knowledge`
+- `POST /api/training/:trainingId/save-draft`
+- `POST /api/training/:trainingId/close`
 
 Endpoint agent existing seperti `POST /api/chat`, `POST /api/knowledge/search`, dan `GET /api/customer/:customer_id/context` tetap dipertahankan.
 
@@ -96,12 +106,16 @@ Collection existing tetap dipakai:
 - `tt_agent_checkpoint`
 - `tt_agent_checkpoint_write`
 - `tm_nava_customer_memory`
+- `tt_chat_training`
+- `tt_chat_training_message`
 
 Collection baru:
 
 - `tt_ticket_helpdesk`
 
 Ticket memakai `session_id` sebagai relasi utama ke history di `tt_chat_helpdesk`, sehingga history chat tidak diduplikasi ke ticket.
+
+Chat Training memakai `tt_chat_training` dan `tt_chat_training_message`. Jalur ini tidak menulis chat customer, trace production, long-term memory customer, atau ticket. Knowledge yang dihasilkan selalu disimpan sebagai `draft`; Helpdesk tetap melakukan review dan publish dari menu Artikel.
 
 ## Upload Gambar
 

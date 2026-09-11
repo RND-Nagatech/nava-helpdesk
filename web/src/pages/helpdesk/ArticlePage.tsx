@@ -1,6 +1,7 @@
 import { FormEvent, useEffect, useState } from "react";
-import { Archive, BookOpenText, CheckCircle2, Plus, Search } from "lucide-react";
+import { Archive, ArrowUpRight, BookOpenText, CheckCircle2, Plus, Search, Trash2 } from "lucide-react";
 import { HelpdeskLayout } from "../../layouts/HelpdeskLayout";
+import { handleHelpdeskNavigation } from "../../lib/navigation";
 import { api } from "../../services/api";
 import type { KnowledgeArticle } from "../../types";
 
@@ -75,6 +76,8 @@ export function ArticlePage() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [publishing, setPublishing] = useState(false);
+  const [deleting, setDeleting] = useState(false);
+  const [confirmDelete, setConfirmDelete] = useState(false);
   const [error, setError] = useState("");
   const [notice, setNotice] = useState("");
 
@@ -195,6 +198,23 @@ export function ArticlePage() {
     }
   }
 
+  async function removeArchived() {
+    if (!selected.articleId || selected.status !== "archived") return;
+    try {
+      setDeleting(true);
+      setError("");
+      const result = await api.deleteKnowledgeArticle(selected.articleId);
+      setConfirmDelete(false);
+      setSelected(emptyArticle());
+      setNotice(`Artikel ${result.articleId} berhasil dihapus permanen.`);
+      await load(undefined, "");
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Gagal menghapus artikel.");
+    } finally {
+      setDeleting(false);
+    }
+  }
+
   return (
     <HelpdeskLayout>
       <section className="article-page">
@@ -203,11 +223,16 @@ export function ArticlePage() {
             <div>
               <span className="eyebrow">Knowledge Bot</span>
               <h1>Artikel</h1>
-              <p>Tambah jawaban NAVA dari kendala yang sering muncul.</p>
+              <p>Kelola knowledge NAVA.</p>
             </div>
-            <button className="button primary" type="button" onClick={() => setSelected(emptyArticle())}>
-              <Plus size={15} /> Artikel Baru
-            </button>
+            <div className="article-head-actions">
+              <a className="button secondary article-training-button" href="/chat-training" onClick={handleHelpdeskNavigation}>
+                Training <ArrowUpRight size={15} />
+              </a>
+              <button className="button primary" type="button" onClick={() => setSelected(emptyArticle())}>
+                <Plus size={15} /> Artikel Baru
+              </button>
+            </div>
           </div>
           <div className="article-filters">
             <select value={category} onChange={(event) => setCategory(event.target.value)}>
@@ -335,13 +360,35 @@ export function ArticlePage() {
                 </button>
               </>
             )}
-            {selected.articleId && (
+            {selected.articleId && selected.status === "published" && (
               <button className="button secondary" type="button" onClick={archive} disabled={saving || publishing}>
                 <Archive size={15} /> Archive
               </button>
             )}
+            {selected.articleId && selected.status === "archived" && (
+              <button className="button danger" type="button" onClick={() => setConfirmDelete(true)} disabled={saving || publishing || deleting}>
+                <Trash2 size={15} /> Delete Permanen
+              </button>
+            )}
           </div>
         </form>
+        {confirmDelete && selected.articleId && (
+          <div className="confirm-backdrop" role="presentation" onMouseDown={() => setConfirmDelete(false)}>
+            <section className="confirm-dialog" role="dialog" aria-modal="true" aria-labelledby="delete-article-title" onMouseDown={(event) => event.stopPropagation()}>
+              <div className="confirm-icon danger">
+                <Trash2 size={22} />
+              </div>
+              <h2 id="delete-article-title">Hapus artikel permanen?</h2>
+              <p>Artikel <strong>{selected.title || "ini"}</strong> sudah archived dan akan dihapus dari database. Tindakan ini tidak dapat dibatalkan.</p>
+              <div className="confirm-actions">
+                <button className="button secondary" type="button" onClick={() => setConfirmDelete(false)} disabled={deleting}>Batal</button>
+                <button className="button danger" type="button" onClick={removeArchived} disabled={deleting}>
+                  {deleting ? "Menghapus..." : "Ya, Hapus Permanen"}
+                </button>
+              </div>
+            </section>
+          </div>
+        )}
       </section>
     </HelpdeskLayout>
   );

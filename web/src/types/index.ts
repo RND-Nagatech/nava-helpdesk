@@ -138,4 +138,91 @@ export type KnowledgeArticle = {
   embedding_status: "ready" | "stale";
   created_at?: string;
   updated_at?: string;
+  source?: {
+    type: string;
+    training_id?: string;
+    created_by_helpdesk_id?: string;
+    created_by_helpdesk_name?: string;
+    supersedes_article_id?: string;
+  };
+};
+
+export type TrainingKnowledgeReference = {
+  query?: string;
+  evidence_strength?: string;
+  primary_article?: {
+    article_id: string;
+    title: string;
+    category?: string;
+  } | null;
+};
+
+export type TrainingMessage = {
+  _id?: string;
+  training_id: string;
+  role: "helpdesk" | "assistant" | "correction";
+  content: string;
+  metadata?: {
+    knowledge_used?: TrainingKnowledgeReference[];
+    corrected_from_helpdesk?: boolean;
+    evaluation?: "correct" | "needs_correction";
+    [key: string]: unknown;
+  };
+  created_at: string;
+};
+
+export type TrainingSession = {
+  training_id: string;
+  helpdesk_id: string;
+  helpdesk_name: string;
+  title: string;
+  status: "active" | "closed";
+  created_at: string;
+  updated_at: string;
+  knowledge_draft_id?: string | null;
+  messages: TrainingMessage[];
+};
+
+export type TrainingSummary = {
+  context: string;
+  customer_question: string;
+  previous_answer_issue: string;
+  helpdesk_corrections: string[];
+  confirmed_conclusion: string;
+  solution_steps: string[];
+  reusable_knowledge: string;
+};
+
+export type TrainingDraft = {
+  title: string;
+  category: string;
+  product: string;
+  clientScope: string[];
+  symptoms: string[];
+  troubleshootingSteps: Array<{
+    order: number;
+    title: string;
+    instruction: string;
+    expectedResult: string;
+  }>;
+  userResponseTemplate: string;
+  tags: string[];
+  internalNotes: string;
+  escalationRules: string[];
+};
+
+export type TrainingGenerateResult = {
+  can_save: boolean;
+  training_id: string;
+  summary: TrainingSummary;
+  missing_confirmation: string[];
+  draft: TrainingDraft | null;
+  duplicate_candidates: Array<{
+    article_id: string;
+    title: string;
+    category?: string;
+    product?: string;
+    confidence: number;
+    evidence_strength: string;
+  }>;
 };

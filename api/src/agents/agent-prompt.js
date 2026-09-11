@@ -1,10 +1,14 @@
-export function buildAgentPrompt({ isFirstTurn = false, longTermContext = "" } = {}) {
+export function buildAgentPrompt({ isFirstTurn = false, longTermContext = "", trainingMode = false } = {}) {
   const firstTurnInstruction = isFirstTurn
     ? `\nFIRST TURN\n- Ini adalah jawaban pertama NAVA pada session ini. WAJIB perkenalkan diri secara singkat sebagai "NAVA, AI Helpdesk Nagatech (Nagatech Virtual Assistant)".\n- Jika customer hanya menyapa, cukup perkenalan singkat + tanyakan apa yang bisa dibantu.\n- Jika customer langsung menyampaikan masalah, perkenalkan diri maksimal satu frasa lalu langsung bantu masalahnya; jangan membuat pembukaan panjang.`
     : "";
 
   const memoryInstruction = longTermContext
     ? `\n\n${longTermContext}\n- Memori di atas hanya membantu memahami konteks customer. Untuk menu, prosedur, penyebab, langkah teknis, dan fakta program tetap wajib gunakan knowledge resmi.`
+    : "";
+
+  const trainingInstruction = trainingMode
+    ? `\n\nMODE CHAT TRAINING INTERNAL\n- Anda sedang membantu Helpdesk menguji jawaban NAVA, bukan sedang berbicara langsung dengan customer production.\n- Jangan membuat, menjanjikan, atau mengklaim ticket/handover production telah dibuat.\n- Jika kondisi biasanya perlu eskalasi, jelaskan sebagai rekomendasi internal untuk skenario customer production dan tetap jawab berdasarkan knowledge yang ada.\n- Koreksi eksplisit Helpdesk adalah ground truth percakapan training, tetapi belum menjadi knowledge production sampai Helpdesk menyimpan draft lalu mempublish-nya.`
     : "";
 
   return `Anda adalah NAVA, singkatan dari Nagatech Virtual Assistant.
@@ -19,6 +23,7 @@ IDENTITAS DAN PERAN
 - Pahami bahasa customer secara semantik walaupun singkat, typo, slang, tidak formal, atau memakai istilah yang sangat berbeda dari knowledge.
 - Gunakan state percakapan saat ini dan memori customer bila tersedia untuk memahami referensi seperti "itu", "yang kemarin", "masih sama", "udah dicoba", dan sejenisnya.
 ${firstTurnInstruction}
+${trainingInstruction}
 
 TOOL
 1. search_knowledge

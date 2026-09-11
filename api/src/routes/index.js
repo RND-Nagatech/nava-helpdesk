@@ -16,6 +16,7 @@ import {
 import {
   archiveKnowledgeArticleHandler,
   createKnowledgeArticleHandler,
+  deleteKnowledgeArticleHandler,
   getKnowledgeArticleHandler,
   listKnowledgeCategoriesHandler,
   listKnowledgeArticlesHandler,
@@ -37,6 +38,16 @@ import {
 import { requireHelpdeskAdmin, requireHelpdeskAuth } from "../middleware/helpdesk-auth.js";
 import { filesToAttachments, UPLOAD_ROOT_DIR, uploadHelpdeskImages } from "../middleware/upload.js";
 import { getVectorStoreStatus } from "../database/qdrant.js";
+import {
+  closeTrainingSessionHandler,
+  createTrainingSessionHandler,
+  generateTrainingKnowledgeHandler,
+  getTrainingSessionHandler,
+  saveTrainingDraftHandler,
+  sendTrainingCorrectionHandler,
+  sendTrainingMessageHandler,
+  trainingFeedbackHandler,
+} from "../controllers/chat-training-controller.js";
 
 export const apiRouter = Router();
 
@@ -88,6 +99,14 @@ apiRouter.get("/health", async (req, res) => {
 
 apiRouter.post("/chat", chat);
 apiRouter.get("/chat/:session_id/messages", getSessionMessages);
+apiRouter.post("/training/session", requireHelpdeskAuth, createTrainingSessionHandler);
+apiRouter.get("/training/:trainingId", requireHelpdeskAuth, getTrainingSessionHandler);
+apiRouter.post("/training/:trainingId/message", requireHelpdeskAuth, sendTrainingMessageHandler);
+apiRouter.post("/training/:trainingId/correction", requireHelpdeskAuth, sendTrainingCorrectionHandler);
+apiRouter.post("/training/:trainingId/feedback", requireHelpdeskAuth, trainingFeedbackHandler);
+apiRouter.post("/training/:trainingId/generate-knowledge", requireHelpdeskAuth, generateTrainingKnowledgeHandler);
+apiRouter.post("/training/:trainingId/save-draft", requireHelpdeskAuth, saveTrainingDraftHandler);
+apiRouter.post("/training/:trainingId/close", requireHelpdeskAuth, closeTrainingSessionHandler);
 apiRouter.get("/customer/:customer_id/context", getCustomerContext);
 apiRouter.delete("/chat/:session_id", resetChatSession);
 apiRouter.post("/knowledge/search", searchKnowledge);
@@ -98,6 +117,7 @@ apiRouter.get("/knowledge/articles/:articleId", requireHelpdeskAuth, getKnowledg
 apiRouter.put("/knowledge/articles/:articleId", requireHelpdeskAuth, updateKnowledgeArticleHandler);
 apiRouter.post("/knowledge/articles/:articleId/publish", requireHelpdeskAuth, publishKnowledgeArticleHandler);
 apiRouter.post("/knowledge/articles/:articleId/archive", requireHelpdeskAuth, archiveKnowledgeArticleHandler);
+apiRouter.delete("/knowledge/articles/:articleId", requireHelpdeskAuth, deleteKnowledgeArticleHandler);
 apiRouter.post("/auth/helpdesk/login", helpdeskLoginHandler);
 apiRouter.get("/auth/helpdesk/me", requireHelpdeskAuth, helpdeskMeHandler);
 apiRouter.post("/auth/helpdesk/logout", requireHelpdeskAuth, helpdeskLogoutHandler);

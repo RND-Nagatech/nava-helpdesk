@@ -26,6 +26,7 @@ const runtimeContextSchema = z.object({
   isFirstTurn: z.boolean().default(false),
   customerId: z.string().nullable().optional(),
   longTermContext: z.string().default(""),
+  trainingMode: z.boolean().default(false),
 });
 
 function getModel() {
@@ -65,6 +66,7 @@ function buildMiddleware() {
       buildAgentPrompt({
         isFirstTurn: Boolean(runtime.context?.isFirstTurn),
         longTermContext: runtime.context?.longTermContext || "",
+        trainingMode: Boolean(runtime.context?.trainingMode),
       })
     ),
     modelCallLimitMiddleware({
@@ -285,6 +287,7 @@ export async function runHelpdeskAgent({
   attachments = [],
   isFirstTurn = false,
   memoryContext = { text: "", source: "none", items: 0 },
+  trainingMode = false,
 }) {
   const startedAt = Date.now();
   const runId = crypto.randomUUID();
@@ -319,6 +322,7 @@ export async function runHelpdeskAgent({
       isFirstTurn,
       customerId,
       longTermContext: memoryContext.text || "",
+      trainingMode,
     },
   };
 

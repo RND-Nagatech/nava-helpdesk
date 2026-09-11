@@ -21,6 +21,8 @@ export const env = {
   mongodbDb: process.env.MONGODB_DB || "db_agent_helpdesk",
   knowledgeCollection: process.env.KNOWLEDGE_COLLECTION || "tm_knowledge_helpdesk",
   chatCollection: process.env.CHAT_COLLECTION || "tt_chat_helpdesk",
+  trainingSessionCollection: process.env.TRAINING_SESSION_COLLECTION || "tt_chat_training",
+  trainingMessageCollection: process.env.TRAINING_MESSAGE_COLLECTION || "tt_chat_training_message",
   agentTraceCollection: process.env.AGENT_TRACE_COLLECTION || "tt_agent_trace",
   ticketCollection: process.env.TICKET_COLLECTION || "tt_ticket_helpdesk",
   helpdeskUserCollection: process.env.HELPDESK_USER_COLLECTION || "tm_helpdesk_user",

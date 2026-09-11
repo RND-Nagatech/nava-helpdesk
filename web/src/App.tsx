@@ -7,6 +7,7 @@ import { ArticlePage } from "./pages/helpdesk/ArticlePage";
 import { LoginPage } from "./pages/helpdesk/LoginPage";
 import { TicketPage } from "./pages/helpdesk/TicketPage";
 import { UsersPage } from "./pages/helpdesk/UsersPage";
+import { ChatTrainingPage } from "./pages/helpdesk/ChatTrainingPage";
 
 export default function App() {
   const [path, setPath] = useState(() => window.location.pathname);
@@ -22,6 +23,7 @@ export default function App() {
   }, []);
 
   if (path === "/helpdesk/login") return <LoginPage />;
+  if (path === "/chat-training") return <ChatTrainingPage />;
   if (path === "/helpdesk" || path === "/helpdesk/") return <ChatRoomPage />;
   if (path === "/helpdesk/dashboard") return <DashboardPage />;
   if (path === "/helpdesk/articles") return <ArticlePage />;

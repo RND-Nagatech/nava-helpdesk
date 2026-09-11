@@ -17,6 +17,7 @@ export function ChatRoomPage({ sessionId }: { sessionId?: string }) {
   const [confirmResolve, setConfirmResolve] = useState(false);
   const [resolving, setResolving] = useState(false);
   const [queueLoading, setQueueLoading] = useState(false);
+  const [queueCollapsed, setQueueCollapsed] = useState(false);
   const loadVersion = useRef(0);
   const currentHelpdesk = getStoredHelpdeskUser();
 
@@ -104,14 +105,21 @@ export function ChatRoomPage({ sessionId }: { sessionId?: string }) {
   return (
     <HelpdeskLayout>
       {error && <div className="error-box">{error}</div>}
-      <section className="helpdesk-workspace">
+      <section className={`helpdesk-workspace ${queueCollapsed ? "queue-collapsed" : ""}`}>
         <aside className="queue-panel">
           <div className="queue-panel-head">
             <div>
               <h2>Chat Aktif <span>{tickets.length}</span></h2>
               <small>Ticket yang sudah diambil helpdesk</small>
             </div>
-            <button className="icon-ghost" type="button" title="Filter antrean">
+            <button
+              className="icon-ghost queue-collapse-toggle"
+              type="button"
+              title={queueCollapsed ? "Buka daftar chat" : "Ciutkan daftar chat"}
+              aria-label={queueCollapsed ? "Buka daftar chat" : "Ciutkan daftar chat"}
+              aria-expanded={!queueCollapsed}
+              onClick={() => setQueueCollapsed((current) => !current)}
+            >
               <SlidersHorizontal size={18} />
             </button>
           </div>

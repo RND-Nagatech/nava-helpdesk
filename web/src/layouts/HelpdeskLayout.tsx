@@ -86,7 +86,7 @@ export function HelpdeskLayout({ children }: { children: ReactNode }) {
   }
 
   return (
-    <div className="ops-frame">
+    <div className={`ops-frame ${path === "/chat-training" ? "training-shell" : ""}`}>
       <header className="ops-topbar">
           <a className="ops-brand" href="/helpdesk/chat" onClick={handleHelpdeskNavigation}>
           <div className="brand-mark">N</div>

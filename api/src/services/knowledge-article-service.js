@@ -217,6 +217,7 @@ export async function createKnowledgeArticle(input, helpdeskUser) {
     created_by_helpdesk_name: helpdeskUser?.name || null,
     updated_by_helpdesk_id: helpdeskUser?.helpdesk_id || null,
     updated_by_helpdesk_name: helpdeskUser?.name || null,
+    ...(input.source ? { source: input.source } : {}),
   };
   await db.collection(env.knowledgeCollection).insertOne(doc);
   return serializeKnowledgeArticle(doc);
@@ -229,6 +230,7 @@ export async function updateKnowledgeArticle(articleId, input, helpdeskUser, { s
 
   const nextStatus = status || existing.status || "published";
   const article = normalizeKnowledgeArticleInput({ ...existing, ...input, articleId, status: nextStatus }, { status: nextStatus });
+  const source = input.source || existing.source;
   const updatedAt = now();
   let embedding;
 
@@ -249,6 +251,7 @@ export async function updateKnowledgeArticle(articleId, input, helpdeskUser, { s
     $set: {
       ...article,
       status: nextStatus,
+      ...(source ? { source } : {}),
       updated_at: updatedAt,
       updated_by_helpdesk_id: helpdeskUser?.helpdesk_id || null,
       updated_by_helpdesk_name: helpdeskUser?.name || null,
@@ -290,6 +293,7 @@ export async function publishKnowledgeArticle(articleId, helpdeskUser) {
   if (!existing) return null;
 
   const article = normalizeKnowledgeArticleInput(existing, { status: existing.status || "draft" });
+  const source = existing.source;
   validatePublishableArticle(article);
 
   const [embedding] = await embedDocuments([articleEmbeddingText(article)]);
@@ -307,6 +311,7 @@ export async function publishKnowledgeArticle(articleId, helpdeskUser) {
       $set: {
         ...article,
         status: "published",
+        ...(source ? { source } : {}),
         [env.vectorField]: embedding,
         embedding_model: env.embeddingModel,
         embedding_profile: env.embeddingProfile,
@@ -341,4 +346,25 @@ export async function archiveKnowledgeArticle(articleId, helpdeskUser) {
     { returnDocument: "after", projection: projection() }
   );
   return serializeKnowledgeArticle(result);
+}
+
+export async function deleteKnowledgeArticle(articleId) {
+  const db = await getDb();
+  const collection = db.collection(env.knowledgeCollection);
+  const existing = await collection.findOne({ articleId }, { projection: { status: 1 } });
+  if (!existing) return null;
+
+  if ((existing.status || "published") !== "archived") {
+    const error = new Error("Hanya artikel archived yang dapat dihapus permanen.");
+    error.code = "ARTICLE_DELETE_NOT_ALLOWED";
+    error.statusCode = 409;
+    throw error;
+  }
+
+  await removeKnowledgeVector(articleId);
+  const result = await collection.deleteOne({ articleId, status: "archived" });
+  return {
+    articleId,
+    deleted: result.deletedCount === 1,
+  };
 }

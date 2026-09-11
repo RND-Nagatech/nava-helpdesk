@@ -63,6 +63,8 @@ export async function ensureIndexes() {
   const db = await getDb();
   const knowledge = db.collection(env.knowledgeCollection);
   const chat = db.collection(env.chatCollection);
+  const trainingSessions = db.collection(env.trainingSessionCollection);
+  const trainingMessages = db.collection(env.trainingMessageCollection);
   const trace = db.collection(env.agentTraceCollection);
   const longTermMemory = db.collection(env.longTermMemoryCollection);
   const tickets = db.collection(env.ticketCollection);
@@ -114,6 +116,11 @@ export async function ensureIndexes() {
     { name: "chat_customer_created_at" }
   );
   await chat.createIndex({ role: 1, created_at: -1 }, { name: "chat_role_created_at" });
+
+  await trainingSessions.createIndex({ training_id: 1 }, { unique: true, name: "training_id_unique" });
+  await trainingSessions.createIndex({ helpdesk_id: 1, updated_at: -1 }, { name: "training_helpdesk_updated" });
+  await trainingMessages.createIndex({ training_id: 1, created_at: 1 }, { name: "training_messages_created_at" });
+  await trainingMessages.createIndex({ training_id: 1, role: 1, created_at: 1 }, { name: "training_messages_role_created_at" });
 
   await trace.createIndex(
     { session_id: 1, created_at: -1 },
