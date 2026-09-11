@@ -1,6 +1,7 @@
 import crypto from "node:crypto";
 import { env } from "../config/env.js";
 import { getDb } from "../database/mongodb.js";
+import { removeKnowledgeVector, upsertKnowledgeVector } from "../database/qdrant.js";
 import { embedDocuments } from "./embedding-service.js";
 import { articleEmbeddingText, articleSearchText, tokenize } from "../utils/text.js";
 
@@ -229,6 +230,21 @@ export async function updateKnowledgeArticle(articleId, input, helpdeskUser, { s
   const nextStatus = status || existing.status || "published";
   const article = normalizeKnowledgeArticleInput({ ...existing, ...input, articleId, status: nextStatus }, { status: nextStatus });
   const updatedAt = now();
+  let embedding;
+
+  if (nextStatus === "published") {
+    [embedding] = await embedDocuments([articleEmbeddingText(article)]);
+    await upsertKnowledgeVector({
+      ...article,
+      status: "published",
+      [env.vectorField]: embedding,
+      embedding_model: env.embeddingModel,
+      embedding_profile: env.embeddingProfile,
+    });
+  } else {
+    await removeKnowledgeVector(articleId);
+  }
+
   const update = {
     $set: {
       ...article,
@@ -236,14 +252,27 @@ export async function updateKnowledgeArticle(articleId, input, helpdeskUser, { s
       updated_at: updatedAt,
       updated_by_helpdesk_id: helpdeskUser?.helpdesk_id || null,
       updated_by_helpdesk_name: helpdeskUser?.name || null,
+      ...(nextStatus === "published"
+        ? {
+            [env.vectorField]: embedding,
+            embedding_model: env.embeddingModel,
+            embedding_profile: env.embeddingProfile,
+            embedding_dimensions: env.embeddingDimensions,
+            embedding_updated_at: updatedAt,
+          }
+        : {}),
     },
-    $unset: {
-      [env.vectorField]: "",
-      embedding_model: "",
-      embedding_profile: "",
-      embedding_dimensions: "",
-      embedding_updated_at: "",
-    },
+    ...(nextStatus === "published"
+      ? {}
+      : {
+          $unset: {
+            [env.vectorField]: "",
+            embedding_model: "",
+            embedding_profile: "",
+            embedding_dimensions: "",
+            embedding_updated_at: "",
+          },
+        }),
   };
 
   const result = await db.collection(env.knowledgeCollection).findOneAndUpdate(
@@ -251,7 +280,7 @@ export async function updateKnowledgeArticle(articleId, input, helpdeskUser, { s
     update,
     { returnDocument: "after", projection: projection() }
   );
-  return serializeKnowledgeArticle({ ...result, _embedding_length: embedding.length });
+  return serializeKnowledgeArticle({ ...result, _embedding_length: embedding?.length || 0 });
 }
 
 export async function publishKnowledgeArticle(articleId, helpdeskUser) {
@@ -264,6 +293,13 @@ export async function publishKnowledgeArticle(articleId, helpdeskUser) {
   validatePublishableArticle(article);
 
   const [embedding] = await embedDocuments([articleEmbeddingText(article)]);
+  await upsertKnowledgeVector({
+    ...article,
+    status: "published",
+    [env.vectorField]: embedding,
+    embedding_model: env.embeddingModel,
+    embedding_profile: env.embeddingProfile,
+  });
   const updatedAt = now();
   const result = await collection.findOneAndUpdate(
     { articleId },
@@ -290,6 +326,7 @@ export async function publishKnowledgeArticle(articleId, helpdeskUser) {
 export async function archiveKnowledgeArticle(articleId, helpdeskUser) {
   const db = await getDb();
   const updatedAt = now();
+  await removeKnowledgeVector(articleId);
   const result = await db.collection(env.knowledgeCollection).findOneAndUpdate(
     { articleId },
     {

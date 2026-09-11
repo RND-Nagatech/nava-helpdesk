@@ -4,6 +4,7 @@ import fs from "node:fs";
 import {
   lexicalScore,
   mergeSearchQuery,
+  articleDomainMatch,
   problemMatchScore,
   stemIndonesianToken,
 } from "../src/utils/text.js";
@@ -56,6 +57,27 @@ test("istilah pembeda detail mengalahkan artikel laporan barang lain yang hanya 
   if (wrong) {
     assert.ok(result[0].problem.distinctiveCoverage > wrong.problem.distinctiveCoverage);
   }
+});
+
+test("slang laporan barang detail tetap dianggap knowledge yang ditemukan", () => {
+  const result = rank("laporan brg detail tuh apa sih", 10);
+  assert.match(result[0]?.title || "", /Laporan Barang Detail/i);
+  assert.equal(result[0]?.problem.distinctiveCoverage, 1);
+});
+
+test("kata penghubung tidak dianggap discriminator knowledge", () => {
+  const result = rank("tapi titipan ini bisa dibatal", 10);
+  assert.match(result[0]?.title || "", /Batal Titipan/i);
+  assert.equal(result[0]?.problem.distinctiveCoverage, 1);
+});
+
+test("domain titipan mengalahkan artikel salah input dari domain lain", () => {
+  const titipan = knowledge.find((doc) => /Batal Titipan/i.test(doc.title || ""));
+  const hutang = knowledge.find((doc) => /kesalahan input pelunasan hutang/i.test(doc.title || ""));
+  const query = "oh iya, ini aku salah input titipan, bisa dibatal gak sih?";
+  assert.equal(articleDomainMatch(query, titipan).coverage, 1);
+  assert.equal(articleDomainMatch(query, hutang).coverage, 0);
+  assert.ok(problemMatchScore(query, titipan).titleDistinctiveCoverage >= 0.5);
 });
 
 test("merge search query mempertahankan discriminator customer yang dibuang oleh rewrite", () => {

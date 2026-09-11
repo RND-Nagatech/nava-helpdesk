@@ -14,9 +14,9 @@ export function HandoverPage() {
     const version = ++loadVersion.current;
     try {
       setError("");
-      const rows = await api.tickets({ status: "waiting", assignment: "unassigned", limit: "50" });
+      const rows = await api.tickets({ status: "waiting", handover_status: "pending", assignment: "unassigned", sort: "oldest", limit: "50" });
       if (version !== loadVersion.current) return;
-      setTickets(rows.filter((ticket) => !ticket.assigned_helpdesk_id && ticket.status !== "resolved"));
+      setTickets(rows.filter((ticket) => !ticket.assigned_helpdesk_id && ticket.status !== "resolved" && ticket.handover_status === "pending"));
     } catch (err) {
       if (version !== loadVersion.current) return;
       setError(err instanceof Error ? err.message : "Gagal memuat handover.");

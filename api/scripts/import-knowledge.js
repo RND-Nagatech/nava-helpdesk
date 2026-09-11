@@ -5,11 +5,14 @@ import "dotenv/config";
 import { env } from "../src/config/env.js";
 import { connectMongo, ensureIndexes, closeMongo } from "../src/database/mongodb.js";
 import { normalizeKnowledgeArticleInput } from "../src/services/knowledge-article-service.js";
+import { refreshKnowledgeEmbeddings } from "../src/services/knowledge-vector-sync.js";
 import { articleSearchText } from "../src/utils/text.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const defaultFile = path.resolve(__dirname, "../data/nava-knowledge.json");
-const filePath = path.resolve(process.argv[2] || defaultFile);
+const inputFile = process.argv.slice(2).find((argument) => !argument.startsWith("--"));
+const filePath = path.resolve(inputFile || defaultFile);
+const publishImportedKnowledge = process.argv.includes("--publish");
 
 async function main() {
   if (!env.mongodbUri) throw new Error("MONGODB_URI belum diisi di .env");
@@ -31,7 +34,11 @@ async function main() {
     // field tersebut tidak ikut ditulis lagi ke MongoDB.
     const { clarificationQuestions: _legacyClarificationQuestions, ...cleanArticle } = article;
     const hasExplicitStatus = Object.prototype.hasOwnProperty.call(cleanArticle, "status");
-    const status = hasExplicitStatus ? cleanArticle.status : "published";
+    const status = publishImportedKnowledge
+      ? "published"
+      : hasExplicitStatus
+        ? cleanArticle.status
+        : "published";
     const normalizedArticle = normalizeKnowledgeArticleInput(cleanArticle, { status });
     const publishedAt = normalizedArticle.status === "published"
       ? cleanArticle.published_at || cleanArticle.publishedAt || now
@@ -48,8 +55,8 @@ async function main() {
             updated_at: now,
           },
         $setOnInsert: { created_at: now },
-        // Isi knowledge berubah berarti vector lama berpotensi stale.
-        // Jalankan npm run knowledge:embed setelah import untuk membuat ulang.
+        // Isi knowledge berubah berarti vector lama harus dibuat ulang.
+        // refreshKnowledgeEmbeddings dijalankan setelah bulkWrite selesai.
         $unset: {
           // clarificationQuestions versi lama adalah template generik dan tidak lagi dipakai.
           // $set tidak menghapus field lama yang tidak ada di JSON, jadi harus di-unset eksplisit.
@@ -68,6 +75,7 @@ async function main() {
 
   const result = await collection.bulkWrite(operations, { ordered: false });
   await ensureIndexes();
+  const vectorResult = await refreshKnowledgeEmbeddings();
 
   console.log("Import knowledge selesai.");
   console.log(`File            : ${filePath}`);
@@ -76,7 +84,8 @@ async function main() {
   console.log(`Modified        : ${result.modifiedCount}`);
   console.log(`Matched         : ${result.matchedCount}`);
   console.log(`Collection      : ${env.knowledgeCollection}`);
-  console.log("PENTING: jalankan `npm run knowledge:embed` agar vector sesuai knowledge terbaru.");
+  console.log(`Embedding       : diproses ${vectorResult.processed} dari ${vectorResult.total}`);
+  console.log(`Qdrant          : upserted=${vectorResult.upserted}, deleted=${vectorResult.deleted}`);
 }
 
 main()

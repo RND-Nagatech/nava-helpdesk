@@ -179,4 +179,5 @@ test("klaim ticket pada pertanyaan informasi tidak diubah menjadi tawaran eskala
   });
   assert.doesNotMatch(answer, /mau saya teruskan/i);
   assert.match(answer, /belum membuat ticket/i);
+  assert.match(answer, /rekapan/i);
 });

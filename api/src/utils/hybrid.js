@@ -19,6 +19,16 @@ export function classifyEvidenceStrength(doc) {
       (titleDistinctiveCoverage >= 0.5 || distinctiveCoverage >= 0.75)
     ) return "strong";
 
+    // Untuk pertanyaan dengan domain eksplisit, judul yang memuat domain dan
+    // tindakan utama tetap merupakan direct match walaupun query juga memuat
+    // konteks tambahan seperti "salah input".
+    if (
+      doc.retrieval.domainCoverage >= 1 &&
+      distinctiveCoverage >= 0.5 &&
+      titleDistinctiveCoverage >= 0.5 &&
+      problemScore >= 35
+    ) return "strong";
+
     if (vectorScore >= 0.94 && distinctiveCoverage >= 0.5) return "strong";
   } else if (problemCoverage >= 0.75 && problemScore >= 40) {
     return "strong";
@@ -59,6 +69,8 @@ export function fuseHybridResults(
           problemDistinctiveTokenCount: doc.problem?.distinctiveTokenCount || 0,
           titleCoverage: doc.problem?.titleCoverage || 0,
           titleDistinctiveCoverage: doc.problem?.titleDistinctiveCoverage || 0,
+          domainCoverage: doc.problem?.domainCoverage || 0,
+          domainMatched: doc.problem?.domainMatched ?? true,
           vectorScore: 0,
           keywordRank: null,
           vectorRank: null,
@@ -84,6 +96,11 @@ export function fuseHybridResults(
         row.retrieval.titleDistinctiveCoverage,
         doc.problem.titleDistinctiveCoverage || 0
       );
+      row.retrieval.domainCoverage = Math.max(
+        row.retrieval.domainCoverage,
+        doc.problem.domainCoverage || 0
+      );
+      row.retrieval.domainMatched = row.retrieval.domainMatched || doc.problem.domainMatched;
       if ((doc.problem.matchedTokens || []).length > row.retrieval.problemMatchedTokens.length) {
         row.retrieval.problemMatchedTokens = doc.problem.matchedTokens || [];
       }
@@ -116,8 +133,9 @@ export function fuseHybridResults(
       const overallCoverageBoost = Number(doc.retrieval.problemCoverage || 0) * Math.max(problemWeight * 0.45, 0.5);
       const distinctiveBoost = Number(doc.retrieval.problemDistinctiveCoverage || 0) * Math.max(problemWeight * 1.35, 1.5);
       const titleDistinctiveBoost = Number(doc.retrieval.titleDistinctiveCoverage || 0) * 1.5;
+      const domainBoost = Number(doc.retrieval.domainCoverage || 0) * 4;
       const scoreBoost = Math.min(Number(doc.retrieval.problemScore || 0) / 120, 1) * 0.75;
-      const problemBoost = overallCoverageBoost + distinctiveBoost + titleDistinctiveBoost + scoreBoost;
+      const problemBoost = overallCoverageBoost + distinctiveBoost + titleDistinctiveBoost + domainBoost + scoreBoost;
       const rrfScore = doc.retrieval.rrfScore * 100;
       const hybridScore = rrfScore + problemBoost;
 
@@ -127,6 +145,7 @@ export function fuseHybridResults(
           ...doc.retrieval,
           rrfScore: Number(rrfScore.toFixed(6)),
           problemBoost: Number(problemBoost.toFixed(6)),
+          domainCoverage: doc.retrieval.domainCoverage,
           hybridScore: Number(hybridScore.toFixed(6)),
           score: Number(hybridScore.toFixed(6)),
         },

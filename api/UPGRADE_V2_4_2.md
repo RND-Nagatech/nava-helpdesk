@@ -24,7 +24,13 @@ Jika ingin import ulang JSON baru tanpa clarification:
 
 ```bash
 npm run knowledge:import -- /path/ke/nava-knowledge-no-clarification.json
-npm run knowledge:embed
 ```
 
-`knowledge:embed` hanya diperlukan setelah `knowledge:import`, karena importer memang menghapus vector lama. Cleanup clarification saja tidak memerlukan embed ulang karena embedding `problem-v2` tidak memakai field tersebut.
+Setelah import, importer sekarang otomatis membuat embedding dan menyinkronkan vector ke Qdrant. Jika ingin menjalankan ulang secara manual:
+
+```bash
+npm run knowledge:embed
+npm run knowledge:vector-index
+```
+
+`knowledge:embed` membuat ulang embedding yang belum sesuai dan otomatis menyinkronkan Qdrant. `knowledge:vector-index` dapat dijalankan sebagai rekonsiliasi eksplisit. Cleanup clarification saja tidak memerlukan embed ulang karena embedding `problem-v2` tidak memakai field tersebut.

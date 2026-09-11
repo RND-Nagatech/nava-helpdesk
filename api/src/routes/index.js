@@ -6,6 +6,14 @@ import { chat, getSessionMessages, getCustomerContext, resetChatSession, searchK
 import { dashboardSummary } from "../controllers/dashboard-controller.js";
 import { eventStream } from "../controllers/event-controller.js";
 import {
+  createHelpdeskUserHandler,
+  deleteHelpdeskUserHandler,
+  getHelpdeskUserHandler,
+  listHelpdeskUsersHandler,
+  updateHelpdeskUserHandler,
+  updateHelpdeskUserStatusHandler,
+} from "../controllers/helpdesk-user-controller.js";
+import {
   archiveKnowledgeArticleHandler,
   createKnowledgeArticleHandler,
   getKnowledgeArticleHandler,
@@ -18,6 +26,7 @@ import {
   acceptHandoverHandler,
   createTicketHandler,
   exportTicketsCsvHandler,
+  handoverCountHandler,
   helpdeskReplyHandler,
   ticketAssigneesHandler,
   listTicketsHandler,
@@ -25,12 +34,14 @@ import {
   ticketBySessionHandler,
   ticketDetailHandler,
 } from "../controllers/ticket-controller.js";
-import { requireHelpdeskAuth } from "../middleware/helpdesk-auth.js";
+import { requireHelpdeskAdmin, requireHelpdeskAuth } from "../middleware/helpdesk-auth.js";
 import { filesToAttachments, UPLOAD_ROOT_DIR, uploadHelpdeskImages } from "../middleware/upload.js";
+import { getVectorStoreStatus } from "../database/qdrant.js";
 
 export const apiRouter = Router();
 
-apiRouter.get("/health", (req, res) => {
+apiRouter.get("/health", async (req, res) => {
+  const vectorStatus = await getVectorStoreStatus();
   res.json({
     success: true,
     service: "nava-langchain-helpdesk-agent",
@@ -64,7 +75,8 @@ apiRouter.get("/health", (req, res) => {
     },
     vector_search: {
       enabled: env.vectorSearchEnabled,
-      index: env.vectorIndexName,
+      index: env.qdrantCollection,
+      qdrant: vectorStatus,
       model: env.embeddingModel,
       dimensions: env.embeddingDimensions,
       embedding_profile: env.embeddingProfile,
@@ -89,6 +101,12 @@ apiRouter.post("/knowledge/articles/:articleId/archive", requireHelpdeskAuth, ar
 apiRouter.post("/auth/helpdesk/login", helpdeskLoginHandler);
 apiRouter.get("/auth/helpdesk/me", requireHelpdeskAuth, helpdeskMeHandler);
 apiRouter.post("/auth/helpdesk/logout", requireHelpdeskAuth, helpdeskLogoutHandler);
+apiRouter.get("/helpdesk/users", requireHelpdeskAuth, requireHelpdeskAdmin, listHelpdeskUsersHandler);
+apiRouter.post("/helpdesk/users", requireHelpdeskAuth, requireHelpdeskAdmin, createHelpdeskUserHandler);
+apiRouter.get("/helpdesk/users/:helpdeskId", requireHelpdeskAuth, requireHelpdeskAdmin, getHelpdeskUserHandler);
+apiRouter.put("/helpdesk/users/:helpdeskId", requireHelpdeskAuth, requireHelpdeskAdmin, updateHelpdeskUserHandler);
+apiRouter.patch("/helpdesk/users/:helpdeskId/status", requireHelpdeskAuth, requireHelpdeskAdmin, updateHelpdeskUserStatusHandler);
+apiRouter.delete("/helpdesk/users/:helpdeskId", requireHelpdeskAuth, requireHelpdeskAdmin, deleteHelpdeskUserHandler);
 apiRouter.get("/dashboard", requireHelpdeskAuth, dashboardSummary);
 apiRouter.get("/dashboard/summary", requireHelpdeskAuth, dashboardSummary);
 apiRouter.get("/events", eventStream);
@@ -111,6 +129,7 @@ apiRouter.get("/uploads/helpdesk/:filename", (req, res) => {
 });
 
 apiRouter.get("/tickets", requireHelpdeskAuth, listTicketsHandler);
+apiRouter.get("/helpdesk/handover/count", requireHelpdeskAuth, handoverCountHandler);
 apiRouter.post("/tickets", createTicketHandler);
 apiRouter.get("/tickets/export.csv", requireHelpdeskAuth, exportTicketsCsvHandler);
 apiRouter.get("/tickets/assignees", requireHelpdeskAuth, ticketAssigneesHandler);

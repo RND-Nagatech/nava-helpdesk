@@ -1,8 +1,10 @@
 import { env } from "../config/env.js";
 import { getDb } from "../database/mongodb.js";
+import { searchKnowledgeVectors } from "../database/qdrant.js";
 import { embedQuery } from "./embedding-service.js";
 import {
   importantQueryTokens,
+  articleDomainMatch,
   lexicalScore,
   problemMatchScore,
 } from "../utils/text.js";
@@ -31,6 +33,11 @@ function dedupeDocuments(documents = []) {
     byKey.set(key, doc);
   }
   return [...byKey.values()];
+}
+
+function constrainToExplicitDomain(query, documents = []) {
+  const scoped = documents.filter((doc) => articleDomainMatch(query, doc).coverage === 1);
+  return scoped.length ? scoped : documents;
 }
 
 export function rankLexicalCandidates(query, docs, limit) {
@@ -116,7 +123,7 @@ async function retrieveLexical(collection, query, limit) {
     }
   }
 
-  const candidates = dedupeDocuments([...textDocuments, ...regexDocuments]);
+  const candidates = constrainToExplicitDomain(query, dedupeDocuments([...textDocuments, ...regexDocuments]));
   const mode = textDocuments.length
     ? regexDocuments.length
       ? "mongodb-text+targeted-regex"
@@ -136,30 +143,32 @@ async function retrieveVector(collection, query, limit) {
 
   try {
     const queryVector = await embedQuery(query);
-    const pipeline = [
-      {
-        $vectorSearch: {
-          index: env.vectorIndexName,
-          path: env.vectorField,
-          queryVector,
-          exact: true,
-          limit,
-        },
-      },
-      { $match: publishedKnowledgeQuery() },
-      {
-        $project: {
-          ...PROJECTION,
-          vectorScore: { $meta: "vectorSearchScore" },
-        },
-      },
-    ];
-
-    const documents = (await collection.aggregate(pipeline).toArray()).map((doc) => ({
-      ...doc,
-      problem: problemMatchScore(query, doc),
-    }));
-    return { enabled: true, ok: true, documents };
+    const points = await searchKnowledgeVectors(queryVector, limit);
+    const articleIds = points
+      .map((point) => point.payload?.articleId)
+      .filter(Boolean);
+    const documents = await collection
+      .find(
+        { ...publishedKnowledgeQuery(), articleId: { $in: articleIds } },
+        { projection: PROJECTION }
+      )
+      .toArray();
+    const byArticleId = new Map(documents.map((doc) => [doc.articleId, doc]));
+    const scopedPoints = points.filter((point) => {
+      const doc = byArticleId.get(point.payload?.articleId);
+      return doc && articleDomainMatch(query, doc).coverage === 1;
+    });
+    const selectedPoints = scopedPoints.length ? scopedPoints : points;
+    const rankedDocuments = selectedPoints
+      .map((point) => {
+        const articleId = point.payload?.articleId;
+        const doc = byArticleId.get(articleId);
+        return doc
+          ? { ...doc, vectorScore: Number(point.score || 0), problem: problemMatchScore(query, doc) }
+          : null;
+      })
+      .filter(Boolean);
+    return { enabled: true, ok: true, documents: rankedDocuments };
   } catch (error) {
     return {
       enabled: true,
@@ -267,7 +276,7 @@ export async function retrieveKnowledge(query, options = {}) {
       enabled: vectorResult.enabled,
       ok: vectorResult.ok,
       error: vectorResult.error,
-      index: env.vectorIndexName,
+      index: env.qdrantCollection,
       model: env.embeddingModel,
     },
     timing: {

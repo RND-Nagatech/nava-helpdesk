@@ -3,7 +3,7 @@ import cors from "cors";
 import helmet from "helmet";
 import { ZodError } from "zod";
 import { env, validateRuntimeEnv } from "./config/env.js";
-import { connectMongo, ensureIndexes, closeMongo } from "./database/mongodb.js";
+import { connectMongo, ensureIndexes, closeMongo, reconcileKnowledgeVectors } from "./database/mongodb.js";
 import { apiRouter } from "./routes/index.js";
 import { warmupEmbeddingModel } from "./services/embedding-service.js";
 import { initializeHelpdeskAgent } from "./agents/helpdesk-agent.js";
@@ -49,10 +49,24 @@ app.use((req, res) => {
 
 app.use((error, req, res, next) => {
   if (error instanceof ZodError) {
+    const firstIssue = error.issues?.[0];
+    const fieldLabels = {
+      helpdesk_id: "Helpdesk ID",
+      name: "Nama",
+      password: "Password",
+      role: "Role",
+      tier: "Tier",
+      is_active: "Status aktif",
+    };
+    const field = fieldLabels[firstIssue?.path?.[0]];
+    let message = "Data yang dikirim belum lengkap atau formatnya belum sesuai.";
+    if (field && firstIssue?.code === "too_small") message = `${field} wajib diisi.`;
+    else if (field && firstIssue?.code === "invalid_type") message = `${field} belum diisi atau formatnya tidak sesuai.`;
+    else if (field && firstIssue?.code === "invalid_value") message = `${field} tidak valid.`;
     return res.status(400).json({
       success: false,
       code: "VALIDATION_ERROR",
-      message: "Request tidak valid.",
+      message,
       errors: error.issues,
     });
   }
@@ -102,6 +116,12 @@ async function start() {
       warmupEmbeddingModel()
         .then(() => console.log("Embedding model warmup selesai."))
         .catch((error) => console.warn(`Embedding model warmup gagal; retrieval akan memakai fallback: ${error?.message || error}`));
+    }
+
+    if (env.qdrantReconcileOnStart) {
+      reconcileKnowledgeVectors()
+        .then((result) => console.log(`Qdrant reconcile selesai: upserted=${result.upserted}, deleted=${result.deleted}`))
+        .catch((error) => console.warn(`Qdrant reconcile gagal; jalankan knowledge:embed lalu knowledge:vector-index: ${error?.message || error}`));
     }
   });
 }

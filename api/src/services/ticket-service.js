@@ -56,7 +56,15 @@ export function createTicketDocument({
 
 function serializeId(doc) {
   if (!doc) return null;
-  return { ...doc, _id: String(doc._id) };
+  const serialized = { ...doc, _id: String(doc._id) };
+  if (serialized.customer_domain) {
+    try {
+      serialized.customer_domain = decodeURIComponent(String(serialized.customer_domain));
+    } catch {
+      // Pertahankan nilai asli jika data lama berisi escape yang tidak lengkap.
+    }
+  }
+  return serialized;
 }
 
 function normalizeDateStart(value) {
@@ -188,7 +196,7 @@ export async function listTickets(filters = {}) {
   const tickets = await db
     .collection(env.ticketCollection)
     .find(query, { maxTimeMS: 5000 })
-    .sort({ last_message_at: -1, created_at: -1 })
+    .sort(filters.sort === "oldest" ? { created_at: 1, _id: 1 } : { last_message_at: -1, created_at: -1 })
     .skip(page ? (page - 1) * limit : 0)
     .limit(limit)
     .toArray();
@@ -211,6 +219,19 @@ export async function listTickets(filters = {}) {
       total_pages: Math.max(Math.ceil(total / limit), 1),
     },
   };
+}
+
+export async function countPendingHandover() {
+  const db = await getDb();
+  return db.collection(env.ticketCollection).countDocuments({
+    handover_status: "pending",
+    status: { $ne: "resolved" },
+    $or: [
+      { assigned_helpdesk_id: null },
+      { assigned_helpdesk_id: "" },
+      { assigned_helpdesk_id: { $exists: false } },
+    ],
+  }, { maxTimeMS: 5000 });
 }
 
 export async function listHelpdeskTicketAssignees(filters = {}) {
@@ -243,8 +264,9 @@ export async function exportTicketsCsv(filters = {}) {
 }
 
 export async function getTicketBySession(sessionId) {
-  const db = await getDb();
-  const ticket = await db.collection(env.ticketCollection).findOne({ session_id: sessionId }, { maxTimeMS: 5000, sort: { created_at: -1 } });
+  // Ticket yang sudah selesai tetap disimpan untuk riwayat/helpdesk,
+  // tetapi tidak boleh dikirim sebagai ticket aktif ke portal customer.
+  const ticket = await findActiveTicketBySession(sessionId);
   return serializeId(ticket);
 }
 

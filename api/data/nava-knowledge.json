@@ -41,7 +41,7 @@
         "tidak",
         "keluar"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 4,
       "sourceNo": "1",
       "sourceQuestion": "Tidak bisa cetak barcode / cetak barcode tidak keluar"
@@ -83,7 +83,7 @@
         "atau",
         "pembelian"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 5,
       "sourceNo": "2",
       "sourceQuestion": "Tidak keluar file download nota penjualan atau pembelian"
@@ -120,7 +120,7 @@
         "stock",
         "barang"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 6,
       "sourceNo": "3",
       "sourceQuestion": "Selisih stock barang"
@@ -158,7 +158,7 @@
         "tranasaksi",
         "penjualan"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 7,
       "sourceNo": "4",
       "sourceQuestion": "selisih laporan tranasaksi penjualan"
@@ -200,7 +200,7 @@
         "pesanan",
         "keluar"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 8,
       "sourceNo": "5",
       "sourceQuestion": "Cetak barcode, faktur pembelian, service, titipan, pesanan keluar double atau terprint 2 kali"
@@ -242,7 +242,7 @@
         "konek",
         "timbangan"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 9,
       "sourceNo": "6",
       "sourceQuestion": "Tambah barang dan timbang baki tidak konek timbangan"
@@ -287,7 +287,7 @@
         "barang",
         "detail"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 10,
       "sourceNo": "7",
       "sourceQuestion": "Apa itu Laporan Barang Detail?"
@@ -395,7 +395,7 @@
         "barang",
         "detail"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 11,
       "sourceNo": "8",
       "sourceQuestion": "Apa saja filter pencarian di Laporan Barang Detail?"
@@ -611,7 +611,7 @@
         "laporan",
         "barang"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 12,
       "sourceNo": "9",
       "sourceQuestion": "Informasi apa saja yang ditampilkan jika Laporan Barang Detail di-export ke PDF?"
@@ -659,7 +659,7 @@
         "2023",
         "06"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 13,
       "sourceNo": "10",
       "sourceQuestion": "Apa arti keterangan “Printed By Helpdesk / 2023-06-14” di Laporan Barang Detail?"
@@ -719,7 +719,7 @@
         "barang",
         "detail"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 14,
       "sourceNo": "11",
       "sourceQuestion": "Tombol apa saja tersedia di Laporan Barang Detail?"
@@ -764,7 +764,7 @@
         "barang",
         "acc"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 15,
       "sourceNo": "12",
       "sourceQuestion": "Apa itu Laporan Barang Acc?"
@@ -811,7 +811,7 @@
         "barang",
         "acc"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 16,
       "sourceNo": "13",
       "sourceQuestion": "Apa filter pencarian di Laporan Barang Acc?"
@@ -1003,7 +1003,7 @@
         "laporan",
         "barang"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 17,
       "sourceNo": "14",
       "sourceQuestion": "Informasi apa saja yang ditampilkan jika Laporan Barang Acc di-export ke PDF?"
@@ -1051,7 +1051,7 @@
         "2023",
         "06"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 18,
       "sourceNo": "15",
       "sourceQuestion": "Apa arti keterangan “Printed By Helpdesk / 2023-06-14” di Laporan Barang Acc?"
@@ -1111,7 +1111,7 @@
         "barang",
         "acc"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 19,
       "sourceNo": "16",
       "sourceQuestion": "Tombol apa saja tersedia di Laporan Barang Acc?"
@@ -1162,7 +1162,7 @@
         "barang",
         "detail"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 20,
       "sourceNo": "17",
       "sourceQuestion": "Apa itu Laporan Barang Detail?"
@@ -1270,7 +1270,7 @@
         "barang",
         "detail"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 21,
       "sourceNo": "18",
       "sourceQuestion": "Apa saja filter pencarian di Laporan Barang Detail?"
@@ -1486,7 +1486,7 @@
         "laporan",
         "barang"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 22,
       "sourceNo": "19",
       "sourceQuestion": "Informasi apa saja yang ditampilkan jika Laporan Barang Detail di-export ke PDF?"
@@ -1534,7 +1534,7 @@
         "2023",
         "06"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 23,
       "sourceNo": "20",
       "sourceQuestion": "Apa arti keterangan “Printed By Helpdesk / 2023-06-14” di Laporan Barang Detail?"
@@ -1594,7 +1594,7 @@
         "barang",
         "detail"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 24,
       "sourceNo": "21",
       "sourceQuestion": "Tombol apa saja tersedia di Laporan Barang Detail?"
@@ -1639,7 +1639,7 @@
         "barang",
         "acc"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 25,
       "sourceNo": "22",
       "sourceQuestion": "Apa itu Laporan Barang Acc?"
@@ -1686,7 +1686,7 @@
         "barang",
         "acc"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 26,
       "sourceNo": "23",
       "sourceQuestion": "Apa filter pencarian di Laporan Barang Acc?"
@@ -1878,7 +1878,7 @@
         "laporan",
         "barang"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 27,
       "sourceNo": "24",
       "sourceQuestion": "Informasi apa saja yang ditampilkan jika Laporan Barang Acc di-export ke PDF?"
@@ -1926,7 +1926,7 @@
         "2023",
         "06"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 28,
       "sourceNo": "25",
       "sourceQuestion": "Apa arti keterangan “Printed By Helpdesk / 2023-06-14” di Laporan Barang Acc?"
@@ -1986,7 +1986,7 @@
         "barang",
         "acc"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 29,
       "sourceNo": "26",
       "sourceQuestion": "Tombol apa saja tersedia di Laporan Barang Acc?"
@@ -2031,7 +2031,7 @@
         "tambah",
         "barang"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 30,
       "sourceNo": "27",
       "sourceQuestion": "Apa itu Laporan Tambah Barang?"
@@ -2127,7 +2127,7 @@
         "tambah",
         "barang"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 31,
       "sourceNo": "28",
       "sourceQuestion": "Apa saja filter pencarian di Laporan Tambah Barang?"
@@ -2223,7 +2223,7 @@
         "tambah",
         "barang"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 32,
       "sourceNo": "29",
       "sourceQuestion": "Tombol apa saja tersedia di Laporan Tambah Barang?"
@@ -2487,7 +2487,7 @@
         "memilih",
         "tombol"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 33,
       "sourceNo": "30",
       "sourceQuestion": "Informasi apa saja yang ditampilkan jika memilih tombol Lihat Laporan pada Laporan Tambah Barang?"
@@ -2595,7 +2595,7 @@
         "memilih",
         "tombol"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 34,
       "sourceNo": "31",
       "sourceQuestion": "Informasi apa saja yang ditampilkan jika memilih tombol Global Per Baki pada Laporan Tambah Barang?"
@@ -2703,7 +2703,7 @@
         "memilih",
         "tombol"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 35,
       "sourceNo": "32",
       "sourceQuestion": "Informasi apa saja yang ditampilkan jika memilih tombol Global Per Jenis pada Laporan Tambah Barang?"
@@ -2799,7 +2799,7 @@
         "memilih",
         "tombol"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 36,
       "sourceNo": "33",
       "sourceQuestion": "Informasi apa saja yang ditampilkan jika memilih tombol Global Per Kode Intern pada Laporan Tambah Barang?"
@@ -2895,7 +2895,7 @@
         "memilih",
         "tombol"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 37,
       "sourceNo": "34",
       "sourceQuestion": "Informasi apa saja yang ditampilkan jika memilih tombol Global Per Kadar pada Laporan Tambah Barang?"
@@ -2940,7 +2940,7 @@
         "timbang",
         "baki"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 38,
       "sourceNo": "35",
       "sourceQuestion": "Apa itu Laporan Timbang Baki?"
@@ -2982,7 +2982,7 @@
         "laporan",
         "timbang"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 39,
       "sourceNo": "36",
       "sourceQuestion": "Apa filter pencarian yang tersedia di Laporan Timbang Baki?"
@@ -3150,7 +3150,7 @@
         "laporan",
         "timbang"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 40,
       "sourceNo": "37",
       "sourceQuestion": "Informasi apa saja yang ditampilkan jika Laporan Timbang Baki di-export ke PDF?"
@@ -3198,7 +3198,7 @@
         "2023",
         "06"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 41,
       "sourceNo": "38",
       "sourceQuestion": "Apa arti keterangan “Printed By Helpdesk / 2023-06-14” pada Laporan Timbang Baki?"
@@ -3258,7 +3258,7 @@
         "pada",
         "laporan"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 42,
       "sourceNo": "39",
       "sourceQuestion": "Tombol export apa saja yang tersedia pada Laporan Timbang Baki?"
@@ -3299,7 +3299,7 @@
         "timbang",
         "baki"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 43,
       "sourceNo": "40",
       "sourceQuestion": "Apa tujuan utama dari Laporan Timbang Baki?"
@@ -3341,7 +3341,7 @@
         "di",
         "laporan"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 44,
       "sourceNo": "41",
       "sourceQuestion": "Bagaimana cara sistem menghitung nilai Total di Laporan Timbang Baki?"
@@ -3389,7 +3389,7 @@
         "total",
         "di"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 45,
       "sourceNo": "42",
       "sourceQuestion": "Apa perbedaan antara kolom Timbangan dan Total di Laporan Timbang Baki?"
@@ -3431,7 +3431,7 @@
         "laporan",
         "timbang"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 46,
       "sourceNo": "43",
       "sourceQuestion": "Apa arti dari kolom Selisih di Laporan Timbang Baki?"
@@ -3482,7 +3482,7 @@
         "hancur",
         "barang"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 47,
       "sourceNo": "44",
       "sourceQuestion": "Apa itu Laporan Hancur Barang?"
@@ -3578,7 +3578,7 @@
         "di",
         "laporan"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 48,
       "sourceNo": "45",
       "sourceQuestion": "Apa saja filter pencarian yang tersedia di Laporan Hancur Barang?"
@@ -3794,7 +3794,7 @@
         "laporan",
         "hancur"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 49,
       "sourceNo": "46",
       "sourceQuestion": "Informasi apa saja yang ditampilkan jika Laporan Hancur Barang di-export ke PDF?"
@@ -3842,7 +3842,7 @@
         "2023",
         "06"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 50,
       "sourceNo": "47",
       "sourceQuestion": "Apa arti keterangan “Printed By Helpdesk / 2023-06-14” di Laporan Hancur Barang?"
@@ -3902,7 +3902,7 @@
         "di",
         "laporan"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 51,
       "sourceNo": "48",
       "sourceQuestion": "Tombol export apa saja yang tersedia di Laporan Hancur Barang?"
@@ -3942,7 +3942,7 @@
         "hancur",
         "barang"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 52,
       "sourceNo": "49",
       "sourceQuestion": "Apa tujuan dari Laporan Hancur Barang?"
@@ -3984,7 +3984,7 @@
         "kondisi",
         "barang"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 53,
       "sourceNo": "50",
       "sourceQuestion": "Informasi apa yang dimaksud dengan kolom Kondisi Barang pada Laporan Hancur Barang?"
@@ -4032,7 +4032,7 @@
         "berat",
         "asli"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 54,
       "sourceNo": "51",
       "sourceQuestion": "Apa perbedaan antara kolom Berat dan Berat Asli di Laporan Hancur Barang?"
@@ -4083,7 +4083,7 @@
         "pindah",
         "barang"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 55,
       "sourceNo": "52",
       "sourceQuestion": "Apa itu Laporan Pindah Barang?"
@@ -4179,7 +4179,7 @@
         "pada",
         "laporan"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 56,
       "sourceNo": "53",
       "sourceQuestion": "Apa saja filter pencarian yang tersedia pada Laporan Pindah Barang?"
@@ -4359,7 +4359,7 @@
         "laporan",
         "pindah"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 57,
       "sourceNo": "54",
       "sourceQuestion": "Informasi apa saja yang ditampilkan jika Laporan Pindah Barang di-export ke PDF?"
@@ -4407,7 +4407,7 @@
         "2023",
         "06"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 58,
       "sourceNo": "55",
       "sourceQuestion": "Apa arti keterangan “Printed By Helpdesk / 2023-06-14” di Laporan Pindah Barang?"
@@ -4467,7 +4467,7 @@
         "di",
         "laporan"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 59,
       "sourceNo": "56",
       "sourceQuestion": "Tombol export apa saja yang tersedia di Laporan Pindah Barang?"
@@ -4508,7 +4508,7 @@
         "pindah",
         "barang"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 60,
       "sourceNo": "57",
       "sourceQuestion": "Apa tujuan utama dari Laporan Pindah Barang?"
@@ -4550,7 +4550,7 @@
         "gudang",
         "asal"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 61,
       "sourceNo": "58",
       "sourceQuestion": "Informasi apa yang ditampilkan pada kolom Gudang Asal di Laporan Pindah Barang?"
@@ -4592,7 +4592,7 @@
         "gudang",
         "di"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 62,
       "sourceNo": "59",
       "sourceQuestion": "Informasi apa yang ditampilkan pada kolom Gudang di Laporan Pindah Barang?"
@@ -4640,7 +4640,7 @@
         "dan",
         "baki"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 63,
       "sourceNo": "60",
       "sourceQuestion": "Apa perbedaan antara kolom Baki Asal dan Baki Tujuan di Laporan Pindah Barang?"
@@ -4685,7 +4685,7 @@
         "barang",
         "summary"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 64,
       "sourceNo": "61",
       "sourceQuestion": "Apa itu Laporan Barang Summary?"
@@ -4725,7 +4725,7 @@
         "barang",
         "summary"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 65,
       "sourceNo": "62",
       "sourceQuestion": "Apa tujuan dari Laporan Barang Summary?"
@@ -4857,7 +4857,7 @@
         "di",
         "laporan"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 66,
       "sourceNo": "63",
       "sourceQuestion": "Apa saja filter pencarian yang tersedia di Laporan Barang Summary?"
@@ -5085,7 +5085,7 @@
         "laporan",
         "barang"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 67,
       "sourceNo": "64",
       "sourceQuestion": "Informasi apa saja yang ditampilkan jika Laporan Barang Summary di-export ke PDF?"
@@ -5133,7 +5133,7 @@
         "2023",
         "06"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 68,
       "sourceNo": "65",
       "sourceQuestion": "Apa arti keterangan “Printed By Helpdesk / 2023-06-14” di Laporan Barang Summary?"
@@ -5193,7 +5193,7 @@
         "di",
         "laporan"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 69,
       "sourceNo": "66",
       "sourceQuestion": "Tombol export apa saja yang tersedia di Laporan Barang Summary?"
@@ -5235,7 +5235,7 @@
         "akhir",
         "di"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 70,
       "sourceNo": "67",
       "sourceQuestion": "Bagaimana cara sistem menghitung nilai PTG Akhir di Laporan Barang Summary?"
@@ -5277,7 +5277,7 @@
         "akhir",
         "di"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 71,
       "sourceNo": "68",
       "sourceQuestion": "Bagaimana cara sistem menghitung nilai Berat Akhir di Laporan Barang Summary?"
@@ -5325,7 +5325,7 @@
         "hancur",
         "ptg"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 72,
       "sourceNo": "69",
       "sourceQuestion": "Apa informasi yang ditampilkan pada kolom Hancur PTG dan Hancur Berat?"
@@ -5364,7 +5364,7 @@
         "laporan",
         "pesanan"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 73,
       "sourceNo": "70",
       "sourceQuestion": "Apa fungsi dari Laporan Pesanan?"
@@ -5405,7 +5405,7 @@
         "laporan",
         "pesanan"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 74,
       "sourceNo": "71",
       "sourceQuestion": "Apa langkah pertama untuk melihat Laporan Pesanan?"
@@ -5447,7 +5447,7 @@
         "tanggal",
         "awal"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 75,
       "sourceNo": "72",
       "sourceQuestion": "Apa yang harus dilakukan setelah memasukkan tanggal awal dan akhir di Laporan Pesanan?"
@@ -5489,7 +5489,7 @@
         "pencarian",
         "laporan"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 76,
       "sourceNo": "73",
       "sourceQuestion": "Apa yang ditampilkan sistem setelah proses pencarian Laporan Pesanan selesai?"
@@ -5537,7 +5537,7 @@
         "dalam",
         "kolom"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 77,
       "sourceNo": "74",
       "sourceQuestion": "Informasi apa saja yang dapat diperiksa dalam kolom-kolom Laporan Pesanan?"
@@ -5578,7 +5578,7 @@
         "laporan",
         "pesanan"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 78,
       "sourceNo": "75",
       "sourceQuestion": "Bagaimana cara mencetak data pada Laporan Pesanan?"
@@ -5618,7 +5618,7 @@
         "penjualan",
         "margin"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 79,
       "sourceNo": "76",
       "sourceQuestion": "Apa fungsi dari Laporan Penjualan Margin?"
@@ -5660,7 +5660,7 @@
         "penjualan",
         "margin"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 80,
       "sourceNo": "77",
       "sourceQuestion": "Apa langkah pertama untuk melihat Laporan Penjualan Margin?"
@@ -5708,7 +5708,7 @@
         "group",
         "di"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 81,
       "sourceNo": "78",
       "sourceQuestion": "Bagaimana cara memfilter laporan berdasarkan Kode Group di Laporan Penjualan Margin?"
@@ -5756,7 +5756,7 @@
         "group",
         "di"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 82,
       "sourceNo": "79",
       "sourceQuestion": "Bagaimana cara memfilter laporan berdasarkan Jenis Group di Laporan Penjualan Margin?"
@@ -5804,7 +5804,7 @@
         "by",
         "di"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 83,
       "sourceNo": "80",
       "sourceQuestion": "Bagaimana cara memfilter laporan berdasarkan Valid By di Laporan Penjualan Margin?"
@@ -5846,7 +5846,7 @@
         "semua",
         "kriteria"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 84,
       "sourceNo": "81",
       "sourceQuestion": "Apa yang harus dilakukan setelah memasukkan semua kriteria di Laporan Penjualan Margin?"
@@ -5954,7 +5954,7 @@
         "laporan",
         "penjualan"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 85,
       "sourceNo": "82",
       "sourceQuestion": "Informasi apa saja yang ditampilkan dalam Laporan Penjualan Margin?"
@@ -5996,7 +5996,7 @@
         "penjualan",
         "margin"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 86,
       "sourceNo": "83",
       "sourceQuestion": "Bagaimana cara mencetak data dari Laporan Penjualan Margin?"
@@ -6037,7 +6037,7 @@
         "titip",
         "uang"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 87,
       "sourceNo": "84",
       "sourceQuestion": "Apa fungsi dari Menu Laporan Titip Uang?"
@@ -6079,7 +6079,7 @@
         "titip",
         "uang"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 88,
       "sourceNo": "85",
       "sourceQuestion": "Apa langkah pertama untuk melihat Laporan Titip Uang?"
@@ -6127,7 +6127,7 @@
         "berdasarkan",
         "valid"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 89,
       "sourceNo": "86",
       "sourceQuestion": "Bagaimana cara memfilter laporan Titip Uang berdasarkan Valid By?"
@@ -6169,7 +6169,7 @@
         "kriteria",
         "pencarian"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 90,
       "sourceNo": "87",
       "sourceQuestion": "Apa yang harus dilakukan setelah memasukkan kriteria pencarian di Laporan Titip Uang?"
@@ -6211,7 +6211,7 @@
         "laporan",
         "titip"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 91,
       "sourceNo": "88",
       "sourceQuestion": "Informasi apa saja yang ditampilkan dalam Laporan Titip Uang?"
@@ -6253,7 +6253,7 @@
         "titip",
         "uang"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 92,
       "sourceNo": "89",
       "sourceQuestion": "Bagaimana cara mencetak data dari Laporan Titip Uang?"
@@ -6300,7 +6300,7 @@
         "stok",
         "jual"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 93,
       "sourceNo": "90",
       "sourceQuestion": "Apa fungsi dari Menu Laporan Stok Jual?"
@@ -6342,7 +6342,7 @@
         "stok",
         "jual"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 94,
       "sourceNo": "91",
       "sourceQuestion": "Apa langkah pertama untuk melihat Laporan Stok Jual?"
@@ -6492,7 +6492,7 @@
         "stok",
         "jual"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 95,
       "sourceNo": "92",
       "sourceQuestion": "Apa langkah-langkah untuk melihat Laporan Stok Jual?"
@@ -6534,7 +6534,7 @@
         "laporan",
         "stok"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 96,
       "sourceNo": "93",
       "sourceQuestion": "Informasi apa saja yang ditampilkan dalam Laporan Stok Jual?"
@@ -6576,7 +6576,7 @@
         "stok",
         "jual"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 97,
       "sourceNo": "94",
       "sourceQuestion": "Bagaimana cara mencetak data dari Laporan Stok Jual?"
@@ -6624,7 +6624,7 @@
         "berdasarkan",
         "valid"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 98,
       "sourceNo": "95",
       "sourceQuestion": "Bagaimana cara memfilter laporan Stok Jual berdasarkan Valid By?"
@@ -6672,7 +6672,7 @@
         "stok",
         "jual"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 99,
       "sourceNo": "96",
       "sourceQuestion": "Bagaimana cara mengurutkan data dalam Laporan Stok Jual?"
@@ -6720,7 +6720,7 @@
         "stok",
         "jual"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 100,
       "sourceNo": "97",
       "sourceQuestion": "Bagaimana cara mengelompokkan data dalam Laporan Stok Jual?"
@@ -6768,7 +6768,7 @@
         "berdasarkan",
         "kode"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 101,
       "sourceNo": "98",
       "sourceQuestion": "Bagaimana cara memfilter laporan Stok Jual berdasarkan Kode Baki?"
@@ -6816,7 +6816,7 @@
         "berdasarkan",
         "jenis"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 102,
       "sourceNo": "99",
       "sourceQuestion": "Bagaimana cara memfilter laporan Stok Jual berdasarkan Jenis?"
@@ -6857,7 +6857,7 @@
         "transaksi",
         "penjualan"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 103,
       "sourceNo": "100",
       "sourceQuestion": "Apa fungsi dari Menu Laporan Transaksi Penjualan?"
@@ -6989,7 +6989,7 @@
         "transaksi",
         "penjualan"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 104,
       "sourceNo": "101",
       "sourceQuestion": "Apa langkah-langkah untuk melihat Laporan Transaksi Penjualan?"
@@ -7031,7 +7031,7 @@
         "laporan",
         "transaksi"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 105,
       "sourceNo": "102",
       "sourceQuestion": "Informasi apa saja yang ditampilkan dalam Laporan Transaksi Penjualan?"
@@ -7073,7 +7073,7 @@
         "transaksi",
         "penjualan"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 106,
       "sourceNo": "103",
       "sourceQuestion": "Bagaimana cara mencetak data dari Laporan Transaksi Penjualan?"
@@ -7121,7 +7121,7 @@
         "ingin",
         "ditampilkan"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 107,
       "sourceNo": "104",
       "sourceQuestion": "Bagaimana cara memilih jenis laporan yang ingin ditampilkan di Laporan Transaksi Penjualan?"
@@ -7169,7 +7169,7 @@
         "ingin",
         "ditampilkan"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 108,
       "sourceNo": "105",
       "sourceQuestion": "Bagaimana cara memilih jenis transaksi yang ingin ditampilkan di Laporan Transaksi Penjualan?"
@@ -7217,7 +7217,7 @@
         "berdasarkan",
         "kode"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 109,
       "sourceNo": "106",
       "sourceQuestion": "Bagaimana cara memfilter laporan transaksi penjualan berdasarkan kode grup?"
@@ -7265,7 +7265,7 @@
         "berdasarkan",
         "jenis"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 110,
       "sourceNo": "107",
       "sourceQuestion": "Bagaimana cara memfilter laporan transaksi penjualan berdasarkan jenis grup?"
@@ -7307,7 +7307,7 @@
         "kriteria",
         "pencarian"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 111,
       "sourceNo": "108",
       "sourceQuestion": "Apa yang harus dilakukan setelah memasukkan kriteria pencarian di Laporan Transaksi Penjualan?"
@@ -7348,7 +7348,7 @@
         "penjualan",
         "marketplace"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 112,
       "sourceNo": "109",
       "sourceQuestion": "Apa fungsi dari Menu Laporan Penjualan Marketplace?"
@@ -7390,7 +7390,7 @@
         "penjualan",
         "marketplace"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 113,
       "sourceNo": "110",
       "sourceQuestion": "Apa langkah pertama untuk melihat Laporan Penjualan Marketplace?"
@@ -7438,7 +7438,7 @@
         "berdasarkan",
         "marketplace"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 114,
       "sourceNo": "111",
       "sourceQuestion": "Bagaimana cara memfilter laporan penjualan marketplace berdasarkan marketplace tertentu?"
@@ -7486,7 +7486,7 @@
         "berdasarkan",
         "kode"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 115,
       "sourceNo": "112",
       "sourceQuestion": "Bagaimana cara memfilter laporan penjualan marketplace berdasarkan Kode Group?"
@@ -7534,7 +7534,7 @@
         "berdasarkan",
         "jenis"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 116,
       "sourceNo": "113",
       "sourceQuestion": "Bagaimana cara memfilter laporan penjualan marketplace berdasarkan Jenis Group?"
@@ -7582,7 +7582,7 @@
         "berdasarkan",
         "valid"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 117,
       "sourceNo": "114",
       "sourceQuestion": "Bagaimana cara memfilter laporan penjualan marketplace berdasarkan Valid By?"
@@ -7624,7 +7624,7 @@
         "laporan",
         "penjualan"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 118,
       "sourceNo": "115",
       "sourceQuestion": "Informasi apa saja yang ditampilkan dalam Laporan Penjualan Marketplace?"
@@ -7666,7 +7666,7 @@
         "penjualan",
         "marketplace"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 119,
       "sourceNo": "116",
       "sourceQuestion": "Bagaimana cara mencetak data dari Laporan Penjualan Marketplace?"
@@ -7719,7 +7719,7 @@
         "barang",
         "tukar"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 120,
       "sourceNo": "117",
       "sourceQuestion": "Apa fungsi dari Menu Laporan Barang Tukar?"
@@ -7761,7 +7761,7 @@
         "barang",
         "tukar"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 121,
       "sourceNo": "118",
       "sourceQuestion": "Apa langkah pertama untuk melihat Laporan Barang Tukar?"
@@ -7809,7 +7809,7 @@
         "berdasarkan",
         "jenis"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 122,
       "sourceNo": "119",
       "sourceQuestion": "Bagaimana cara memfilter Laporan Barang Tukar berdasarkan Jenis Group?"
@@ -7857,7 +7857,7 @@
         "berdasarkan",
         "sales"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 123,
       "sourceNo": "120",
       "sourceQuestion": "Bagaimana cara memfilter Laporan Barang Tukar berdasarkan Sales?"
@@ -7899,7 +7899,7 @@
         "laporan",
         "barang"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 124,
       "sourceNo": "121",
       "sourceQuestion": "Informasi apa saja yang ditampilkan dalam Laporan Barang Tukar?"
@@ -7941,7 +7941,7 @@
         "barang",
         "tukar"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 125,
       "sourceNo": "122",
       "sourceQuestion": "Bagaimana cara mencetak data dari Laporan Barang Tukar?"
@@ -7989,7 +7989,7 @@
         "berdasarkan",
         "jenis"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 126,
       "sourceNo": "123",
       "sourceQuestion": "Bagaimana cara memfilter Laporan Barang Tukar berdasarkan Jenis Group?"
@@ -8037,7 +8037,7 @@
         "berdasarkan",
         "sales"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 127,
       "sourceNo": "124",
       "sourceQuestion": "Bagaimana cara memfilter Laporan Barang Tukar berdasarkan Sales?"
@@ -8078,7 +8078,7 @@
         "batal",
         "penjualan"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 128,
       "sourceNo": "125",
       "sourceQuestion": "Apa fungsi dari Menu Laporan Batal Penjualan?"
@@ -8120,7 +8120,7 @@
         "tanggal",
         "dari"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 129,
       "sourceNo": "126",
       "sourceQuestion": "Apa yang harus diisi pada kolom Tanggal Dari dan Tanggal Akhir di Laporan Batal Penjualan?"
@@ -8168,7 +8168,7 @@
         "berdasarkan",
         "valid"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 130,
       "sourceNo": "127",
       "sourceQuestion": "Bagaimana cara memfilter Laporan Batal Penjualan berdasarkan Valid By?"
@@ -8210,7 +8210,7 @@
         "laporan",
         "batal"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 131,
       "sourceNo": "128",
       "sourceQuestion": "Data apa saja yang ditampilkan dalam Laporan Batal Penjualan?"
@@ -8252,7 +8252,7 @@
         "batal",
         "penjualan"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 132,
       "sourceNo": "129",
       "sourceQuestion": "Bagaimana cara mencetak data dari Laporan Batal Penjualan?"
@@ -8300,7 +8300,7 @@
         "berdasarkan",
         "kode"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 133,
       "sourceNo": "130",
       "sourceQuestion": "Bagaimana cara memfilter laporan Penjualan Sales berdasarkan Kode Sales?"
@@ -8348,7 +8348,7 @@
         "laporan",
         "penjualan"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 134,
       "sourceNo": "131",
       "sourceQuestion": "Bagaimana cara memilih jenis laporan pada Laporan Penjualan Sales?"
@@ -8396,7 +8396,7 @@
         "berdasarkan",
         "kode"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 135,
       "sourceNo": "132",
       "sourceQuestion": "Bagaimana cara memfilter laporan Penjualan Sales berdasarkan Kode Group dan Jenis Group?"
@@ -8437,7 +8437,7 @@
         "penjualan",
         "sales"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 136,
       "sourceNo": "133",
       "sourceQuestion": "Apa fungsi dari Menu Laporan Penjualan Sales?"
@@ -8479,7 +8479,7 @@
         "penjualan",
         "sales"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 137,
       "sourceNo": "134",
       "sourceQuestion": "Bagaimana cara mencetak data dari Laporan Penjualan Sales?"
@@ -8521,7 +8521,7 @@
         "laporan",
         "penjualan"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 138,
       "sourceNo": "135",
       "sourceQuestion": "Informasi apa saja yang ditampilkan dalam Laporan Penjualan Sales?"
@@ -8635,7 +8635,7 @@
         "penjualan",
         "sales"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 139,
       "sourceNo": "136",
       "sourceQuestion": "Apa langkah-langkah untuk melihat Laporan Penjualan Sales?"
@@ -8676,7 +8676,7 @@
         "cash",
         "back"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 140,
       "sourceNo": "137",
       "sourceQuestion": "Apa fungsi dari Menu Laporan Cash Back?"
@@ -8716,7 +8716,7 @@
         "cash",
         "back"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 141,
       "sourceNo": "138",
       "sourceQuestion": "Bagaimana cara membuka Laporan Cash Back?"
@@ -8776,7 +8776,7 @@
         "cash",
         "back"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 142,
       "sourceNo": "139",
       "sourceQuestion": "Apa langkah-langkah untuk melihat Laporan Cash Back?"
@@ -8818,7 +8818,7 @@
         "laporan",
         "cash"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 143,
       "sourceNo": "140",
       "sourceQuestion": "Informasi apa saja yang ditampilkan dalam Laporan Cash Back?"
@@ -8860,7 +8860,7 @@
         "cash",
         "back"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 144,
       "sourceNo": "141",
       "sourceQuestion": "Bagaimana cara mencetak data dari Laporan Cash Back?"
@@ -8900,7 +8900,7 @@
         "penjualan",
         "rekap"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 145,
       "sourceNo": "142",
       "sourceQuestion": "Apa fungsi dari Laporan Penjualan Rekap?"
@@ -8960,7 +8960,7 @@
         "penjualan",
         "rekap"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 146,
       "sourceNo": "143",
       "sourceQuestion": "Apa langkah-langkah untuk melihat Laporan Penjualan Rekap?"
@@ -9002,7 +9002,7 @@
         "penjualan",
         "rekap"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 147,
       "sourceNo": "144",
       "sourceQuestion": "Bagaimana cara mencetak data dari Laporan Penjualan Rekap?"
@@ -9041,7 +9041,7 @@
         "transaki",
         "pembelian"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 148,
       "sourceNo": "145",
       "sourceQuestion": "Apa itu Laporan Transaki Pembelian?"
@@ -9173,7 +9173,7 @@
         "laporan",
         "transaksi"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 149,
       "sourceNo": "146",
       "sourceQuestion": "Filter apa saja yang tersedia pada Laporan Transaksi Pembelian?"
@@ -9479,7 +9479,7 @@
         "laporan",
         "transaksi"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 150,
       "sourceNo": "147",
       "sourceQuestion": "Informasi apa saja yang ditampilkan pada Laporan Transaksi Pembelian (Type Laporan Normal)?"
@@ -9719,7 +9719,7 @@
         "laporan",
         "transaksi"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 151,
       "sourceNo": "148",
       "sourceQuestion": "Informasi apa saja yang ditampilkan pada Laporan Transaksi Pembelian (Type Laporan Selisih)?"
@@ -9760,7 +9760,7 @@
         "jenis",
         "selisih"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 152,
       "sourceNo": "149",
       "sourceQuestion": "Apa fungsi dari Laporan Pembelian jenis Selisih?"
@@ -9832,7 +9832,7 @@
         "pada",
         "laporan"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 153,
       "sourceNo": "150",
       "sourceQuestion": "Tombol export apa saja yang tersedia pada Laporan Transaksi Pembelian?"
@@ -9873,7 +9873,7 @@
         "transaksi",
         "pembelian"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 154,
       "sourceNo": "151",
       "sourceQuestion": "Apa fungsi dari Menu History Transaksi Pembelian?"
@@ -9981,7 +9981,7 @@
         "laporan",
         "history"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 155,
       "sourceNo": "152",
       "sourceQuestion": "Filter apa saja yang tersedia pada Laporan History Transaksi Pembelian?"
@@ -10227,7 +10227,7 @@
         "laporan",
         "history"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 156,
       "sourceNo": "153",
       "sourceQuestion": "Informasi apa saja yang ditampilkan pada Laporan History Transaksi Pembelian saat di export ke PDF?"
@@ -10287,7 +10287,7 @@
         "pada",
         "laporan"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 157,
       "sourceNo": "154",
       "sourceQuestion": "Tombol export apa saja yang tersedia pada Laporan History Transaksi Pembelian?"
@@ -10328,7 +10328,7 @@
         "batal",
         "pembelian"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 158,
       "sourceNo": "155",
       "sourceQuestion": "Apa fungsi dari Menu Laporan Batal Pembelian?"
@@ -10400,7 +10400,7 @@
         "laporan",
         "batal"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 159,
       "sourceNo": "156",
       "sourceQuestion": "Filter apa saja yang tersedia pada Laporan Batal Pembelian?"
@@ -10598,7 +10598,7 @@
         "laporan",
         "batal"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 160,
       "sourceNo": "157",
       "sourceQuestion": "Informasi apa saja yang ditampilkan pada Laporan Batal Pembelian saat di export ke PDF?"
@@ -10658,7 +10658,7 @@
         "pada",
         "laporan"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 161,
       "sourceNo": "158",
       "sourceQuestion": "Tombol export apa saja yang tersedia pada Laporan Batal Pembelian?"
@@ -10699,7 +10699,7 @@
         "pembelian",
         "sales"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 162,
       "sourceNo": "159",
       "sourceQuestion": "Apa fungsi dari Menu Laporan Pembelian Sales?"
@@ -10795,7 +10795,7 @@
         "laporan",
         "pembelian"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 163,
       "sourceNo": "160",
       "sourceQuestion": "Filter apa saja yang tersedia pada Laporan Pembelian Sales?"
@@ -10921,7 +10921,7 @@
         "laporan",
         "pembelian"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 164,
       "sourceNo": "161",
       "sourceQuestion": "Informasi apa saja yang ditampilkan pada Laporan Pembelian Sales saat di export ke PDF?"
@@ -10981,7 +10981,7 @@
         "pada",
         "laporan"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 165,
       "sourceNo": "162",
       "sourceQuestion": "Tombol export apa saja yang tersedia pada Laporan Pembelian Sales?"
@@ -11020,7 +11020,7 @@
         "hancur",
         "pembelian"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 166,
       "sourceNo": "163",
       "sourceQuestion": "Apa itu Laporan Hancur Pembelian?"
@@ -11080,7 +11080,7 @@
         "laporan",
         "hancur"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 167,
       "sourceNo": "164",
       "sourceQuestion": "Filter apa saja yang tersedia pada Laporan Hancur Pembelian?"
@@ -11194,7 +11194,7 @@
         "laporan",
         "hancur"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 168,
       "sourceNo": "165",
       "sourceQuestion": "Informasi apa saja yang ditampilkan pada Laporan Hancur Pembelian saat di export ke PDF?"
@@ -11254,7 +11254,7 @@
         "pada",
         "laporan"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 169,
       "sourceNo": "166",
       "sourceQuestion": "Tombol export apa saja yang tersedia pada Laporan Hancur Pembelian?"
@@ -11293,7 +11293,7 @@
         "pembelian",
         "transfer"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 170,
       "sourceNo": "167",
       "sourceQuestion": "Apa itu Laporan Pembelian Transfer?"
@@ -11353,7 +11353,7 @@
         "laporan",
         "pembelian"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 171,
       "sourceNo": "168",
       "sourceQuestion": "Filter apa saja yang tersedia pada Laporan Pembelian Transfer?"
@@ -11509,7 +11509,7 @@
         "laporan",
         "pembelian"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 172,
       "sourceNo": "169",
       "sourceQuestion": "Informasi apa saja yang ditampilkan pada Laporan Pembelian Transfer saat di export ke PDF?"
@@ -11569,7 +11569,7 @@
         "pada",
         "laporan"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 173,
       "sourceNo": "170",
       "sourceQuestion": "Tombol export apa saja yang tersedia pada Laporan Pembelian Transfer?"
@@ -11609,7 +11609,7 @@
         "pembelian",
         "transfer"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 174,
       "sourceNo": "171",
       "sourceQuestion": "Apa fungsi dari Laporan Pembelian Transfer?"
@@ -11649,7 +11649,7 @@
         "transaksi",
         "pembelian"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 175,
       "sourceNo": "172",
       "sourceQuestion": "Apa itu Laporan Rekap Transaksi Pembelian?"
@@ -11709,7 +11709,7 @@
         "laporan",
         "rekap"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 176,
       "sourceNo": "173",
       "sourceQuestion": "Filter apa saja yang tersedia pada Laporan Rekap Transaksi Pembelian?"
@@ -11835,7 +11835,7 @@
         "laporan",
         "rekap"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 177,
       "sourceNo": "174",
       "sourceQuestion": "Informasi apa saja yang ditampilkan pada Laporan Rekap Transaksi Pembelian saat di export ke PDF?"
@@ -11877,7 +11877,7 @@
         "pada",
         "laporan"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 178,
       "sourceNo": "175",
       "sourceQuestion": "Tombol export apa saja yang tersedia pada Laporan Rekap Transaksi Pembelian?"
@@ -11922,7 +11922,7 @@
         "transaksi",
         "service"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 179,
       "sourceNo": "176",
       "sourceQuestion": "Apa itu Laporan Transaksi Service?"
@@ -11982,7 +11982,7 @@
         "laporan",
         "transaksi"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 180,
       "sourceNo": "177",
       "sourceQuestion": "Filter apa saja yang tersedia pada Laporan Transaksi Service?"
@@ -12288,7 +12288,7 @@
         "laporan",
         "transaksi"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 181,
       "sourceNo": "178",
       "sourceQuestion": "Informasi apa saja yang ditampilkan pada Laporan Transaksi Service saat di export ke PDF?"
@@ -12360,7 +12360,7 @@
         "pada",
         "laporan"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 182,
       "sourceNo": "179",
       "sourceQuestion": "Tombol export apa saja yang tersedia pada Laporan Transaksi Service?"
@@ -12405,7 +12405,7 @@
         "batal",
         "service"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 183,
       "sourceNo": "180",
       "sourceQuestion": "Apa itu Laporan Batal Service?"
@@ -12465,7 +12465,7 @@
         "laporan",
         "batal"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 184,
       "sourceNo": "181",
       "sourceQuestion": "Filter apa saja yang tersedia pada Laporan Batal Service?"
@@ -12639,7 +12639,7 @@
         "laporan",
         "batal"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 185,
       "sourceNo": "182",
       "sourceQuestion": "Informasi apa saja yang ditampilkan pada Laporan Batal Service saat di export ke PDF?"
@@ -12711,7 +12711,7 @@
         "pada",
         "laporan"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 186,
       "sourceNo": "183",
       "sourceQuestion": "Tombol export apa saja yang tersedia pada Laporan Batal Service?"
@@ -12758,7 +12758,7 @@
         "service",
         "masuk"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 187,
       "sourceNo": "184",
       "sourceQuestion": "Apa fungsi dari Menu Laporan Service (Masuk)?"
@@ -12818,7 +12818,7 @@
         "laporan",
         "service"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 188,
       "sourceNo": "185",
       "sourceQuestion": "Filter apa saja yang tersedia pada Laporan Service (Masuk)?"
@@ -12980,7 +12980,7 @@
         "laporan",
         "service"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 189,
       "sourceNo": "186",
       "sourceQuestion": "Informasi apa saja yang ditampilkan pada Laporan Service (Masuk) saat di export ke PDF?"
@@ -13052,7 +13052,7 @@
         "pada",
         "laporan"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 190,
       "sourceNo": "187",
       "sourceQuestion": "Tombol export apa saja yang tersedia pada Laporan Service (Masuk)?"
@@ -13093,7 +13093,7 @@
         "service",
         "selesai"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 191,
       "sourceNo": "188",
       "sourceQuestion": "Apa fungsi dari Menu Laporan Service (Selesai)?"
@@ -13153,7 +13153,7 @@
         "laporan",
         "service"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 192,
       "sourceNo": "189",
       "sourceQuestion": "Filter apa saja yang tersedia pada Laporan Service (Selesai)?"
@@ -13315,7 +13315,7 @@
         "laporan",
         "service"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 193,
       "sourceNo": "190",
       "sourceQuestion": "Informasi apa saja yang ditampilkan pada Laporan Service (Selesai) saat di export ke PDF?"
@@ -13387,7 +13387,7 @@
         "pada",
         "laporan"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 194,
       "sourceNo": "191",
       "sourceQuestion": "Tombol export apa saja yang tersedia pada Laporan Service (Selesai)?"
@@ -13428,7 +13428,7 @@
         "service",
         "ambil"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 195,
       "sourceNo": "192",
       "sourceQuestion": "Apa fungsi dari Menu Laporan Service (Ambil)?"
@@ -13488,7 +13488,7 @@
         "laporan",
         "service"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 196,
       "sourceNo": "193",
       "sourceQuestion": "Filter apa saja yang tersedia pada Laporan Service (Ambil)?"
@@ -13662,7 +13662,7 @@
         "laporan",
         "service"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 197,
       "sourceNo": "194",
       "sourceQuestion": "Informasi apa saja yang ditampilkan pada Laporan Service (Ambil) saat di export ke PDF?"
@@ -13734,7 +13734,7 @@
         "pada",
         "laporan"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 198,
       "sourceNo": "195",
       "sourceQuestion": "Tombol export apa saja yang tersedia pada Laporan Service (Ambil)?"
@@ -13775,7 +13775,7 @@
         "transaksi",
         "hutang"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 199,
       "sourceNo": "196",
       "sourceQuestion": "Apa fungsi dari Menu Laporan Transaksi Hutang?"
@@ -13859,7 +13859,7 @@
         "melihat",
         "laporan"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 200,
       "sourceNo": "197",
       "sourceQuestion": "Bagaimana langkah-langkah untuk membuka dan melihat Laporan Transaksi Hutang?"
@@ -13919,7 +13919,7 @@
         "laporan",
         "transaksi"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 201,
       "sourceNo": "198",
       "sourceQuestion": "Filter apa saja yang tersedia pada Laporan Transaksi Hutang?"
@@ -14039,7 +14039,7 @@
         "laporan",
         "transaksi"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 202,
       "sourceNo": "199",
       "sourceQuestion": "Informasi apa saja yang ditampilkan pada Laporan Transaksi Hutang?"
@@ -14099,7 +14099,7 @@
         "pada",
         "laporan"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 203,
       "sourceNo": "200",
       "sourceQuestion": "Tombol export apa saja yang tersedia pada Laporan Transaksi Hutang?"
@@ -14140,7 +14140,7 @@
         "stock",
         "hutang"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 204,
       "sourceNo": "201",
       "sourceQuestion": "Apa fungsi dari Menu Laporan Stock Hutang?"
@@ -14224,7 +14224,7 @@
         "melihat",
         "laporan"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 205,
       "sourceNo": "202",
       "sourceQuestion": "Bagaimana langkah-langkah untuk membuka dan melihat Laporan Stock Hutang?"
@@ -14284,7 +14284,7 @@
         "laporan",
         "stock"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 206,
       "sourceNo": "203",
       "sourceQuestion": "Filter apa saja yang tersedia pada Laporan Stock Hutang?"
@@ -14488,7 +14488,7 @@
         "laporan",
         "stock"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 207,
       "sourceNo": "204",
       "sourceQuestion": "Informasi apa saja yang ditampilkan pada Laporan Stock Hutang?"
@@ -14548,7 +14548,7 @@
         "pada",
         "laporan"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 208,
       "sourceNo": "205",
       "sourceQuestion": "Tombol export apa saja yang tersedia pada Laporan Stock Hutang?"
@@ -14589,7 +14589,7 @@
         "hutang",
         "lunas"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 209,
       "sourceNo": "206",
       "sourceQuestion": "Apa fungsi dari Menu Laporan Hutang Lunas?"
@@ -14649,7 +14649,7 @@
         "laporan",
         "hutang"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 210,
       "sourceNo": "207",
       "sourceQuestion": "Filter apa saja yang tersedia pada Laporan Hutang Lunas?"
@@ -14781,7 +14781,7 @@
         "laporan",
         "hutang"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 211,
       "sourceNo": "208",
       "sourceQuestion": "Informasi apa saja yang ditampilkan pada Laporan Hutang Lunas?"
@@ -14841,7 +14841,7 @@
         "pada",
         "laporan"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 212,
       "sourceNo": "209",
       "sourceQuestion": "Tombol export apa saja yang tersedia pada Laporan Hutang Lunas?"
@@ -14913,7 +14913,7 @@
         "melihat",
         "laporan"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 213,
       "sourceNo": "210",
       "sourceQuestion": "Bagaimana langkah-langkah untuk membuka dan melihat Laporan Batal Hutang?"
@@ -14952,7 +14952,7 @@
         "gesek",
         "tunai"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 214,
       "sourceNo": "211",
       "sourceQuestion": "Apa itu Laporan Gesek Tunai?"
@@ -15030,7 +15030,7 @@
         "laporan",
         "gesek"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 215,
       "sourceNo": "212",
       "sourceQuestion": "Filter apa saja yang tersedia pada Laporan Gesek Tunai?"
@@ -15077,7 +15077,7 @@
         "gesek",
         "tunai"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 216,
       "sourceNo": "213",
       "sourceQuestion": "Apa fungsi lain dari Laporan Gesek Tunai?"
@@ -15137,7 +15137,7 @@
         "pada",
         "laporan"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 217,
       "sourceNo": "214",
       "sourceQuestion": "Tombol export apa saja yang tersedia pada Laporan Gesek Tunai?"
@@ -15183,7 +15183,7 @@
         "keuangan",
         "cash"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 218,
       "sourceNo": "215",
       "sourceQuestion": "Apa itu Laporan Transaksi Keuangan Cash?"
@@ -15237,7 +15237,7 @@
         "laporan",
         "ini"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 219,
       "sourceNo": "216",
       "sourceQuestion": "Apa keterangan saldo yang terdapat pada laporan ini?"
@@ -15333,7 +15333,7 @@
         "laporan",
         "transaksi"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 220,
       "sourceNo": "217",
       "sourceQuestion": "Filter apa saja yang tersedia pada Laporan Transaksi Keuangan Cash?"
@@ -15483,7 +15483,7 @@
         "laporan",
         "transaksi"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 221,
       "sourceNo": "218",
       "sourceQuestion": "Informasi apa saja yang ditampilkan pada Laporan Transaksi Keuangan Cash saat di export ke PDF?"
@@ -15555,7 +15555,7 @@
         "pada",
         "laporan"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 222,
       "sourceNo": "219",
       "sourceQuestion": "Tombol export apa saja yang tersedia pada Laporan Transaksi Keuangan Cash?"
@@ -15602,7 +15602,7 @@
         "non",
         "cash"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 223,
       "sourceNo": "220",
       "sourceQuestion": "Apa itu Laporan Transaksi Keuangan Non Cash?"
@@ -15656,7 +15656,7 @@
         "laporan",
         "ini"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 224,
       "sourceNo": "221",
       "sourceQuestion": "Apa keterangan saldo yang terdapat pada laporan ini?"
@@ -15740,7 +15740,7 @@
         "laporan",
         "transaksi"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 225,
       "sourceNo": "222",
       "sourceQuestion": "Filter apa saja yang tersedia pada Laporan Transaksi Keuangan Non Cash?"
@@ -15914,7 +15914,7 @@
         "laporan",
         "transaksi"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 226,
       "sourceNo": "223",
       "sourceQuestion": "Informasi apa saja yang ditampilkan pada Laporan Transaksi Keuangan Non Cash (Type Detail) saat di export ke PDF?"
@@ -15986,7 +15986,7 @@
         "pada",
         "laporan"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 227,
       "sourceNo": "224",
       "sourceQuestion": "Tombol export apa saja yang tersedia pada Laporan Transaksi Keuangan Non Cash?"
@@ -16031,7 +16031,7 @@
         "buku",
         "berlian"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 228,
       "sourceNo": "225",
       "sourceQuestion": "Apa itu Laporan Buku Berlian?"
@@ -16073,7 +16073,7 @@
         "melihat",
         "laporan"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 229,
       "sourceNo": "226",
       "sourceQuestion": "Bagaimana langkah-langkah untuk membuka dan melihat Laporan Buku Berlian?"
@@ -16121,7 +16121,7 @@
         "laporan",
         "buku"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 230,
       "sourceNo": "227",
       "sourceQuestion": "Filter apa saja yang tersedia pada Laporan Buku Berlian?"
@@ -16217,7 +16217,7 @@
         "laporan",
         "buku"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 231,
       "sourceNo": "228",
       "sourceQuestion": "Informasi apa saja yang ditampilkan pada Laporan Buku Berlian saat di export ke PDF?"
@@ -16273,7 +16273,7 @@
         "laporan",
         "otorisasi"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 232,
       "sourceNo": "229",
       "sourceQuestion": "Apa itu Laporan Otorisasi?"
@@ -16393,7 +16393,7 @@
         "laporan",
         "otorisasi"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 233,
       "sourceNo": "230",
       "sourceQuestion": "Informasi apa saja yang ditampilkan pada Laporan Otorisasi saat di export ke PDF?"
@@ -16453,7 +16453,7 @@
         "pada",
         "laporan"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 234,
       "sourceNo": "231",
       "sourceQuestion": "Tombol export apa saja yang tersedia pada Laporan Otorisasi?"
@@ -16506,7 +16506,7 @@
         "of",
         "day"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 235,
       "sourceNo": "232",
       "sourceQuestion": "Apa itu Laporan EOD (End of Day)?"
@@ -16548,7 +16548,7 @@
         "of",
         "day"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 236,
       "sourceNo": "233",
       "sourceQuestion": "Apa isi dari Laporan EOD (End Of Day)?"
@@ -16752,7 +16752,7 @@
         "laporan",
         "eod"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 237,
       "sourceNo": "234",
       "sourceQuestion": "Informasi apa saja yang ditampilkan pada Laporan EOD saat di export ke PDF?"
@@ -16812,7 +16812,7 @@
         "pada",
         "laporan"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 238,
       "sourceNo": "235",
       "sourceQuestion": "Tombol export apa saja yang tersedia pada Laporan EOD?"
@@ -16851,7 +16851,7 @@
         "managerial",
         "analysis"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 239,
       "sourceNo": "236",
       "sourceQuestion": "Apa itu Laporan Managerial Analysis?"
@@ -16893,7 +16893,7 @@
         "dan",
         "fast"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 240,
       "sourceNo": "237",
       "sourceQuestion": "Apa fungsi dari filter slow moving dan fast moving pada Laporan Managerial Analysis?"
@@ -17013,7 +17013,7 @@
         "laporan",
         "managerial"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 241,
       "sourceNo": "238",
       "sourceQuestion": "Filter apa saja yang tersedia pada Laporan Managerial Analysis?"
@@ -17139,7 +17139,7 @@
         "laporan",
         "managerial"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 242,
       "sourceNo": "239",
       "sourceQuestion": "Informasi apa saja yang ditampilkan pada Laporan Managerial Analysis saat di export ke PDF?"
@@ -17199,7 +17199,7 @@
         "pada",
         "laporan"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 243,
       "sourceNo": "240",
       "sourceQuestion": "Tombol export apa saja yang tersedia pada Laporan Managerial Analysis?"
@@ -17238,7 +17238,7 @@
         "stock",
         "opname"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 244,
       "sourceNo": "241",
       "sourceQuestion": "Apa itu Laporan Stock Opname?"
@@ -17334,7 +17334,7 @@
         "laporan",
         "stock"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 245,
       "sourceNo": "242",
       "sourceQuestion": "Filter apa saja yang tersedia pada Laporan Stock Opname?"
@@ -17514,7 +17514,7 @@
         "laporan",
         "stock"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 246,
       "sourceNo": "243",
       "sourceQuestion": "Informasi apa saja yang ditampilkan pada Laporan Stock Opname saat di export ke PDF?"
@@ -17574,7 +17574,7 @@
         "pada",
         "laporan"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 247,
       "sourceNo": "244",
       "sourceQuestion": "Tombol export apa saja yang tersedia pada Laporan Stock Opname?"
@@ -17626,7 +17626,7 @@
         "harga",
         "emas"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 248,
       "sourceNo": "245",
       "sourceQuestion": "Apa itu Laporan Perubahan Harga Emas?"
@@ -17673,7 +17673,7 @@
         "harga",
         "emas"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 249,
       "sourceNo": "246",
       "sourceQuestion": "Apa tujuan dari Laporan Perubahan Harga Emas?"
@@ -17733,7 +17733,7 @@
         "laporan",
         "perubahan"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 250,
       "sourceNo": "247",
       "sourceQuestion": "Filter apa saja yang tersedia pada Laporan Perubahan Harga Emas?"
@@ -17847,7 +17847,7 @@
         "laporan",
         "perubahan"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 251,
       "sourceNo": "248",
       "sourceQuestion": "Informasi apa saja yang ditampilkan pada Laporan Perubahan Harga Emas saat di export ke PDF?"
@@ -17907,7 +17907,7 @@
         "pada",
         "laporan"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 252,
       "sourceNo": "249",
       "sourceQuestion": "Tombol export apa saja yang tersedia pada Laporan Perubahan Harga Emas?"
@@ -17960,7 +17960,7 @@
         "timbang",
         "baki"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 253,
       "sourceNo": "250",
       "sourceQuestion": "Apa itu Laporan Aktivitas Setelah Timbang Baki?"
@@ -18020,7 +18020,7 @@
         "laporan",
         "aktivitas"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 254,
       "sourceNo": "251",
       "sourceQuestion": "Filter apa saja yang tersedia pada Laporan Aktivitas Setelah Timbang Baki?"
@@ -18128,7 +18128,7 @@
         "laporan",
         "aktivitas"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 255,
       "sourceNo": "252",
       "sourceQuestion": "Informasi apa saja yang ditampilkan pada Laporan Aktivitas Setelah Timbang Baki saat di export ke PDF?"
@@ -18188,7 +18188,7 @@
         "pada",
         "laporan"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 256,
       "sourceNo": "253",
       "sourceQuestion": "Tombol export apa saja yang tersedia pada Laporan Aktivitas Setelah Timbang Baki?"
@@ -18228,7 +18228,7 @@
         "data",
         "users"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 257,
       "sourceNo": "254",
       "sourceQuestion": "Apa fungsi dari Menu Data Users?"
@@ -18269,7 +18269,7 @@
         "pada",
         "program"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 258,
       "sourceNo": "255",
       "sourceQuestion": "Apakah ada batasan penggunaan akun pada program?"
@@ -18311,7 +18311,7 @@
         "menu",
         "data"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 259,
       "sourceNo": "256",
       "sourceQuestion": "Siapa yang dapat melakukan otorisasi melalui menu Data Users?"
@@ -18406,7 +18406,7 @@
         "data",
         "users"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 260,
       "sourceNo": "257",
       "sourceQuestion": "Bagaimana langkah-langkah untuk menambahkan Data Users?"
@@ -18513,7 +18513,7 @@
         "data",
         "users"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 261,
       "sourceNo": "258",
       "sourceQuestion": "Bagaimana langkah-langkah untuk mengedit Data Users?"
@@ -18608,7 +18608,7 @@
         "data",
         "users"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 262,
       "sourceNo": "259",
       "sourceQuestion": "Bagaimana langkah-langkah untuk menghapus Data Users?"
@@ -18650,7 +18650,7 @@
         "menu",
         "data"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 263,
       "sourceNo": "260",
       "sourceQuestion": "Tombol export apa yang tersedia pada Menu Data Users?"
@@ -18690,7 +18690,7 @@
         "hak",
         "akses"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 264,
       "sourceNo": "261",
       "sourceQuestion": "Apa fungsi dari Menu Hak Akses?"
@@ -18729,7 +18729,7 @@
         "berdasarkan",
         "apa"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 265,
       "sourceNo": "262",
       "sourceQuestion": "Hak Akses diberikan berdasarkan apa?"
@@ -18800,7 +18800,7 @@
         "hak",
         "akses"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 266,
       "sourceNo": "263",
       "sourceQuestion": "Bagaimana langkah-langkah untuk menginputkan Hak Akses?"
@@ -18842,7 +18842,7 @@
         "level",
         "owner"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 267,
       "sourceNo": "264",
       "sourceQuestion": "Apakah pengaturan hak akses berlaku untuk level Owner?"
@@ -18884,7 +18884,7 @@
         "pengaturan",
         "hak"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 268,
       "sourceNo": "265",
       "sourceQuestion": "Tombol apa yang tersedia untuk mengembalikan pengaturan hak akses ke awal?"
@@ -18932,7 +18932,7 @@
         "pada",
         "system"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 269,
       "sourceNo": "266",
       "sourceQuestion": "Apa fungsi dari menu Export CSV pada system?"
@@ -19015,7 +19015,7 @@
         "export",
         "csv"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 270,
       "sourceNo": "267",
       "sourceQuestion": "Bagaimana langkah-langkah untuk melakukan Export CSV?"
@@ -19055,7 +19055,7 @@
         "cetak",
         "barcode"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 271,
       "sourceNo": "268",
       "sourceQuestion": "Apa fungsi dari menu Cetak Barcode?"
@@ -19258,7 +19258,7 @@
         "cetak",
         "barcode"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 272,
       "sourceNo": "269",
       "sourceQuestion": "Bagaimana langkah-langkah untuk melakukan Cetak Barcode?"
@@ -19298,7 +19298,7 @@
         "setting",
         "system"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 273,
       "sourceNo": "270",
       "sourceQuestion": "Apa fungsi dari menu Setting System?"
@@ -19338,7 +19338,7 @@
         "setting",
         "nota"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 274,
       "sourceNo": "271",
       "sourceQuestion": "Apa fungsi dari menu Setting Nota?"
@@ -19464,7 +19464,7 @@
         "mengatur",
         "setting"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 275,
       "sourceNo": "272",
       "sourceQuestion": "Bagaimana langkah-langkah untuk membuka dan mengatur Setting Nota?"
@@ -19608,7 +19608,7 @@
         "setting",
         "nota"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 276,
       "sourceNo": "273",
       "sourceQuestion": "Apa saja keterangan tambahan pada menu Setting Nota?"
@@ -19649,7 +19649,7 @@
         "nota",
         "slip"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 277,
       "sourceNo": "274",
       "sourceQuestion": "Apa fungsi dari menu Setting Nota Slip?"
@@ -19745,7 +19745,7 @@
         "nota",
         "slip"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 278,
       "sourceNo": "275",
       "sourceQuestion": "Bagaimana langkah-langkah untuk mengatur Setting Nota Slip?"
@@ -19796,7 +19796,7 @@
         "opname",
         "barang"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 279,
       "sourceNo": "276",
       "sourceQuestion": "Apa itu Stock Opname Barang?"
@@ -19927,7 +19927,7 @@
         "opname",
         "barang"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 280,
       "sourceNo": "277",
       "sourceQuestion": "Bagaimana langkah-langkah melakukan Stock Opname Barang?"
@@ -19969,7 +19969,7 @@
         "secara",
         "berkala"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 281,
       "sourceNo": "278",
       "sourceQuestion": "Apa manfaat melakukan Stock Opname Barang secara berkala?"
@@ -20015,7 +20015,7 @@
         "penerimaan",
         "barang"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 282,
       "sourceNo": "279",
       "sourceQuestion": "Apa itu Stock Opname Penerimaan Barang?"
@@ -20111,7 +20111,7 @@
         "penerimaan",
         "barang"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 283,
       "sourceNo": "280",
       "sourceQuestion": "Bagaimana langkah-langkah melakukan Stock Opname Penerimaan Barang?"
@@ -20152,7 +20152,7 @@
         "penerimaan",
         "barang"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 284,
       "sourceNo": "281",
       "sourceQuestion": "Apa hasil dari Stock Opname Penerimaan Barang?"
@@ -20191,7 +20191,7 @@
         "helpdesk",
         "tersedia"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 285,
       "sourceNo": "282",
       "sourceQuestion": "Kapan jam operasional Helpdesk tersedia?"
@@ -20239,7 +20239,7 @@
         "kebingungan",
         "atau"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 286,
       "sourceNo": "283",
       "sourceQuestion": "Apa yang harus dilakukan jika mengalami kebingungan atau ingin mengetahui lebih lanjut tentang program?"
@@ -20277,7 +20277,7 @@
         "menghubungi",
         "helpdesk"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 287,
       "sourceNo": "284",
       "sourceQuestion": "Bagaimana cara menghubungi Helpdesk?"
@@ -20316,7 +20316,7 @@
         "tim",
         "helpdesk"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 288,
       "sourceNo": "285",
       "sourceQuestion": "Bagaimana respons dari tim Helpdesk?"
@@ -20361,7 +20361,7 @@
         "transaksi",
         "pembelian"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 289,
       "sourceNo": "286",
       "sourceQuestion": "Apa fungsi Menu Transaksi Pembelian?"
@@ -20667,7 +20667,7 @@
         "dengan",
         "barcode"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 290,
       "sourceNo": "287",
       "sourceQuestion": "Bagaimana cara melakukan Input Transaksi Pembelian dengan barcode?"
@@ -20829,7 +20829,7 @@
         "tanpa",
         "barcode"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 291,
       "sourceNo": "288",
       "sourceQuestion": "Bagaimana cara melakukan Input Transaksi Pembelian tanpa barcode atau manual?"
@@ -20876,7 +20876,7 @@
         "transaksi",
         "pembelian"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 292,
       "sourceNo": "289",
       "sourceQuestion": "Apa format nomor faktur dari transaksi pembelian?"
@@ -20920,7 +20920,7 @@
         "validasi",
         "pembelian"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 293,
       "sourceNo": "290",
       "sourceQuestion": "Apa fungsi Validasi Pembelian?"
@@ -21043,7 +21043,7 @@
         "validasi",
         "pembelian"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 294,
       "sourceNo": "291",
       "sourceQuestion": "Bagaimana cara melakukan Validasi Pembelian?"
@@ -21085,7 +21085,7 @@
         "sudah",
         "divalidasi"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 295,
       "sourceNo": "292",
       "sourceQuestion": "Bagaimana cara memastikan transaksi pembelian yang sudah divalidasi tercatat dengan benar di sistem?"
@@ -21133,7 +21133,7 @@
         "validasi",
         "pembelian"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 296,
       "sourceNo": "293",
       "sourceQuestion": "Bagaimana cara mengecek poin member setelah Validasi Pembelian?"
@@ -21178,7 +21178,7 @@
         "lihat",
         "pembelian"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 297,
       "sourceNo": "294",
       "sourceQuestion": "Apa fungsi Menu Lihat Pembelian?"
@@ -21226,7 +21226,7 @@
         "menu",
         "lihat"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 298,
       "sourceNo": "295",
       "sourceQuestion": "Informasi apa saja yang ditampilkan pada Menu Lihat Pembelian?"
@@ -21268,7 +21268,7 @@
         "kolom",
         "action"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 299,
       "sourceNo": "296",
       "sourceQuestion": "Tombol apa saja yang ada pada kolom Action di Menu Lihat Pembelian?"
@@ -21306,7 +21306,7 @@
         "membatalkan",
         "pembelian"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 300,
       "sourceNo": "297",
       "sourceQuestion": "Apa fungsi Membatalkan Pembelian?"
@@ -21452,7 +21452,7 @@
         "membatalkan",
         "pembelian"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 301,
       "sourceNo": "298",
       "sourceQuestion": "Bagaimana langkah Membatalkan Pembelian?"
@@ -21534,7 +21534,7 @@
         "nota",
         "pembelian"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 302,
       "sourceNo": "299",
       "sourceQuestion": "Bagaimana cara mencetak ulang nota pembelian?"
@@ -21617,7 +21617,7 @@
         "data",
         "pembelian"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 303,
       "sourceNo": "300",
       "sourceQuestion": "Bagaimana cara melakukan filter pencarian data pembelian?"
@@ -21674,7 +21674,7 @@
         "hancur",
         "pembelian"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 304,
       "sourceNo": "301",
       "sourceQuestion": "Apa fungsi Menu Hancur Pembelian?"
@@ -21779,7 +21779,7 @@
         "hancur",
         "pembelian"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 305,
       "sourceNo": "302",
       "sourceQuestion": "Bagaimana langkah melakukan Hancur Pembelian?"
@@ -21818,7 +21818,7 @@
         "transaksi",
         "service"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 306,
       "sourceNo": "303",
       "sourceQuestion": "Apa fungsi Menu Transaksi Service?"
@@ -22109,7 +22109,7 @@
         "transaksi",
         "service"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 307,
       "sourceNo": "304",
       "sourceQuestion": "Bagaimana langkah menginput Transaksi Service?"
@@ -22151,7 +22151,7 @@
         "dengan",
         "down"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 308,
       "sourceNo": "305",
       "sourceQuestion": "Apakah pembayaran transaksi service dapat dilakukan dengan Down Payment (DP)?"
@@ -22196,7 +22196,7 @@
         "faktur",
         "service"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 309,
       "sourceNo": "306",
       "sourceQuestion": "Apa format nomor faktur service?"
@@ -22238,7 +22238,7 @@
         "tercatat",
         "dengan"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 310,
       "sourceNo": "307",
       "sourceQuestion": "Bagaimana cara memastikan transaksi service telah tercatat dengan benar?"
@@ -22283,7 +22283,7 @@
         "lihat",
         "service"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 311,
       "sourceNo": "308",
       "sourceQuestion": "Apa fungsi Menu Lihat Service?"
@@ -22331,7 +22331,7 @@
         "menu",
         "lihat"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 312,
       "sourceNo": "309",
       "sourceQuestion": "Informasi apa saja yang ditampilkan pada Menu Lihat Service?"
@@ -22373,7 +22373,7 @@
         "kolom",
         "action"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 313,
       "sourceNo": "310",
       "sourceQuestion": "Tombol apa saja yang ada pada kolom Action di Menu Lihat Service?"
@@ -22490,7 +22490,7 @@
         "transaksi",
         "service"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 314,
       "sourceNo": "311",
       "sourceQuestion": "Bagaimana cara menyelesaikan transaksi Service?"
@@ -22604,7 +22604,7 @@
         "sudah",
         "selesai"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 315,
       "sourceNo": "312",
       "sourceQuestion": "Bagaimana cara mengambil barang Service yang sudah selesai?"
@@ -22686,7 +22686,7 @@
         "nota",
         "service"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 316,
       "sourceNo": "313",
       "sourceQuestion": "Bagaimana cara mencetak ulang Nota Service?"
@@ -22768,7 +22768,7 @@
         "barang",
         "service"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 317,
       "sourceNo": "314",
       "sourceQuestion": "Bagaimana cara melihat Detail Barang Service?"
@@ -22810,7 +22810,7 @@
         "setelah",
         "transaksi"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 318,
       "sourceNo": "315",
       "sourceQuestion": "Apa yang terjadi pada status barang setelah transaksi pembelian dengan barcode selesai?"
@@ -22864,7 +22864,7 @@
         "transaksi",
         "pembelian"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 319,
       "sourceNo": "316",
       "sourceQuestion": "Bagaimana cara menghitung potongan harga pada transaksi pembelian?"
@@ -22912,7 +22912,7 @@
         "pada",
         "transaksi"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 320,
       "sourceNo": "317",
       "sourceQuestion": "Bagaimana cara sistem menghitung Harga Beli pada transaksi pembelian?"
@@ -22954,7 +22954,7 @@
         "pada",
         "transaksi"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 321,
       "sourceNo": "318",
       "sourceQuestion": "Bagaimana cara sistem menghitung Harga Rata pada transaksi pembelian?"
@@ -22996,7 +22996,7 @@
         "diinput",
         "pada"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 322,
       "sourceNo": "319",
       "sourceQuestion": "Bagaimana cara sistem menyimpan barang setelah diinput pada transaksi pembelian?"
@@ -23038,7 +23038,7 @@
         "action",
         "di"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 323,
       "sourceNo": "320",
       "sourceQuestion": "Apa fungsi tombol “Hapus” pada kolom Action di input Transaksi Pembelian?"
@@ -23086,7 +23086,7 @@
         "input",
         "data"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 324,
       "sourceNo": "321",
       "sourceQuestion": "Apa yang harus dipilih pada saat input Data Customer di transaksi pembelian?"
@@ -23134,7 +23134,7 @@
         "dengan",
         "nomor"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 325,
       "sourceNo": "322",
       "sourceQuestion": "Bagaimana format nomor faktur service dibandingkan dengan nomor faktur pembelian?"
@@ -23182,7 +23182,7 @@
         "sudah",
         "divalidasi"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 326,
       "sourceNo": "323",
       "sourceQuestion": "Bagaimana cara melihat transaksi pembelian yang sudah divalidasi berdasarkan sales tertentu?"
@@ -23224,7 +23224,7 @@
         "mata",
         "berwarna"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 327,
       "sourceNo": "324",
       "sourceQuestion": "Apa yang ditampilkan oleh tombol icon mata berwarna biru pada menu Validasi?"
@@ -23265,7 +23265,7 @@
         "setelah",
         "validasi"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 328,
       "sourceNo": "325",
       "sourceQuestion": "Bagaimana sistem menampilkan nota pembelian setelah validasi?"
@@ -23307,7 +23307,7 @@
         "sudah",
         "masuk"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 329,
       "sourceNo": "326",
       "sourceQuestion": "Bagaimana cara mengetahui apakah poin member sudah masuk dari transaksi pembelian?"
@@ -23348,7 +23348,7 @@
         "transaksi",
         "pembelian"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 330,
       "sourceNo": "327",
       "sourceQuestion": "Bagaimana poin member dihitung dalam transaksi pembelian?"
@@ -23390,7 +23390,7 @@
         "untuk",
         "memeriksa"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 331,
       "sourceNo": "328",
       "sourceQuestion": "Laporan apa saja yang dapat digunakan untuk memeriksa transaksi pembelian yang sudah divalidasi?"
@@ -23432,7 +23432,7 @@
         "menu",
         "lihat"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 332,
       "sourceNo": "329",
       "sourceQuestion": "Apa fungsi tombol Reprint Pembelian di menu Lihat Pembelian?"
@@ -23472,7 +23472,7 @@
         "membatalkan",
         "pembelian"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 333,
       "sourceNo": "330",
       "sourceQuestion": "Bagaimana otorisasi dilakukan saat membatalkan pembelian?"
@@ -23514,7 +23514,7 @@
         "jika",
         "pembelian"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 334,
       "sourceNo": "331",
       "sourceQuestion": "Apa yang terjadi pada status barcode jika pembelian yang menggunakan barcode dibatalkan?"
@@ -23556,7 +23556,7 @@
         "jika",
         "pembelian"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 335,
       "sourceNo": "332",
       "sourceQuestion": "Apa yang terjadi pada poin member jika pembelian dibatalkan?"
@@ -23598,7 +23598,7 @@
         "untuk",
         "memastikan"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 336,
       "sourceNo": "333",
       "sourceQuestion": "Laporan apa saja yang dapat digunakan untuk memastikan batal pembelian tercatat?"
@@ -23637,7 +23637,7 @@
         "hancur",
         "pembelian"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 337,
       "sourceNo": "334",
       "sourceQuestion": "Apa fungsi laporan Hancur Pembelian?"
@@ -23676,7 +23676,7 @@
         "pembelian",
         "diperlukan"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 338,
       "sourceNo": "335",
       "sourceQuestion": "Mengapa fitur Hancur Pembelian diperlukan?"
@@ -23718,7 +23718,7 @@
         "setelah",
         "barang"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 339,
       "sourceNo": "336",
       "sourceQuestion": "Apa yang terjadi pada data service setelah barang diambil customer?"
@@ -23760,7 +23760,7 @@
         "menu",
         "lihat"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 340,
       "sourceNo": "337",
       "sourceQuestion": "Apa fungsi tombol “Service Selesai” pada menu Lihat Service?"
@@ -23802,7 +23802,7 @@
         "selesai",
         "setelah"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 341,
       "sourceNo": "338",
       "sourceQuestion": "Apa yang terjadi pada tombol “Service Selesai” setelah diklik?"
@@ -23844,7 +23844,7 @@
         "hanya",
         "dibayar"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 342,
       "sourceNo": "339",
       "sourceQuestion": "Bagaimana sistem menangani transaksi service yang hanya dibayar dengan Down Payment (DP)?"
@@ -23886,7 +23886,7 @@
         "service",
         "ambil"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 343,
       "sourceNo": "340",
       "sourceQuestion": "Apa format nota yang dihasilkan saat Service Ambil?"
@@ -23926,7 +23926,7 @@
         "barang",
         "service"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 344,
       "sourceNo": "341",
       "sourceQuestion": "Apa fungsi tombol “Detail Barang Service”?"
@@ -23968,7 +23968,7 @@
         "biru",
         "di"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 345,
       "sourceNo": "342",
       "sourceQuestion": "Apa fungsi tombol icon mata berwarna biru di Form Detail Service?"
@@ -24061,7 +24061,7 @@
         "transaksi",
         "service"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 346,
       "sourceNo": "343",
       "sourceQuestion": "Bagaimana cara membatalkan transaksi service?"
@@ -24103,7 +24103,7 @@
         "dan",
         "diambil"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 347,
       "sourceNo": "344",
       "sourceQuestion": "Apakah transaksi service yang sudah selesai dan diambil dapat dibatalkan?"
@@ -24145,7 +24145,7 @@
         "untuk",
         "memastikan"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 348,
       "sourceNo": "345",
       "sourceQuestion": "Laporan apa saja yang dapat digunakan untuk memastikan batal service tercatat?"
@@ -24185,7 +24185,7 @@
         "service",
         "tertentu"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 349,
       "sourceNo": "346",
       "sourceQuestion": "Bagaimana cara mencari transaksi service tertentu?"
@@ -24227,7 +24227,7 @@
         "ambil",
         "pada"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 350,
       "sourceNo": "347",
       "sourceQuestion": "Apa fungsi toggle Lihat Service Status Ambil pada filter pencarian service?"
@@ -24266,7 +24266,7 @@
         "transaksi",
         "hutang"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 351,
       "sourceNo": "348",
       "sourceQuestion": "Apa fungsi Menu Transaksi Hutang?"
@@ -24307,7 +24307,7 @@
         "transaksi",
         "hutang"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 352,
       "sourceNo": "349",
       "sourceQuestion": "Apa tahap pertama ketika melakukan transaksi hutang?"
@@ -24439,7 +24439,7 @@
         "transaksi",
         "hutang"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 353,
       "sourceNo": "350",
       "sourceQuestion": "Bagaimana cara menginput Data Barang pada Transaksi Hutang?"
@@ -24481,7 +24481,7 @@
         "barang",
         "di"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 354,
       "sourceNo": "351",
       "sourceQuestion": "Apa yang terjadi setelah mengisi Data Barang di Transaksi Hutang?"
@@ -24535,7 +24535,7 @@
         "transaksi",
         "hutang"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 355,
       "sourceNo": "352",
       "sourceQuestion": "Bagaimana cara menghapus Data Barang pada Transaksi Hutang?"
@@ -24607,7 +24607,7 @@
         "transaksi",
         "hutang"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 356,
       "sourceNo": "353",
       "sourceQuestion": "Bagaimana cara mengisi Data Hutang pada Transaksi Hutang?"
@@ -24655,7 +24655,7 @@
         "dan",
         "disable"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 357,
       "sourceNo": "354",
       "sourceQuestion": "Kolom inputan apa saja yang enable dan disable pada Form Data Hutang?"
@@ -24697,7 +24697,7 @@
         "transaksi",
         "hutang"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 358,
       "sourceNo": "355",
       "sourceQuestion": "Apa fungsi button Reset pada halaman Transaksi Hutang?"
@@ -24742,7 +24742,7 @@
         "lihat",
         "hutang"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 359,
       "sourceNo": "356",
       "sourceQuestion": "Apa fungsi Menu Lihat Hutang?"
@@ -24784,7 +24784,7 @@
         "menu",
         "lihat"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 360,
       "sourceNo": "357",
       "sourceQuestion": "Bagaimana cara memfilter data hutang pada Menu Lihat Hutang?"
@@ -24892,7 +24892,7 @@
         "menu",
         "lihat"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 361,
       "sourceNo": "358",
       "sourceQuestion": "Bagaimana tahapan proses Batal Hutang di Menu Lihat Hutang?"
@@ -24934,7 +24934,7 @@
         "form",
         "batal"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 362,
       "sourceNo": "359",
       "sourceQuestion": "Informasi apa saja yang ditampilkan pada Form Batal Hutang?"
@@ -25054,7 +25054,7 @@
         "menu",
         "lihat"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 363,
       "sourceNo": "360",
       "sourceQuestion": "Bagaimana tahapan proses Pelunasan Hutang di Menu Lihat Hutang?"
@@ -25096,7 +25096,7 @@
         "form",
         "pelunasan"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 364,
       "sourceNo": "361",
       "sourceQuestion": "Informasi apa saja yang ditampilkan pada Form Pelunasan Hutang?"
@@ -25134,7 +25134,7 @@
         "peremajaan",
         "hutang"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 365,
       "sourceNo": "362",
       "sourceQuestion": "Apa fungsi Peremajaan Hutang?"
@@ -25226,7 +25226,7 @@
         "peremajaan",
         "hutang"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 366,
       "sourceNo": "363",
       "sourceQuestion": "Bagaimana tahapan Peremajaan Hutang?"
@@ -25266,7 +25266,7 @@
         "nota",
         "hutang"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 367,
       "sourceNo": "364",
       "sourceQuestion": "Bagaimana cara mencetak ulang Nota Hutang?"
@@ -25305,7 +25305,7 @@
         "hutang",
         "lunas"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 368,
       "sourceNo": "365",
       "sourceQuestion": "Apa itu Batal Hutang Lunas?"
@@ -25347,7 +25347,7 @@
         "hutang",
         "lunas"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 369,
       "sourceNo": "366",
       "sourceQuestion": "Informasi apa saja pada halaman Batal Hutang Lunas?"
@@ -25454,7 +25454,7 @@
         "sudah",
         "lunas"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 370,
       "sourceNo": "367",
       "sourceQuestion": "Bagaimana tahapan membatalkan hutang yang sudah lunas?"
@@ -25499,7 +25499,7 @@
         "uang",
         "kas"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 371,
       "sourceNo": "368",
       "sourceQuestion": "Apa fungsi Menu Uang Kas?"
@@ -25592,7 +25592,7 @@
         "uang",
         "kas"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 372,
       "sourceNo": "369",
       "sourceQuestion": "Bagaimana langkah Ambil Uang Kas?"
@@ -25679,7 +25679,7 @@
         "uang",
         "kas"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 373,
       "sourceNo": "370",
       "sourceQuestion": "Bagaimana langkah Tambah Uang Kas?"
@@ -25721,7 +25721,7 @@
         "uang",
         "kas"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 374,
       "sourceNo": "371",
       "sourceQuestion": "Informasi apa yang ditampilkan pada Menu Uang Kas?"
@@ -25799,7 +25799,7 @@
         "uang",
         "kas"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 375,
       "sourceNo": "372",
       "sourceQuestion": "Bagaimana cara melihat foto pada Menu Uang Kas?"
@@ -25841,7 +25841,7 @@
         "uang",
         "kas"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 376,
       "sourceNo": "373",
       "sourceQuestion": "Bagaimana memastikan inputan tambah atau ambil uang kas sudah masuk?"
@@ -25892,7 +25892,7 @@
         "uang",
         "bank"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 377,
       "sourceNo": "374",
       "sourceQuestion": "Apa fungsi Menu Uang Bank?"
@@ -25973,7 +25973,7 @@
         "uang",
         "bank"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 378,
       "sourceNo": "375",
       "sourceQuestion": "Bagaimana langkah Ambil Uang Bank?"
@@ -26054,7 +26054,7 @@
         "uang",
         "bank"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 379,
       "sourceNo": "376",
       "sourceQuestion": "Bagaimana langkah Tambah Uang Bank?"
@@ -26096,7 +26096,7 @@
         "uang",
         "bank"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 380,
       "sourceNo": "377",
       "sourceQuestion": "Informasi apa yang ditampilkan pada Menu Uang Bank?"
@@ -26138,7 +26138,7 @@
         "uang",
         "bank"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 381,
       "sourceNo": "378",
       "sourceQuestion": "Bagaimana memastikan inputan tambah atau ambil uang bank sudah masuk?"
@@ -26177,7 +26177,7 @@
         "gesek",
         "tunai"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 382,
       "sourceNo": "379",
       "sourceQuestion": "Apa fungsi Menu Gesek Tunai?"
@@ -26324,7 +26324,7 @@
         "gesek",
         "tunai"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 383,
       "sourceNo": "380",
       "sourceQuestion": "Bagaimana langkah menginput Gesek Tunai?"
@@ -26366,7 +26366,7 @@
         "gesek",
         "tunai"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 384,
       "sourceNo": "381",
       "sourceQuestion": "Informasi apa yang ditampilkan pada Menu Gesek Tunai?"
@@ -26407,7 +26407,7 @@
         "sudah",
         "tercatat"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 385,
       "sourceNo": "382",
       "sourceQuestion": "Bagaimana memastikan transaksi gesek tunai sudah tercatat?"
@@ -26453,7 +26453,7 @@
         "jual",
         "beli"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 386,
       "sourceNo": "383",
       "sourceQuestion": "Apa fungsi Menu Validasi Jual Beli?"
@@ -26546,7 +26546,7 @@
         "jual",
         "beli"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 387,
       "sourceNo": "384",
       "sourceQuestion": "Bagaimana cara memvalidasi Jual Beli?"
@@ -26594,7 +26594,7 @@
         "beli",
         "belum"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 388,
       "sourceNo": "385",
       "sourceQuestion": "Apa yang terjadi jika transaksi Jual Beli belum divalidasi?"
@@ -26632,7 +26632,7 @@
         "validasi",
         "hutang"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 389,
       "sourceNo": "386",
       "sourceQuestion": "Apa fungsi Validasi Hutang?"
@@ -26724,7 +26724,7 @@
         "memvalidasi",
         "hutang"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 390,
       "sourceNo": "387",
       "sourceQuestion": "Bagaimana cara memvalidasi Hutang?"
@@ -26766,7 +26766,7 @@
         "belum",
         "divalidasi"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 391,
       "sourceNo": "388",
       "sourceQuestion": "Apa yang terjadi jika transaksi Hutang belum divalidasi?"
@@ -26817,7 +26817,7 @@
         "saldo",
         "uang"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 392,
       "sourceNo": "389",
       "sourceQuestion": "Apa fungsi Pengalihan Saldo Uang?"
@@ -26899,7 +26899,7 @@
         "saldo",
         "uang"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 393,
       "sourceNo": "390",
       "sourceQuestion": "Bagaimana tahapan melakukan Pengalihan Saldo Uang?"
@@ -26946,7 +26946,7 @@
         "sudah",
         "tercatat"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 394,
       "sourceNo": "391",
       "sourceQuestion": "Bagaimana memastikan Pengalihan Saldo Uang sudah tercatat?"
@@ -26994,7 +26994,7 @@
         "transaksi",
         "hutang"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 395,
       "sourceNo": "392",
       "sourceQuestion": "Apa konsekuensi menghapus Data Barang pada Transaksi Hutang?"
@@ -27036,7 +27036,7 @@
         "batal",
         "hutang"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 396,
       "sourceNo": "393",
       "sourceQuestion": "Apa fungsi Form Otorisasi pada proses Batal Hutang?"
@@ -27078,7 +27078,7 @@
         "peremajaan",
         "hutang"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 397,
       "sourceNo": "394",
       "sourceQuestion": "Apa fungsi Form Peremajaan pada proses Peremajaan Hutang?"
@@ -27120,7 +27120,7 @@
         "bisa",
         "diubah"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 398,
       "sourceNo": "395",
       "sourceQuestion": "Apa syarat agar bunga lama tidak bisa diubah saat Peremajaan Hutang?"
@@ -27162,7 +27162,7 @@
         "tambah",
         "uang"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 399,
       "sourceNo": "396",
       "sourceQuestion": "Apa fungsi upload gambar pada Ambil/Tambah Uang Kas?"
@@ -27204,7 +27204,7 @@
         "gesek",
         "tunai"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 400,
       "sourceNo": "397",
       "sourceQuestion": "Bagaimana perhitungan otomatis Fee Rp pada Gesek Tunai?"
@@ -27245,7 +27245,7 @@
         "gesek",
         "tunai"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 401,
       "sourceNo": "398",
       "sourceQuestion": "Bagaimana perhitungan otomatis Cash pada Gesek Tunai?"
@@ -27287,7 +27287,7 @@
         "gesek",
         "tunai"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 402,
       "sourceNo": "399",
       "sourceQuestion": "Laporan apa saja untuk memeriksa transaksi Gesek Tunai?"
@@ -27329,7 +27329,7 @@
         "validasi",
         "penjualan"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 403,
       "sourceNo": "400",
       "sourceQuestion": "Apa yang terjadi pada stok sebelum Validasi Penjualan dilakukan?"
@@ -27371,7 +27371,7 @@
         "sebelum",
         "validasi"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 404,
       "sourceNo": "401",
       "sourceQuestion": "Apa yang terjadi pada laporan keuangan sebelum Validasi Hutang dilakukan?"
@@ -27410,7 +27410,7 @@
         "transaksi",
         "penjualan"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 405,
       "sourceNo": "402",
       "sourceQuestion": "Apa fungsi Menu Transaksi Penjualan?"
@@ -27452,7 +27452,7 @@
         "melakukan",
         "transaksi"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 406,
       "sourceNo": "403",
       "sourceQuestion": "Apa yang harus dilakukan pada saat melakukan transaksi penjualan?"
@@ -27570,7 +27570,7 @@
         "data",
         "customer"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 407,
       "sourceNo": "404",
       "sourceQuestion": "Bagaimana cara melakukan Input Data Customer?"
@@ -27688,7 +27688,7 @@
         "data",
         "customer"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 408,
       "sourceNo": "405",
       "sourceQuestion": "Bagaimana cara melakukan Edit Data Customer?"
@@ -27806,7 +27806,7 @@
         "data",
         "barang"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 409,
       "sourceNo": "406",
       "sourceQuestion": "Bagaimana cara melakukan Input Data Barang?"
@@ -27866,7 +27866,7 @@
         "dapat",
         "diubah"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 410,
       "sourceNo": "407",
       "sourceQuestion": "Apakah Data Barang yang sudah diinputkan dapat diubah?"
@@ -27992,7 +27992,7 @@
         "ambil",
         "titipan"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 411,
       "sourceNo": "408",
       "sourceQuestion": "Bagaimana proses Transaksi Penjualan pada saat Ambil Titipan?"
@@ -28100,7 +28100,7 @@
         "ambil",
         "pesanan"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 412,
       "sourceNo": "409",
       "sourceQuestion": "Bagaimana proses Transaksi Penjualan pada saat Ambil Pesanan?"
@@ -28218,7 +28218,7 @@
         "transaksi",
         "penjualan"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 413,
       "sourceNo": "410",
       "sourceQuestion": "Bagaimana proses Pembayaran pada Transaksi Penjualan?"
@@ -28308,7 +28308,7 @@
         "dengan",
         "tukar"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 414,
       "sourceNo": "411",
       "sourceQuestion": "Bagaimana proses pembayaran dengan sistem “Bayar Dengan Tukar”?"
@@ -28350,7 +28350,7 @@
         "yang",
         "sudah"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 415,
       "sourceNo": "412",
       "sourceQuestion": "Apa yang terjadi dengan Transaksi Penjualan yang sudah selesai?"
@@ -28392,7 +28392,7 @@
         "sudah",
         "divalidasi"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 416,
       "sourceNo": "413",
       "sourceQuestion": "Bagaimana cara membatalkan Transaksi Penjualan yang sudah divalidasi?"
@@ -28446,7 +28446,7 @@
         "transaksi",
         "penjualan"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 417,
       "sourceNo": "414",
       "sourceQuestion": "Bagaimana cara menghapus data barang pada Transaksi Penjualan?"
@@ -28494,7 +28494,7 @@
         "pada",
         "transaksi"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 418,
       "sourceNo": "415",
       "sourceQuestion": "Bagaimana jika terjadi kesalahan penulisan data pada transaksi penjualan?"
@@ -28536,7 +28536,7 @@
         "dipakai",
         "kembali"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 419,
       "sourceNo": "416",
       "sourceQuestion": "Apakah barcode yang sudah digunakan bisa dipakai kembali?"
@@ -28584,7 +28584,7 @@
         "penjualan",
         "yang"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 420,
       "sourceNo": "417",
       "sourceQuestion": "Apa yang harus diperhatikan pada Transaksi Penjualan yang melibatkan group acc?"
@@ -28624,7 +28624,7 @@
         "berdasarkan",
         "gram"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 421,
       "sourceNo": "418",
       "sourceQuestion": "Bagaimana perhitungan harga jual berdasarkan gram?"
@@ -28664,7 +28664,7 @@
         "berdasarkan",
         "persentase"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 422,
       "sourceNo": "419",
       "sourceQuestion": "Bagaimana perhitungan harga jual berdasarkan persentase?"
@@ -28706,7 +28706,7 @@
         "barang",
         "didapatkan"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 423,
       "sourceNo": "420",
       "sourceQuestion": "Dari mana Total pada form Data Barang didapatkan?"
@@ -28748,7 +28748,7 @@
         "transaksi",
         "titipan"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 424,
       "sourceNo": "421",
       "sourceQuestion": "Bagaimana status barang yang sudah masuk transaksi Titipan?"
@@ -28787,7 +28787,7 @@
         "lihat",
         "penjualan"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 425,
       "sourceNo": "422",
       "sourceQuestion": "Apa tujuan Menu Lihat Penjualan?"
@@ -28829,7 +28829,7 @@
         "menu",
         "lihat"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 426,
       "sourceNo": "423",
       "sourceQuestion": "Informasi apa saja yang ditampilkan pada Menu Lihat Penjualan?"
@@ -28931,7 +28931,7 @@
         "menu",
         "transaksi"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 427,
       "sourceNo": "424",
       "sourceQuestion": "Bagaimana tahapan untuk melihat penjualan pada Menu Transaksi Penjualan?"
@@ -28977,7 +28977,7 @@
         "nota",
         "penjualan"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 428,
       "sourceNo": "425",
       "sourceQuestion": "Bagaimana cara mencetak ulang nota penjualan?"
@@ -29016,7 +29016,7 @@
         "batal",
         "penjualan"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 429,
       "sourceNo": "426",
       "sourceQuestion": "Apa fungsi Menu Batal Penjualan?"
@@ -29164,7 +29164,7 @@
         "pembatalan",
         "penjualan"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 430,
       "sourceNo": "427",
       "sourceQuestion": "Apa tahapan untuk melakukan pembatalan penjualan?"
@@ -29210,7 +29210,7 @@
         "transaksi",
         "titipan"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 431,
       "sourceNo": "428",
       "sourceQuestion": "Apa yang dimaksud dengan Transaksi Titipan?"
@@ -29254,7 +29254,7 @@
         "no",
         "titip"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 432,
       "sourceNo": "429",
       "sourceQuestion": "Apa itu No Titip?"
@@ -29296,7 +29296,7 @@
         "transaksi",
         "titipan"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 433,
       "sourceNo": "430",
       "sourceQuestion": "Informasi apa saja yang ditampilkan pada Transaksi Titipan?"
@@ -29394,7 +29394,7 @@
         "melihat",
         "titipan"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 434,
       "sourceNo": "431",
       "sourceQuestion": "Bagaimana cara melihat titipan?"
@@ -29535,7 +29535,7 @@
         "batal",
         "titipan"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 435,
       "sourceNo": "432",
       "sourceQuestion": "Bagaimana cara melakukan Batal Titipan?"
@@ -29574,7 +29574,7 @@
         "transaksi",
         "pesanan"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 436,
       "sourceNo": "433",
       "sourceQuestion": "Apa fungsi Menu Transaksi Pesanan?"
@@ -29616,7 +29616,7 @@
         "transaksi",
         "pesanan"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 437,
       "sourceNo": "434",
       "sourceQuestion": "Informasi apa saja yang ada pada Transaksi Pesanan?"
@@ -29670,7 +29670,7 @@
         "transaksi",
         "pesanan"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 438,
       "sourceNo": "435",
       "sourceQuestion": "Bagaimana cara menambahkan gambar foto dalam Transaksi Pesanan?"
@@ -29760,7 +29760,7 @@
         "transaksi",
         "pesanan"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 439,
       "sourceNo": "436",
       "sourceQuestion": "Bagaimana cara mengisi Contoh Barang saat Transaksi Pesanan dengan pilihan Bawa Sendiri?"
@@ -29856,7 +29856,7 @@
         "transaksi",
         "pesanan"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 440,
       "sourceNo": "437",
       "sourceQuestion": "Bagaimana cara mengisi Contoh Barang saat Transaksi Pesanan dengan pilihan Dari Toko?"
@@ -29895,7 +29895,7 @@
         "lihat",
         "pesanan"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 441,
       "sourceNo": "438",
       "sourceQuestion": "Apa fungsi Menu Lihat Pesanan?"
@@ -30000,7 +30000,7 @@
         "melihat",
         "pesanan"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 442,
       "sourceNo": "439",
       "sourceQuestion": "Bagaimana tahapan untuk melihat Pesanan?"
@@ -30045,7 +30045,7 @@
         "batal",
         "pesanan"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 443,
       "sourceNo": "440",
       "sourceQuestion": "Bagaimana cara melakukan Batal Pesanan?"
@@ -30084,7 +30084,7 @@
         "reprint",
         "pesanan"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 444,
       "sourceNo": "441",
       "sourceQuestion": "Bagaimana cara melakukan Reprint Pesanan?"
@@ -30130,7 +30130,7 @@
         "barang",
         "contoh"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 445,
       "sourceNo": "442",
       "sourceQuestion": "Apa tujuan Menu Ambil Barang Contoh?"
@@ -30172,7 +30172,7 @@
         "form",
         "ambil"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 446,
       "sourceNo": "443",
       "sourceQuestion": "Informasi apa saja yang ada pada Form Ambil Barang Contoh?"
@@ -30290,7 +30290,7 @@
         "barang",
         "contoh"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 447,
       "sourceNo": "444",
       "sourceQuestion": "Bagaimana tahapan untuk mengambil barang contoh?"
@@ -30337,7 +30337,7 @@
         "dapat",
         "diubah"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 448,
       "sourceNo": "445",
       "sourceQuestion": "Apakah data yang sudah divalidasi dapat diubah?"
@@ -30383,7 +30383,7 @@
         "dalam",
         "penjualan"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 449,
       "sourceNo": "446",
       "sourceQuestion": "Apa itu No FJ dalam penjualan?"
@@ -30429,7 +30429,7 @@
         "dalam",
         "penjualan"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 450,
       "sourceNo": "447",
       "sourceQuestion": "Apa itu Kode Sales dalam penjualan?"
@@ -30473,7 +30473,7 @@
         "nama",
         "customer"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 451,
       "sourceNo": "448",
       "sourceQuestion": "Apa itu Nama Customer?"
@@ -30523,7 +30523,7 @@
         "kode",
         "barcode"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 452,
       "sourceNo": "449",
       "sourceQuestion": "Apa itu Kode Barcode?"
@@ -30567,7 +30567,7 @@
         "nama",
         "barang"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 453,
       "sourceNo": "450",
       "sourceQuestion": "Apa itu Nama Barang?"
@@ -30613,7 +30613,7 @@
         "transaksi",
         "penjualan"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 454,
       "sourceNo": "451",
       "sourceQuestion": "Apa itu Harga dalam transaksi penjualan?"
@@ -30653,7 +30653,7 @@
         "transaksi",
         "penjualan"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 455,
       "sourceNo": "452",
       "sourceQuestion": "Apa itu Ongkos dalam transaksi penjualan?"
@@ -30699,7 +30699,7 @@
         "transaksi",
         "penjualan"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 456,
       "sourceNo": "453",
       "sourceQuestion": "Apa itu Berat dalam transaksi penjualan?"
@@ -30740,7 +30740,7 @@
         "transaksi",
         "penjualan"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 457,
       "sourceNo": "454",
       "sourceQuestion": "Apa itu Harga Total dalam transaksi penjualan?"
@@ -30780,7 +30780,7 @@
         "transaksi",
         "penjualan"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 458,
       "sourceNo": "455",
       "sourceQuestion": "Apa itu Status dalam transaksi penjualan?"
@@ -30824,7 +30824,7 @@
         "no",
         "titip"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 459,
       "sourceNo": "456",
       "sourceQuestion": "Apa itu No Titip?"
@@ -30871,7 +30871,7 @@
         "transaksi",
         "titipan"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 460,
       "sourceNo": "457",
       "sourceQuestion": "Apa itu Kode Barcode pada Transaksi Titipan?"
@@ -30918,7 +30918,7 @@
         "transaksi",
         "titipan"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 461,
       "sourceNo": "458",
       "sourceQuestion": "Apa itu Nama Customer pada Transaksi Titipan?"
@@ -30959,7 +30959,7 @@
         "transaksi",
         "titipan"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 462,
       "sourceNo": "459",
       "sourceQuestion": "Apa itu Total DP pada Transaksi Titipan?"
@@ -31000,7 +31000,7 @@
         "transaksi",
         "titipan"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 463,
       "sourceNo": "460",
       "sourceQuestion": "Apa itu Total Harga pada Transaksi Titipan?"
@@ -31040,7 +31040,7 @@
         "transaksi",
         "pesanan"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 464,
       "sourceNo": "461",
       "sourceQuestion": "Apa itu Kategori pada Transaksi Pesanan?"
@@ -31087,7 +31087,7 @@
         "transaksi",
         "pesanan"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 465,
       "sourceNo": "462",
       "sourceQuestion": "Apa itu Perkiraan Berat pada Transaksi Pesanan?"
@@ -31128,7 +31128,7 @@
         "transaksi",
         "pesanan"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 466,
       "sourceNo": "463",
       "sourceQuestion": "Apa itu Perkiraan Kadar pada Transaksi Pesanan?"
@@ -31169,7 +31169,7 @@
         "transaksi",
         "pesanan"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 467,
       "sourceNo": "464",
       "sourceQuestion": "Apa itu Harga/Gram pada Transaksi Pesanan?"
@@ -31210,7 +31210,7 @@
         "transaksi",
         "pesanan"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 468,
       "sourceNo": "465",
       "sourceQuestion": "Apa itu Sub Total pada Transaksi Pesanan?"
@@ -31252,7 +31252,7 @@
         "menu",
         "ambil"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 469,
       "sourceNo": "466",
       "sourceQuestion": "Apa itu Kode Barcode Contoh pada Menu Ambil Barang Contoh?"
@@ -31294,7 +31294,7 @@
         "menu",
         "ambil"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 470,
       "sourceNo": "467",
       "sourceQuestion": "Apa itu Kode Baki Contoh pada Menu Ambil Barang Contoh?"
@@ -31336,7 +31336,7 @@
         "barang",
         "contoh"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 471,
       "sourceNo": "468",
       "sourceQuestion": "Apa itu Deskripsi pada Menu Ambil Barang Contoh?"
@@ -31378,7 +31378,7 @@
         "barang",
         "contoh"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 472,
       "sourceNo": "469",
       "sourceQuestion": "Apa itu Berat pada Menu Ambil Barang Contoh?"
@@ -31420,7 +31420,7 @@
         "barang",
         "lebih"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 473,
       "sourceNo": "470",
       "sourceQuestion": "Apa yang terjadi jika harga jual barang lebih rendah dari harga jual sistem?"
@@ -31462,7 +31462,7 @@
         "pembayaran",
         "transaksi"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 474,
       "sourceNo": "471",
       "sourceQuestion": "Apa yang harus dilakukan setelah proses pembayaran transaksi penjualan selesai?"
@@ -31503,7 +31503,7 @@
         "barang",
         "digunakan"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 475,
       "sourceNo": "472",
       "sourceQuestion": "Untuk apa menu Tambah Data Barang digunakan?"
@@ -31544,7 +31544,7 @@
         "data",
         "barang"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 476,
       "sourceNo": "473",
       "sourceQuestion": "Apa langkah pertama dalam menambahkan data barang?"
@@ -31584,7 +31584,7 @@
         "data",
         "barang"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 477,
       "sourceNo": "474",
       "sourceQuestion": "Ada berapa cara menambahkan data barang?"
@@ -31667,7 +31667,7 @@
         "dengan",
         "tombol"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 478,
       "sourceNo": "475",
       "sourceQuestion": "Bagaimana cara menambahkan data barang dengan tombol “+”?"
@@ -31706,7 +31706,7 @@
         "kode",
         "intern"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 479,
       "sourceNo": "476",
       "sourceQuestion": "Apa yang dimaksud Kode Intern?"
@@ -31753,7 +31753,7 @@
         "data",
         "barang"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 480,
       "sourceNo": "477",
       "sourceQuestion": "Apa yang dimaksud Markis dalam data barang?"
@@ -31801,7 +31801,7 @@
         "berat",
         "dalam"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 481,
       "sourceNo": "478",
       "sourceQuestion": "Apa yang dimaksud Berat Asli dan Berat dalam data barang?"
@@ -31843,7 +31843,7 @@
         "data",
         "barang"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 482,
       "sourceNo": "479",
       "sourceQuestion": "Apa yang dimaksud Kadar Cetak dalam data barang?"
@@ -31915,7 +31915,7 @@
         "atribut",
         "dan"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 483,
       "sourceNo": "480",
       "sourceQuestion": "Apa yang dimaksud Nama Atribut, Berat Atribut dan Harga Atribut?"
@@ -31954,7 +31954,7 @@
         "berat",
         "plastik"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 484,
       "sourceNo": "481",
       "sourceQuestion": "Apa yang dimaksud Berat Plastik?"
@@ -31993,7 +31993,7 @@
         "gambar",
         "barang"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 485,
       "sourceNo": "482",
       "sourceQuestion": "Bagaimana cara upload gambar barang?"
@@ -32041,7 +32041,7 @@
         "dalam",
         "tambah"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 486,
       "sourceNo": "483",
       "sourceQuestion": "Apa ketentuan khusus untuk Group ACC dalam tambah barang?"
@@ -32227,7 +32227,7 @@
         "data",
         "barang"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 487,
       "sourceNo": "484",
       "sourceQuestion": "Bagaimana langkah menampilkan Group ACC ke Data Barang?"
@@ -32323,7 +32323,7 @@
         "tombol",
         "barang"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 488,
       "sourceNo": "485",
       "sourceQuestion": "Bagaimana cara menambahkan data barang dengan tombol “Barang Pesanan”?"
@@ -32365,7 +32365,7 @@
         "barang",
         "pesanan"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 489,
       "sourceNo": "486",
       "sourceQuestion": "Apa yang dimaksud Berat Jadi dalam Barang Pesanan?"
@@ -32407,7 +32407,7 @@
         "barang",
         "pesanan"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 490,
       "sourceNo": "487",
       "sourceQuestion": "Apa yang dimaksud Kadar Cetak dalam Barang Pesanan?"
@@ -32507,7 +32507,7 @@
         "tambah",
         "barang"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 491,
       "sourceNo": "488",
       "sourceQuestion": "Bagaimana cara menampilkan Data Tambah Barang?"
@@ -32549,7 +32549,7 @@
         "tambah",
         "barang"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 492,
       "sourceNo": "489",
       "sourceQuestion": "Apakah ada fitur ekspor pada Data Tambah Barang?"
@@ -32591,7 +32591,7 @@
         "laporan",
         "mana"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 493,
       "sourceNo": "490",
       "sourceQuestion": "Setelah tambah barang, bisa lihat ke laporan mana saja?"
@@ -32637,7 +32637,7 @@
         "barang",
         "digunakan"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 494,
       "sourceNo": "491",
       "sourceQuestion": "Untuk apa menu Data Barang digunakan?"
@@ -32706,7 +32706,7 @@
         "data",
         "barang"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 495,
       "sourceNo": "492",
       "sourceQuestion": "Bagaimana cara menampilkan Data Barang?"
@@ -32776,7 +32776,7 @@
         "data",
         "barang"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 496,
       "sourceNo": "493",
       "sourceQuestion": "Bagaimana cara melihat foto Data Barang?"
@@ -32899,7 +32899,7 @@
         "data",
         "barang"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 497,
       "sourceNo": "494",
       "sourceQuestion": "Bagaimana cara mengedit Data Barang?"
@@ -32981,7 +32981,7 @@
         "data",
         "barang"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 498,
       "sourceNo": "495",
       "sourceQuestion": "Bagaimana cara cek harga Data Barang?"
@@ -33063,7 +33063,7 @@
         "data",
         "barang"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 499,
       "sourceNo": "496",
       "sourceQuestion": "Bagaimana cara filter pencarian Data Barang?"
@@ -33111,7 +33111,7 @@
         "input",
         "berat"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 500,
       "sourceNo": "497",
       "sourceQuestion": "Apa yang harus dilakukan jika salah input berat barang?"
@@ -33170,7 +33170,7 @@
         "barang",
         "digunakan"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 501,
       "sourceNo": "498",
       "sourceQuestion": "Untuk apa menu Hancur Data Barang digunakan?"
@@ -33334,7 +33334,7 @@
         "menghancur",
         "barang"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 502,
       "sourceNo": "499",
       "sourceQuestion": "Bagaimana cara menghancur barang?"
@@ -33376,7 +33376,7 @@
         "yang",
         "dipilih"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 503,
       "sourceNo": "500",
       "sourceQuestion": "Dari mana asal data Kondisi Barang yang dipilih pada saat menghancur barang?"
@@ -33418,7 +33418,7 @@
         "hancur",
         "barang"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 504,
       "sourceNo": "501",
       "sourceQuestion": "Apa tujuan Gudang default ketika melakukan Hancur Barang?"
@@ -33458,7 +33458,7 @@
         "ada",
         "otorisasi"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 505,
       "sourceNo": "502",
       "sourceQuestion": "Apakah ketika menghancur barang ada otorisasi?"
@@ -33499,7 +33499,7 @@
         "otorisasi",
         "berhasil"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 506,
       "sourceNo": "503",
       "sourceQuestion": "Apa yang ditampilkan sistem setelah otorisasi berhasil?"
@@ -33553,7 +33553,7 @@
         "bisa",
         "dilihat"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 507,
       "sourceNo": "504",
       "sourceQuestion": "Setelah barang dihancurkan, laporan apa yang bisa dilihat?"
@@ -33598,7 +33598,7 @@
         "pindah",
         "barang"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 508,
       "sourceNo": "505",
       "sourceQuestion": "Apa fungsi menu Pindah Barang?"
@@ -33760,7 +33760,7 @@
         "pindah",
         "barang"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 509,
       "sourceNo": "506",
       "sourceQuestion": "Bagaimana cara memindahkan barang melalui menu Pindah Barang?"
@@ -33808,7 +33808,7 @@
         "simpan",
         "data"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 510,
       "sourceNo": "507",
       "sourceQuestion": "Apa yang terjadi setelah klik tombol Simpan Data pada Pindah Barang?"
@@ -33850,7 +33850,7 @@
         "barang",
         "di"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 511,
       "sourceNo": "508",
       "sourceQuestion": "Apakah bisa memindahkan lebih dari satu barang di menu Pindah Barang?"
@@ -33910,7 +33910,7 @@
         "di",
         "sistem"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 512,
       "sourceNo": "509",
       "sourceQuestion": "Bagaimana memastikan pindah barang sudah tercatat di sistem?"
@@ -33968,7 +33968,7 @@
         "satu",
         "baki"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 513,
       "sourceNo": "510",
       "sourceQuestion": "Apa itu Pindah Barang Satu Baki?"
@@ -34094,7 +34094,7 @@
         "pindah",
         "barang"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 514,
       "sourceNo": "511",
       "sourceQuestion": "Bagaimana cara memindahkan barang di menu Pindah Barang Satu Baki?"
@@ -34142,7 +34142,7 @@
         "simpan",
         "data"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 515,
       "sourceNo": "512",
       "sourceQuestion": "Apa yang terjadi setelah klik tombol Simpan Data pada Pindah Barang Satu Baki?"
@@ -34202,7 +34202,7 @@
         "sudah",
         "tercatat"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 516,
       "sourceNo": "513",
       "sourceQuestion": "Bagaimana memastikan pindah barang satu baki sudah tercatat di sistem?"
@@ -34252,7 +34252,7 @@
         "timbang",
         "baki"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 517,
       "sourceNo": "514",
       "sourceQuestion": "Apa itu Timbang Baki?"
@@ -34399,7 +34399,7 @@
         "timbang",
         "baki"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 518,
       "sourceNo": "515",
       "sourceQuestion": "Bagaimana cara menginputkan Timbang Baki?"
@@ -34453,7 +34453,7 @@
         "notifikasi",
         "terdapat"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 519,
       "sourceNo": "516",
       "sourceQuestion": "Apa yang harus dilakukan jika muncul notifikasi \"Terdapat proses timbang baki yang masih aktif\"?"
@@ -34501,7 +34501,7 @@
         "di",
         "sistem"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 520,
       "sourceNo": "517",
       "sourceQuestion": "Bagaimana cara memastikan Timbang Baki tercatat di sistem?"
@@ -34540,7 +34540,7 @@
         "timbang",
         "baki"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 521,
       "sourceNo": "518",
       "sourceQuestion": "Apa manfaat fitur Timbang Baki?"
@@ -34581,7 +34581,7 @@
         "stock",
         "aksesoris"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 522,
       "sourceNo": "519",
       "sourceQuestion": "Apa itu Tambah dan Ambil Stock Aksesoris?"
@@ -34698,7 +34698,7 @@
         "stock",
         "aksesoris"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 523,
       "sourceNo": "520",
       "sourceQuestion": "Bagaimana cara menambah Stock Aksesoris?"
@@ -34815,7 +34815,7 @@
         "stock",
         "aksesoris"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 524,
       "sourceNo": "521",
       "sourceQuestion": "Bagaimana cara mengambil  Stock Aksesoris?"
@@ -34932,7 +34932,7 @@
         "stock",
         "aksesoris"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 525,
       "sourceNo": "522",
       "sourceQuestion": "Bagaimana cara menambah Stock Aksesoris?"
@@ -34974,7 +34974,7 @@
         "aksesoris",
         "sudah"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 526,
       "sourceNo": "523",
       "sourceQuestion": "Bagaimana memastikan tambah atau ambil stock aksesoris sudah tercatat di sistem?"
@@ -35016,7 +35016,7 @@
         "dimana",
         "saya"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 527,
       "sourceNo": "524",
       "sourceQuestion": "Kalau ada penjualan dan transaksi lainnya, dimana saya bisa melihat keuangannya?"
@@ -35178,7 +35178,7 @@
         "pembelian",
         "dari"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 528,
       "sourceNo": "525",
       "sourceQuestion": "Bagaimana caranya jika saya ingin input pembelian dari customer tapi tanpa surat?"
@@ -35230,7 +35230,7 @@
         "untuk",
         "apa"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 529,
       "sourceNo": "526",
       "sourceQuestion": "Menu hancur barang fungsinya untuk apa?"
@@ -35284,7 +35284,7 @@
         "caranya",
         "biar"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 530,
       "sourceNo": "527",
       "sourceQuestion": "Saya ada kesalahan input barang, gimana caranya biar saya bisa hapus barang tersebut?"
@@ -35332,7 +35332,7 @@
         "stock",
         "barang"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 531,
       "sourceNo": "528",
       "sourceQuestion": "Bisa tidak kalau saya ingin lihat stock barang saya ada berapa?"
@@ -35380,7 +35380,7 @@
         "barang",
         "apa"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 532,
       "sourceNo": "529",
       "sourceQuestion": "Bisa tidak kalau saya ingin lihat barang apa saja yang paling laku terjual?"
@@ -35440,7 +35440,7 @@
         "barang",
         "yang"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 533,
       "sourceNo": "530",
       "sourceQuestion": "Ketika saya cocokkan barang fisik dengan barang yang ada di sistem, terdapat perbedaan stock yang ada. Gimana caranya agar saya tau barang mana yang hilang?"
@@ -35488,7 +35488,7 @@
         "perhiasan",
         "custom"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 534,
       "sourceNo": "531",
       "sourceQuestion": "kalau ada pelanggan yang mau beli perhiasan custom, bagaimana cara saya input datanya ke sistem?"
@@ -35536,7 +35536,7 @@
         "data",
         "otomatis"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 535,
       "sourceNo": "532",
       "sourceQuestion": "saya ingin setelah simpan transaksi, semua data otomatis tersimpan ke laporan tanpa validasi dulu. apakah bisa?"
@@ -35584,7 +35584,7 @@
         "hutang",
         "bisa"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 536,
       "sourceNo": "533",
       "sourceQuestion": "kalau saya ada kesalahan input pelunasan hutang, bisa tidak transaksinya dibatalkan?"
@@ -35629,7 +35629,7 @@
         "minus",
         "tidak"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 537,
       "sourceNo": "534",
       "sourceQuestion": "Poin member bisa minus tidak?"
@@ -35671,7 +35671,7 @@
         "sales",
         "dengan"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 538,
       "sourceNo": "535",
       "sourceQuestion": "Bisa tidak, otorisasi transaksi dilakukan oleh sales dengan user id dan passwordnya sendiri?"
@@ -35737,7 +35737,7 @@
         "barang",
         "dari"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 539,
       "sourceNo": "536",
       "sourceQuestion": "Bagaimana caranya jika saya ingin pindahkan barang dari cabang yang satu ke cabang yang lainnya?"
@@ -35785,7 +35785,7 @@
         "gimana",
         "caranya"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 540,
       "sourceNo": "537",
       "sourceQuestion": "Saya ingin lihat keuntungan penjualan ditoko, gimana caranya?"
@@ -35833,7 +35833,7 @@
         "saya",
         "dapat"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 541,
       "sourceNo": "538",
       "sourceQuestion": "Dimana saya bisa melihat keuntungan yang saya dapat dari penjualan?"
@@ -35881,7 +35881,7 @@
         "jumlah",
         "poinnya"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 542,
       "sourceNo": "539",
       "sourceQuestion": "Bisa tidak member menukar hadiah tapi jumlah poinnya tidak mencukupi?"
@@ -35935,7 +35935,7 @@
         "rusak",
         "bagaimana"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 543,
       "sourceNo": "540",
       "sourceQuestion": "Di toko saya ada barang yang rusak, bagaimana cara hapus datanya dari sistem?"
@@ -35983,7 +35983,7 @@
         "member",
         "yang"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 544,
       "sourceNo": "541",
       "sourceQuestion": "Bisa tidak jika saya ingin lihat member yang paling loyal?"
@@ -36031,7 +36031,7 @@
         "paling",
         "sering"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 545,
       "sourceNo": "542",
       "sourceQuestion": "Saya ingin lihat member mana yang paling sering belanja di toko saya, gimana caranya?"
@@ -36073,7 +36073,7 @@
         "muncul",
         "notif"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 546,
       "sourceNo": "543",
       "sourceQuestion": "User id saya tidak bisa masuk, muncul notif user id sedang digunakan, padahal tidak ada yang menggunakan user saya"
@@ -36115,7 +36115,7 @@
         "saya",
         "dari"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 547,
       "sourceNo": "544",
       "sourceQuestion": "saya mau lihat total inventory barang saya dari semua baki itu bagaimana ya"
@@ -36193,7 +36193,7 @@
         "1",
         "gimana"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 548,
       "sourceNo": "545",
       "sourceQuestion": "Jika customer membeli barang lebih dari 1 gimana cara inputnya"
@@ -36233,7 +36233,7 @@
         "foto",
         "barang"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 549,
       "sourceNo": "546",
       "sourceQuestion": "Kamera error tidak bisa foto barang"
@@ -36281,7 +36281,7 @@
         "di",
         "system"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 550,
       "sourceNo": "547",
       "sourceQuestion": "Laporan barang detail saya jumlah akhir di system dengan fisik berbeda, apa yang harus saya lakukan"
@@ -36328,7 +36328,7 @@
         "tambah",
         "barang"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 551,
       "sourceNo": "548",
       "sourceQuestion": "Apa itu markis pada saat tambah barang"
@@ -36415,7 +36415,7 @@
         "gelang",
         "keroncong"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 552,
       "sourceNo": "549",
       "sourceQuestion": "Gimana cara input gelang keroncong"
@@ -36457,7 +36457,7 @@
         "mengikat",
         "di"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 553,
       "sourceNo": "550",
       "sourceQuestion": "Apa arti dari mengikat dan tidak mengikat di menu transaksi titipan"
@@ -36505,7 +36505,7 @@
         "gadai",
         "dicatat"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 554,
       "sourceNo": "551",
       "sourceQuestion": "Gimana caranya kalau saya ingin transaksi gadai dicatat di program?"
@@ -36550,7 +36550,7 @@
         "buat",
         "apa"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 555,
       "sourceNo": "552",
       "sourceQuestion": "Menu lelang hutang buat apa?"
@@ -36676,7 +36676,7 @@
         "edit",
         "pada"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 556,
       "sourceNo": "553",
       "sourceQuestion": "Bagaimana caranya jika saya ingin melakukan edit pada data barang?"
@@ -36724,7 +36724,7 @@
         "data",
         "barang"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 557,
       "sourceNo": "554",
       "sourceQuestion": "Gimana caranya jika saya ingin hapus data barang saya?"
@@ -36772,7 +36772,7 @@
         "input",
         "ketika"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 558,
       "sourceNo": "555",
       "sourceQuestion": "Gimana solusinya jka saya ada salah input ketika penjualan dan data sudah terlanjur di simpan?"
@@ -36825,7 +36825,7 @@
         "bagaimana",
         "solusinya"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 559,
       "sourceNo": "556",
       "sourceQuestion": "Barang saya ada yang hilang, bagaimana solusinya?"
@@ -36873,7 +36873,7 @@
         "faktur",
         "penjualan"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 560,
       "sourceNo": "557",
       "sourceQuestion": "Gimana caranya jika saya ingin reprint faktur penjualan?"
@@ -36929,7 +36929,7 @@
         "untuk",
         "apa"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 561,
       "sourceNo": "558",
       "sourceQuestion": "Laporan otorisasi untuk apa?"
@@ -36976,7 +36976,7 @@
         "gimana",
         "caranya"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 562,
       "sourceNo": "559",
       "sourceQuestion": "Saya ingin menambah user baru, gimana caranya?"
@@ -37024,7 +37024,7 @@
         "ditambahkan",
         "saat"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 570,
       "sourceNo": "560",
       "sourceQuestion": "Apakah foto barang dapat diambil atau ditambahkan saat proses penjualan?"
@@ -37069,7 +37069,7 @@
         "untuk",
         "apa"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 577,
       "sourceNo": "561",
       "sourceQuestion": "Data Master digunakan untuk apa?"
@@ -37117,7 +37117,7 @@
         "bisa",
         "akses"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 578,
       "sourceNo": "562",
       "sourceQuestion": "Bagaimana caranya agar sales saya tidak bisa akses laporan di program?"
@@ -37163,7 +37163,7 @@
         "untuk",
         "apa"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 579,
       "sourceNo": "563",
       "sourceQuestion": "Fitur ganti password digunakan untuk apa?"
@@ -37214,7 +37214,7 @@
         "penjualan",
         "kemarin"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 580,
       "sourceNo": "564",
       "sourceQuestion": "Apakah bisa membatalkan penjualan kemarin?"
@@ -37265,7 +37265,7 @@
         "pembelian",
         "kemarin"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 581,
       "sourceNo": "565",
       "sourceQuestion": "Apakah bisa membatalkan pembelian kemarin?"
@@ -37319,7 +37319,7 @@
         "datanya",
         "tidak"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 582,
       "sourceNo": "566",
       "sourceQuestion": "Saya sudah melakukan transaksi penjualan, tapi datanya tidak muncul di laporan"
@@ -37373,7 +37373,7 @@
         "datanya",
         "tidak"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 583,
       "sourceNo": "567",
       "sourceQuestion": "Saya sudah melakukan transaksi pembelian, tapi datanya tidak muncul di laporan"
@@ -37427,7 +37427,7 @@
         "datanya",
         "tidak"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 584,
       "sourceNo": "568",
       "sourceQuestion": "Saya sudah melakukan transaksi pembelian, tapi datanya tidak muncul di laporan"
@@ -37465,7 +37465,7 @@
         "transaksi",
         "pembelian"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 585,
       "sourceNo": "569",
       "sourceQuestion": "Selisih laporan transaksi pembelian"
@@ -37502,7 +37502,7 @@
         "laporan",
         "service"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 586,
       "sourceNo": "570",
       "sourceQuestion": "Selisih laporan service"
@@ -37539,7 +37539,7 @@
         "laporan",
         "pesanan"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 587,
       "sourceNo": "571",
       "sourceQuestion": "Selisih laporan pesanan"
@@ -37576,7 +37576,7 @@
         "laporan",
         "hutang"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 588,
       "sourceNo": "572",
       "sourceQuestion": "Selisih laporan hutang"
@@ -37613,7 +37613,7 @@
         "laporan",
         "titipan"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 589,
       "sourceNo": "573",
       "sourceQuestion": "Selisih laporan titipan"
@@ -37655,7 +37655,7 @@
         "dipakai",
         "kembali"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 590,
       "sourceNo": "574",
       "sourceQuestion": "Apakah barcode yang sudah digunakan bisa dipakai kembali?"
@@ -37697,7 +37697,7 @@
         "mengikat",
         "di"
       ],
-      "status": "draft",
+      "status": "published",
       "sourceRow": 591,
       "sourceNo": "575",
       "sourceQuestion": "Apa arti dari mengikat dan tidak mengikat di menu transaksi pesanan?"

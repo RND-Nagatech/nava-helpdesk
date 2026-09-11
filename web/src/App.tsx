@@ -6,6 +6,7 @@ import { HandoverPage } from "./pages/helpdesk/HandoverPage";
 import { ArticlePage } from "./pages/helpdesk/ArticlePage";
 import { LoginPage } from "./pages/helpdesk/LoginPage";
 import { TicketPage } from "./pages/helpdesk/TicketPage";
+import { UsersPage } from "./pages/helpdesk/UsersPage";
 
 export default function App() {
   const [path, setPath] = useState(() => window.location.pathname);
@@ -26,6 +27,7 @@ export default function App() {
   if (path === "/helpdesk/articles") return <ArticlePage />;
   if (path === "/helpdesk/tickets") return <TicketPage />;
   if (path === "/helpdesk/handover") return <HandoverPage />;
+  if (path === "/helpdesk/users") return <UsersPage />;
   if (path === "/helpdesk/chat") return <ChatRoomPage />;
   if (path.startsWith("/helpdesk/chat/")) {
     return <ChatRoomPage sessionId={decodeURIComponent(path.replace("/helpdesk/chat/", ""))} />;

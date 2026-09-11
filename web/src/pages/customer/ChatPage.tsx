@@ -10,7 +10,8 @@ import type { Ticket } from "../../types";
 export function CustomerChatPage() {
   const [sessionId, setSessionId] = useState(getSessionId);
   const [customerId] = useState(getCustomerId);
-  const [profile, setProfile] = useState<CustomerProfile | null>(loadCustomerProfile);
+  const [profile, setProfile] = useState<CustomerProfile | null>(() => loadCustomerProfile());
+  const [showProfileGate, setShowProfileGate] = useState(() => !profile);
   const [ticket, setTicket] = useState<Ticket | null>(null);
 
   async function refreshTicket() {
@@ -22,6 +23,26 @@ export function CustomerChatPage() {
     refreshTicket().catch(() => undefined);
   }, [sessionId]);
 
+  useEffect(() => {
+    const stream = new EventSource(api.eventsUrl());
+    const refreshForCurrentSession = (event: Event) => {
+      try {
+        const payload = JSON.parse((event as MessageEvent).data || "{}") as {
+          session_id?: string;
+          ticket?: Partial<Ticket>;
+        };
+        const eventSessionId = payload.session_id || payload.ticket?.session_id;
+        if (eventSessionId === sessionId) refreshTicket().catch(() => undefined);
+      } catch {
+        // Abaikan event realtime yang tidak berisi payload ticket valid.
+      }
+    };
+    ["new_ticket", "new_message", "ticket_updated", "handover_started", "handover_resolved"].forEach((eventName) => {
+      stream.addEventListener(eventName, refreshForCurrentSession);
+    });
+    return () => stream.close();
+  }, [sessionId]);
+
   function startNewSession() {
     setSessionId(createNewSessionId());
     setTicket(null);
@@ -29,8 +50,14 @@ export function CustomerChatPage() {
 
   return (
     <CustomerLayout>
-      {!profile ? (
-        <ProfileGate initial={profile} onSave={setProfile} />
+      {!profile || showProfileGate ? (
+        <ProfileGate
+          initial={profile}
+          onSave={(nextProfile) => {
+            setProfile(nextProfile);
+            setShowProfileGate(false);
+          }}
+        />
       ) : (
         <section className="customer-chat-stage">
           <aside className="customer-support-panel" aria-label="Informasi bantuan NAVA">
@@ -72,7 +99,7 @@ export function CustomerChatPage() {
             customerDomain={profile.domain}
             ticket={ticket}
             onSent={refreshTicket}
-            onEditProfile={() => setProfile(null)}
+            onEditProfile={() => setShowProfileGate(true)}
             onNewSession={startNewSession}
           />
         </section>

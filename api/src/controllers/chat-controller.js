@@ -69,7 +69,9 @@ function isMeaningfulIssueMessage(message) {
   if (!message || message.role !== "user") return false;
   const text = String(message.content || "").replace(/\s+/g, " ").trim();
   if (text.length < 4) return false;
-  if (isExplicitHumanHandoverRequest(text)) return false;
+  // Abaikan permintaan helpdesk yang hanya meminta petugas, tetapi tetap
+  // simpan konteks masalah jika user menyebutkan kendalanya dalam kalimat yang sama.
+  if (isExplicitHumanHandoverRequest(text) && isGenericHumanHandoverRequest(text)) return false;
   if (isShortAcknowledgement(text)) return false;
   return true;
 }
@@ -151,13 +153,18 @@ export function hasTicketCreatedClaim(answer) {
   return claimsCreatedTicket || claimsForwarded;
 }
 
+function questionPreview(question = "") {
+  const text = String(question || "").replace(/\s+/g, " ").trim().slice(0, 180);
+  return text ? ` untuk pertanyaan "${text}"` : " untuk pertanyaan ini";
+}
+
 export function sanitizeAnswerWithoutTicket({ answer, question, escalationBlocked, pendingEscalation = null }) {
   if (!hasTicketCreatedClaim(answer)) return answer;
   if (pendingEscalation) return escalationConsentQuestion(pendingEscalation);
   if (escalationBlocked || isInformationalProgramQuestion(question)) {
-    return "Saya belum membuat ticket untuk pertanyaan ini. Saya bantu lewat chat dulu berdasarkan informasi yang tersedia.";
+    return `Saya belum menemukan panduan yang cukup tepat${questionPreview(question)}, jadi saya belum membuat ticket. Saya bantu cek lewat chat dulu; jika masih belum jelas, saya bisa bantu arahkan ke helpdesk.`;
   }
-  return "Saya belum membuat ticket. Jika Anda memang ingin diteruskan ke helpdesk, cukup bilang minta helpdesk atau minta dibuatkan ticket.";
+  return `Saya belum bisa memastikan solusi${questionPreview(question)}, jadi saya belum membuat ticket. Jika Anda ingin dibantu petugas, saya bisa meneruskan kasus ini ke helpdesk untuk dicek lebih lanjut.`;
 }
 
 function groundedAnswerFromAgentResult(result) {
@@ -176,6 +183,18 @@ function groundedAnswerFromAgentResult(result) {
     if (steps.length) return steps.join("\n");
   }
   return "Saya belum menemukan panduan yang cukup tepat untuk memastikan jawabannya. Sebutkan nama menu atau laporan yang dimaksud persis seperti yang tampil di program, supaya saya cari panduan yang lebih tepat.";
+}
+
+function hasStrongGroundedSearch(result) {
+  return (result?.searches || []).some((search) => (
+    search?.found &&
+    search?.evidence_strength === "strong" &&
+    search?.primary_article
+  ));
+}
+
+function answerNeedsGroundedFallback(answer = "") {
+  return /(belum (menemukan|punya|bisa|dapat memastikan|membuat ticket|membuat tiket)|tidak (menemukan|tahu|bisa memastikan)|belum ada panduan|tidak ada panduan|minta bantuan helpdesk|teruskan ke helpdesk|dibuatkan ticket|dibuatkan tiket)/i.test(answer);
 }
 
 function publicSearches(searches = []) {
@@ -256,7 +275,7 @@ export async function chat(req, res, next) {
         customerDomain: input.customer_domain,
         subject: pendingEscalation.issue_summary || "Permintaan bantuan helpdesk",
         reason: pendingEscalation.reason || "Customer menyetujui handover ke helpdesk.",
-        source: "agent_escalation",
+        source: pendingEscalation.source || "agent_escalation",
         priority: "normal",
       });
       const assistantMessage = await saveChatMessage({
@@ -267,6 +286,7 @@ export async function chat(req, res, next) {
         metadata: {
           runtime_meta: {
             escalation_confirmed: true,
+            direct_customer_handover: pendingEscalation.source === "customer_button",
             ticket_code: result.ticket.ticket_code,
           },
         },
@@ -312,30 +332,24 @@ export async function chat(req, res, next) {
     }
 
     if (isExplicitHumanHandoverRequest(input.question)) {
-      // Permintaan eksplisit customer untuk petugas/ticket sudah merupakan consent.
-      // Jangan menanyakan kendala/konfirmasi berulang. Helpdesk tetap dapat membaca history session yang sama.
+      // Permintaan bantuan manusia masuk ke satu konfirmasi singkat. Jika
+      // customer menjawab iya, branch di atas membuat ticket tanpa agent lagi.
       const recentMessages = await getChatMessages(sessionId, { limit: 12 });
       const handoverIssue = deriveHandoverIssue(recentMessages);
-      const result = await createTicket({
-        sessionId,
-        customerId,
-        customerName: input.customer_name,
-        customerDomain: input.customer_domain,
-        subject: handoverIssue.subject,
-        reason: handoverIssue.reason,
+      const pendingHandover = {
+        ...handoverIssue,
         source: "customer_button",
-        priority: "normal",
-      });
+      };
       const assistantMessage = await saveChatMessage({
         sessionId,
         customerId,
         role: "assistant",
-        content: `Siap, ticket ${result.ticket.ticket_code} sudah dibuat dan percakapan ini diteruskan ke helpdesk. Petugas dapat melihat riwayat chat yang sama, jadi Anda tidak perlu mengulang kendalanya dari awal.`,
+        content: "Baik, saya teruskan percakapan ini ke helpdesk. Apakah saya buatkan tiket sekarang?",
         metadata: {
           runtime_meta: {
-            escalation_confirmed: true,
+            pending_escalation_confirmation: true,
+            pending_escalation: pendingHandover,
             direct_customer_handover: true,
-            ticket_code: result.ticket.ticket_code,
           },
         },
       });
@@ -347,8 +361,7 @@ export async function chat(req, res, next) {
           session_id: sessionId,
           customer_id: customerId,
           answer: assistantMessage.content,
-          handover_active: true,
-          ticket: result.ticket,
+          handover_active: false,
           meta: assistantMessage.metadata.runtime_meta,
         },
       });
@@ -387,11 +400,13 @@ export async function chat(req, res, next) {
         })
       : escalationBlocked
         ? groundedAnswerFromAgentResult(result)
-        : sanitizeAnswerWithoutTicket({
-            answer: result.answer,
-            question: input.question,
-            escalationBlocked: false,
-          });
+        : hasStrongGroundedSearch(result) && answerNeedsGroundedFallback(result.answer)
+          ? groundedAnswerFromAgentResult(result)
+          : sanitizeAnswerWithoutTicket({
+              answer: result.answer,
+              question: input.question,
+              escalationBlocked: false,
+            });
     const assistantMetadata = {
       run_id: result.runId,
       tool_call_count: result.toolCallCount,

@@ -52,6 +52,7 @@ export function serializeHelpdeskUser(user) {
     role: user.role,
     tier: user.tier,
     is_active: Boolean(user.is_active),
+    created_at: user.created_at || null,
   };
 }
 
@@ -107,12 +108,12 @@ export async function createHelpdeskUserDocument({
   isActive = true,
 }) {
   return {
-    helpdesk_id: helpdeskId,
+    helpdesk_id: String(helpdeskId || generateHelpdeskId()).trim(),
     name: String(name || "").trim(),
     password_hash: hashPassword(password),
     role,
     tier,
-    is_active: isActive,
+    is_active: Boolean(isActive),
     created_at: new Date(),
   };
 }

@@ -1,0 +1,54 @@
+- generic [ref=e3]:
+  - banner [ref=e4]:
+    - link "N NAVA Helpdesk Sistem Dukungan & Operasional" [ref=e5] [cursor=pointer]:
+      - /url: /
+      - generic [ref=e6]: "N"
+      - generic [ref=e7]:
+        - strong [ref=e8]: NAVA Helpdesk
+        - generic [ref=e9]: Sistem Dukungan & Operasional
+    - navigation "Navigasi customer" [ref=e10]:
+      - link "Chat Room" [ref=e11] [cursor=pointer]:
+        - /url: /
+    - generic [ref=e14]: Online
+  - generic [ref=e54]:
+    - complementary "Informasi bantuan NAVA" [ref=e55]:
+      - generic [ref=e56]:
+        - generic [ref=e57]: "N"
+        - generic [ref=e58]:
+          - strong [ref=e59]: NAVA Helpdesk
+          - generic [ref=e60]: Asisten bantuan toko
+      - heading "Asisten operasional toko" [level=1] [ref=e61]
+      - paragraph [ref=e62]: Ceritakan kendalanya dengan singkat. NAVA akan memberi langkah awal, lalu meneruskan ke petugas manusia bila dibutuhkan.
+      - generic [ref=e63]:
+        - generic [ref=e64]: Ruang Aktif
+        - strong [ref=e65]: Andi
+        - generic [ref=e66]: italy bandung
+        - generic [ref=e67]: session-a17c8338-53b8-44be-91f9-f9bbc000f280
+      - generic [ref=e68]:
+        - generic [ref=e73]:
+          - strong [ref=e74]: Tulis kendala utama
+          - generic [ref=e75]: "Contoh: tidak bisa login atau struk tidak keluar"
+        - generic [ref=e80]:
+          - strong [ref=e81]: Lampirkan screenshot
+          - generic [ref=e82]: Gambar membantu petugas memahami kondisi layar
+        - generic [ref=e86]:
+          - strong [ref=e87]: Bisa diteruskan ke petugas
+          - generic [ref=e88]: Percakapan tetap memakai session yang sama
+    - generic [ref=e89]:
+      - generic [ref=e90]:
+        - paragraph [ref=e92]: Live Chat
+        - generic [ref=e93]:
+          - generic [ref=e94]: Online
+          - button "Ganti toko" [ref=e99] [cursor=pointer]
+          - button "Sesi baru" [ref=e104] [cursor=pointer]
+      - generic [ref=e110]: Belum ada pesan. Mulai percakapan dengan NAVA.
+      - generic [ref=e112]:
+        - generic "Aksi cepat" [ref=e113]:
+          - button "Struk saya tidak keluar" [ref=e114] [cursor=pointer]
+          - button "Saya tidak bisa login" [ref=e115] [cursor=pointer]
+          - button "Data transaksi tidak muncul" [ref=e116] [cursor=pointer]
+          - button "Saya ingin dibantu petugas manusia" [ref=e117] [cursor=pointer]
+        - generic [ref=e120]:
+          - generic "Kirim gambar" [ref=e122]
+          - textbox "Tulis pesan..." [ref=e127]
+          - button "Kirim" [disabled] [ref=e128]

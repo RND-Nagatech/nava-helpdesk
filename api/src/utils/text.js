@@ -2,7 +2,9 @@ const STOP_WORDS = new Set([
   "apa", "apakah", "bagaimana", "gimana", "kenapa", "mengapa", "yang", "dan", "atau",
   "di", "ke", "dari", "untuk", "pada", "saya", "aku", "kami", "kita", "anda", "user",
   "ini", "itu", "jadi", "kok", "ya", "dong", "nya", "ada", "bisa", "dengan", "kalau",
-  "ketika", "saat", "mau", "ingin", "tolong", "mohon", "cara", "udah", "udh", "sudah"
+  "ketika", "saat", "mau", "ingin", "tolong", "mohon", "cara", "udah", "udh", "sudah",
+  "oh", "iya", "gak", "ga", "nggak", "ngga",
+  "tuh", "sih", "nih", "deh", "tapi", "nah", "trs", "terus"
 ]);
 
 // Token seperti ini membantu menjelaskan intent, tetapi terlalu umum untuk menjadi
@@ -16,6 +18,7 @@ const LOW_INFORMATION_ROOTS = new Set([
 
 const SYNONYMS = {
   gak: ["tidak"],
+  brg: ["barang"],
   ga: ["tidak"],
   nggak: ["tidak"],
   ngga: ["tidak"],
@@ -41,7 +44,7 @@ const SYNONYMS = {
   keluar: ["muncul"],
   beres: ["selesai"],
   selesai: ["beres"],
-  alat: ["perangkat"],
+  alat: ["perangkat", "timbangan"],
   perangkat: ["alat"],
   rekap: ["ringkasan", "summary"],
   ringkasan: ["rekap", "summary"],
@@ -49,6 +52,19 @@ const SYNONYMS = {
   keuntungan: ["untung", "laba", "margin"],
   laba: ["keuntungan", "untung", "margin"],
   margin: ["keuntungan", "laba", "untung"],
+};
+
+// Domain eksplisit dipakai sebagai pembatas ranking, bukan sebagai router intent.
+// Jika customer menyebut "titipan", kandidat dari domain hutang/penjualan tidak
+// boleh mengalahkan kandidat titipan hanya karena sama-sama memuat "salah input".
+const DOMAIN_ALIASES = {
+  titipan: ["titipan", "titip"],
+  hutang: ["hutang", "pelunasan"],
+  penjualan: ["penjualan", "jualan", "jual"],
+  pembelian: ["pembelian", "beli"],
+  member: ["member"],
+  user: ["user", "login", "password"],
+  timbangan: ["timbangan", "timbang"],
 };
 
 export function normalizeText(value = "") {
@@ -148,6 +164,37 @@ function tokenMatchesSet(token, set) {
   return false;
 }
 
+export function queryDomainSignals(query = "") {
+  const querySet = textTokenSet(query);
+  return Object.entries(DOMAIN_ALIASES)
+    .filter(([, aliases]) => aliases.some((alias) => tokenMatchesSet(alias, querySet)))
+    .map(([domain]) => domain);
+}
+
+export function articleDomainMatch(query = "", article = {}) {
+  const domains = queryDomainSignals(query);
+  if (!domains.length) {
+    return { constrained: false, coverage: 0, domains: [], matchedDomains: [] };
+  }
+
+  const articleSet = textTokenSet([
+    article.category || "",
+    article.title || "",
+    ...(article.symptoms || []),
+    ...(article.tags || []),
+  ].join(" "));
+  const matchedDomains = domains.filter((domain) => (
+    DOMAIN_ALIASES[domain] || []
+  ).some((alias) => tokenMatchesSet(alias, articleSet)));
+
+  return {
+    constrained: true,
+    coverage: Number((matchedDomains.length / domains.length).toFixed(4)),
+    domains,
+    matchedDomains,
+  };
+}
+
 function tokenRoot(token) {
   return stemIndonesianToken(token);
 }
@@ -177,7 +224,7 @@ export function isLowInformationToken(token) {
 }
 
 export function importantQueryTokens(query) {
-  const tokens = tokenize(query, { removeStopWords: true, expand: false });
+  const tokens = tokenize(query, { removeStopWords: true, expand: true });
   const distinctive = tokens.filter((token) => !isLowInformationToken(token));
   const selected = distinctive.length ? distinctive : tokens;
 
@@ -251,6 +298,8 @@ export function problemMatchScore(query, article) {
       distinctiveTokenCount: 0,
       titleCoverage: 0,
       titleDistinctiveCoverage: 0,
+      domainCoverage: 0,
+      domainMatched: false,
     };
   }
 
@@ -303,6 +352,7 @@ export function problemMatchScore(query, article) {
   const titleDistinctiveCoverage = distinctiveTokens.length
     ? titleDistinctiveMatches.length / distinctiveTokens.length
     : titleCoverage;
+  const domain = articleDomainMatch(query, article);
 
   return {
     score,
@@ -313,6 +363,8 @@ export function problemMatchScore(query, article) {
     distinctiveTokenCount: distinctiveTokens.length,
     titleCoverage: Number(titleCoverage.toFixed(4)),
     titleDistinctiveCoverage: Number(titleDistinctiveCoverage.toFixed(4)),
+    domainCoverage: domain.coverage,
+    domainMatched: !domain.constrained || domain.coverage === 1,
   };
 }
 

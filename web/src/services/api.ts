@@ -8,6 +8,7 @@ type ApiResponse<T> = {
   success: boolean;
   data: T;
   message?: string;
+  code?: string;
   pagination?: Pagination;
 };
 
@@ -32,6 +33,17 @@ export class ApiError extends Error {
     this.name = "ApiError";
     this.status = status;
   }
+}
+
+function friendlyApiMessage(payload: ApiResponse<unknown> | null, status: number) {
+  if (payload?.message && payload.message !== "Request tidak valid.") return payload.message;
+  if (status === 400) return "Data yang diisi belum lengkap atau formatnya belum sesuai.";
+  if (status === 401) return "Session sudah berakhir. Silakan login kembali.";
+  if (status === 403) return "Anda tidak memiliki izin untuk melakukan tindakan ini.";
+  if (status === 404) return "Data atau halaman yang diminta tidak ditemukan.";
+  if (status === 409) return "Data tersebut sudah digunakan. Silakan gunakan data lain.";
+  if (status >= 500) return "Terjadi kendala pada server. Silakan coba lagi beberapa saat.";
+  return "Permintaan belum dapat diproses. Silakan coba lagi.";
 }
 
 async function request<T>(path: string, init: RequestInit = {}): Promise<T> {
@@ -66,7 +78,7 @@ async function requestPayload<T>(path: string, init: RequestInit = {}): Promise<
 
   const payload = (await response.json().catch(() => null)) as ApiResponse<T> | null;
   if (!response.ok || !payload?.success) {
-    throw new ApiError(payload?.message || `Request gagal (${response.status})`, response.status);
+    throw new ApiError(friendlyApiMessage(payload as ApiResponse<unknown> | null, response.status), response.status);
   }
   return payload;
 }
@@ -114,6 +126,36 @@ export const api = {
     return request<{ logged_out: boolean }>("/api/auth/helpdesk/logout", {
       method: "POST",
       body: JSON.stringify({}),
+    });
+  },
+  handoverCount() {
+    return request<{ count: number }>("/api/helpdesk/handover/count");
+  },
+  helpdeskUsers(search = "") {
+    const suffix = search ? `?search=${encodeURIComponent(search)}` : "";
+    return request<HelpdeskUser[]>(`/api/helpdesk/users${suffix}`);
+  },
+  createHelpdeskUser(input: { helpdesk_id: string; name: string; password: string; role: "admin" | "helpdesk"; tier?: string; is_active?: boolean }) {
+    return request<HelpdeskUser>("/api/helpdesk/users", {
+      method: "POST",
+      body: JSON.stringify(input),
+    });
+  },
+  updateHelpdeskUser(helpdeskId: string, input: Partial<{ helpdesk_id: string; name: string; password: string; role: "admin" | "helpdesk"; tier: string; is_active: boolean }>) {
+    return request<HelpdeskUser>(`/api/helpdesk/users/${encodeURIComponent(helpdeskId)}`, {
+      method: "PUT",
+      body: JSON.stringify(input),
+    });
+  },
+  setHelpdeskUserActive(helpdeskId: string, is_active: boolean) {
+    return request<HelpdeskUser>(`/api/helpdesk/users/${encodeURIComponent(helpdeskId)}/status`, {
+      method: "PATCH",
+      body: JSON.stringify({ is_active }),
+    });
+  },
+  deleteHelpdeskUser(helpdeskId: string) {
+    return request<{ deleted: boolean }>(`/api/helpdesk/users/${encodeURIComponent(helpdeskId)}`, {
+      method: "DELETE",
     });
   },
   imageFallbackUrl(path: string) {

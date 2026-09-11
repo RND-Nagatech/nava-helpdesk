@@ -248,7 +248,10 @@ export function ChatWindow({
         </header>
       )}
       {mode === "helpdesk" && reconnecting && <div className="handover-banner">Menyambungkan ulang realtime...</div>}
-      {helpdeskClosed && <div className="handover-banner">Ticket sudah selesai. Balasan petugas ditutup dan customer kembali dilayani NAVA.</div>}
+      {helpdeskClosed && <div className="handover-banner resolved-banner">Ticket sudah selesai. Balasan petugas ditutup dan customer kembali dilayani NAVA.</div>}
+      {mode === "customer" && ticket?.status === "resolved" && (
+        <div className="handover-banner resolved-banner">Ticket {ticket.ticket_code} sudah selesai. Anda tetap dapat melanjutkan percakapan dengan NAVA.</div>
+      )}
       {!helpdeskClosed && readOnlyReason && <div className="handover-banner">{readOnlyReason}</div>}
 
       {ticket && ticket.status !== "resolved" && (

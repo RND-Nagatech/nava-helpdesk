@@ -1,24 +1,25 @@
 import { useEffect, useState, type ReactNode } from "react";
-import { Bell, BookOpenText, Circle, LayoutDashboard, LogOut, MessageSquare, Ticket, UserRound } from "lucide-react";
+import { BookOpenText, Circle, LayoutDashboard, LogOut, MessageSquare, Ticket, UserRound, Users } from "lucide-react";
 import { clearHelpdeskSession, getHelpdeskToken, getStoredHelpdeskUser } from "../lib/helpdeskAuth";
 import { handleHelpdeskNavigation } from "../lib/navigation";
 import { ApiError, api } from "../services/api";
 import type { HelpdeskUser } from "../types";
 
-const menu = [
+const baseMenu = [
   { href: "/helpdesk/chat", label: "Chat Aktif", icon: MessageSquare },
   { href: "/helpdesk/handover", label: "Handover", icon: Ticket },
   { href: "/helpdesk/tickets", label: "Daftar Tiket", icon: Ticket },
   { href: "/helpdesk/articles", label: "Artikel", icon: BookOpenText },
   { href: "/helpdesk/dashboard", label: "Dashboard", icon: LayoutDashboard },
 ];
+const usersMenuItem = { href: "/helpdesk/users", label: "Users", icon: Users };
 
 export function HelpdeskLayout({ children }: { children: ReactNode }) {
   const path = window.location.pathname;
   const [user, setUser] = useState<HelpdeskUser | null>(() => getStoredHelpdeskUser());
   const [checking, setChecking] = useState(true);
   const [authError, setAuthError] = useState("");
-  const [newTicketCount, setNewTicketCount] = useState(0);
+  const [handoverCount, setHandoverCount] = useState(0);
   const [confirmLogout, setConfirmLogout] = useState(false);
 
   useEffect(() => {
@@ -59,8 +60,14 @@ export function HelpdeskLayout({ children }: { children: ReactNode }) {
   useEffect(() => {
     const token = getHelpdeskToken();
     if (!token) return undefined;
+    const refreshCount = () => {
+      api.handoverCount().then((result) => setHandoverCount(Math.max(0, Number(result.count) || 0))).catch(() => undefined);
+    };
+    refreshCount();
     const stream = new EventSource(api.eventsUrl());
-    stream.addEventListener("new_ticket", () => setNewTicketCount((current) => current + 1));
+    ["new_ticket", "ticket_updated", "handover_started", "handover_resolved"].forEach((eventName) => {
+      stream.addEventListener(eventName, refreshCount);
+    });
     return () => stream.close();
   }, []);
 
@@ -89,31 +96,22 @@ export function HelpdeskLayout({ children }: { children: ReactNode }) {
           </div>
         </a>
         <nav className="ops-nav" aria-label="Navigasi helpdesk">
-          {menu.map((item) => {
+          {[...baseMenu, ...(user?.role === "admin" ? [usersMenuItem] : [])].map((item) => {
             const Icon = item.icon;
             const active = path === item.href || path.startsWith(`${item.href}/`);
             return (
               <a className={active ? "active" : ""} href={item.href} key={item.href} onClick={handleHelpdeskNavigation}>
                 <Icon size={15} />
                 {item.label}
+                {item.href === "/helpdesk/handover" && handoverCount > 0 && (
+                  <span className="sidebar-count-badge" aria-label={`${handoverCount} handover menunggu`}>{handoverCount > 99 ? "99+" : handoverCount}</span>
+                )}
               </a>
             );
           })}
         </nav>
         <div className="ops-userbar">
           <span className="online-chip"><Circle size={9} fill="currentColor" /> Online</span>
-          <button
-            className={`notification-button ${newTicketCount ? "has-notification" : ""}`}
-            type="button"
-            title={newTicketCount ? `${newTicketCount} ticket baru` : "Belum ada ticket baru"}
-            onClick={() => {
-              setNewTicketCount(0);
-              if (!path.startsWith("/helpdesk/handover")) window.location.href = "/helpdesk/handover";
-            }}
-          >
-            <Bell size={18} />
-            {newTicketCount > 0 && <span>{newTicketCount > 9 ? "9+" : newTicketCount}</span>}
-          </button>
           <div className="operator-name">
             <strong>{user?.name || "Helpdesk"}</strong>
             <span>{user?.tier || "Helpdesk"}</span>

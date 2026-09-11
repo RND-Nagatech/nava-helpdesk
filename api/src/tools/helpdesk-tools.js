@@ -3,7 +3,19 @@ import { z } from "zod";
 import { retrieveKnowledge } from "../services/knowledge-retriever.js";
 import { env } from "../config/env.js";
 import { agentRunContext } from "../services/agent-run-context.js";
-import { mergeSearchQuery, normalizeText } from "../utils/text.js";
+import { isLowInformationToken, mergeSearchQuery, normalizeText, tokenize } from "../utils/text.js";
+
+function hasCurrentTopic(question = "") {
+  const tokens = tokenize(question, { removeStopWords: true, expand: false });
+  const distinctive = tokens.filter((token) => !isLowInformationToken(token));
+  return distinctive.length >= 2;
+}
+
+function prefersCurrentQuestion(question = "") {
+  // Pertanyaan yang sudah menyebut objek + tindakan harus menjadi anchor utama.
+  // History tetap dipakai untuk follow-up pendek seperti "yang kedua bagaimana?".
+  return hasCurrentTopic(question);
+}
 
 function compactPrimaryArticle(doc) {
   return {
@@ -34,6 +46,7 @@ function buildRetrievalMeta(doc) {
     problem_distinctive_coverage: doc.retrieval?.problemDistinctiveCoverage || 0,
     problem_distinctive_matched_tokens: doc.retrieval?.problemDistinctiveMatchedTokens || [],
     title_distinctive_coverage: doc.retrieval?.titleDistinctiveCoverage || 0,
+    domain_coverage: doc.retrieval?.domainCoverage || 0,
     vector_score: doc.retrieval?.vectorScore || 0,
     hybrid_score: doc.retrieval?.hybridScore || 0,
     evidence_strength: doc.retrieval?.evidenceStrength || "weak",
@@ -147,7 +160,20 @@ const searchKnowledgeTool = tool(
       }));
     }
 
-    const result = await retrieveKnowledge(effectiveQuery, { topK: top_k });
+    const currentQuestionIsSpecific = prefersCurrentQuestion(originalQuestion);
+    const primaryQuery = currentQuestionIsSpecific ? originalQuestion : effectiveQuery;
+    const alternateQuery = currentQuestionIsSpecific ? effectiveQuery : originalQuestion;
+    let result = await retrieveKnowledge(primaryQuery, { topK: top_k });
+
+    // Bila pertanyaan terbaru terlalu pendek/ambigu atau anchor utama benar-benar
+    // tidak menemukan apa-apa, baru gunakan query hasil rewrite + history.
+    if (
+      normalizeText(alternateQuery) !== normalizeText(primaryQuery) &&
+      !result.found
+    ) {
+      const alternateResult = await retrieveKnowledge(alternateQuery, { topK: top_k });
+      if (alternateResult.found || !result.candidates?.length) result = alternateResult;
+    }
     rememberSearchResult(state, result);
     return JSON.stringify(buildSearchPayload(result, { requestedQuery: query }));
   },

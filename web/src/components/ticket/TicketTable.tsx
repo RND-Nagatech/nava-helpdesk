@@ -19,7 +19,6 @@ export function TicketTable({ tickets, onAccept, onResolve, variant = "tickets" 
             <th>Customer</th>
             <th>Subject</th>
             <th>Status</th>
-            <th>Prioritas</th>
             <th>Helpdesk</th>
             <th>Created At</th>
             <th>Last Message</th>
@@ -56,7 +55,6 @@ export function TicketTable({ tickets, onAccept, onResolve, variant = "tickets" 
                   ? <span className="badge badge-pending">Belum ditangani</span>
                   : <StatusBadge type="status" value={ticket.status} />}
               </td>
-              <td><StatusBadge type="priority" value={ticket.priority} /></td>
               <td>{ticket.assigned_helpdesk_name || (variant === "handover" ? "Belum ditangani" : "-")}</td>
               <td className="mono-cell">{new Date(ticket.created_at).toLocaleString("id-ID")}</td>
               <td className="truncate-cell">{ticket.last_message || "-"}</td>
@@ -76,7 +74,7 @@ export function TicketTable({ tickets, onAccept, onResolve, variant = "tickets" 
           ))}
           {!tickets.length && (
             <tr>
-              <td colSpan={10}>Tidak ada ticket yang sesuai.</td>
+              <td colSpan={9}>Tidak ada ticket yang sesuai.</td>
             </tr>
           )}
         </tbody>

@@ -34,14 +34,21 @@ export type CustomerProfile = {
 };
 
 export function normalizeCustomerDomain(value: string) {
-  const raw = value.trim().toLowerCase();
+  let raw = value.trim().toLowerCase();
   if (!raw) return "";
+  try {
+    raw = decodeURIComponent(raw);
+  } catch {
+    // Biarkan nilai asli jika input mengandung escape yang tidak valid.
+  }
+  raw = raw.replace(/\s+/g, " ").trim();
+  if (raw.includes(" ") && !/^https?:\/\//i.test(raw)) return raw;
   const withProtocol = /^https?:\/\//i.test(raw) ? raw : `https://${raw}`;
   try {
     const url = new URL(withProtocol);
-    return url.hostname.replace(/^www\./, "");
+    return decodeURIComponent(url.hostname).replace(/^www\./, "");
   } catch {
-    return raw.replace(/[^a-z0-9.-]/g, "");
+    return raw.replace(/[^a-z0-9.\- ]/g, "").replace(/\s+/g, " ").trim();
   }
 }
 

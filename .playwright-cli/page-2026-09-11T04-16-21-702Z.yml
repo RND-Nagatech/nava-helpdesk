@@ -1,0 +1,32 @@
+- generic [ref=e3]:
+  - banner [ref=e4]:
+    - link "N NAVA Helpdesk Sistem Dukungan & Operasional" [ref=e5] [cursor=pointer]:
+      - /url: /
+      - generic [ref=e6]: "N"
+      - generic [ref=e7]:
+        - strong [ref=e8]: NAVA Helpdesk
+        - generic [ref=e9]: Sistem Dukungan & Operasional
+    - navigation "Navigasi customer" [ref=e10]:
+      - link "Chat Room" [ref=e11] [cursor=pointer]:
+        - /url: /
+    - generic [ref=e14]: Online
+  - generic [ref=e18]:
+    - generic [ref=e19]: Sistem terhubung ke NAVA & Tim Support Manusia
+    - generic [ref=e21]:
+      - generic [ref=e22]: NAVA Helpdesk
+      - heading "Bantuan cepat untuk kendala operasional toko" [level=1] [ref=e25]
+      - paragraph [ref=e26]: Jelaskan masalahnya. Agent akan mencari SOP, mengecek website dan backend, lalu memberi langkah awal yang aman.
+      - generic [ref=e27]:
+        - generic [ref=e28]: Verifikasi Otomatis Domain
+        - generic [ref=e32]: Histori Chat Tersimpan
+    - generic [ref=e36]:
+      - heading "Data Customer" [level=2] [ref=e37]
+      - generic [ref=e38]:
+        - text: Nama customer
+        - textbox "Nama customer" [active] [ref=e43]:
+          - /placeholder: "Contoh: Andi"
+      - generic [ref=e44]:
+        - text: Domain / nama toko
+        - textbox "Domain / nama toko" [ref=e50]:
+          - /placeholder: "Contoh: tokoanda.com"
+      - button "Mulai Chat" [ref=e51] [cursor=pointer]

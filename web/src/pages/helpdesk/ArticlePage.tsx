@@ -169,10 +169,9 @@ export function ArticlePage() {
       setError("");
       setNotice("");
       const saved = await api.updateKnowledgeArticle(selected.articleId, cleanArticle(selected));
-      const published = await api.publishKnowledgeArticle(saved.articleId);
-      setSelected(published);
+      setSelected(saved);
       setNotice("Perubahan tersimpan dan embedding diperbarui.");
-      await Promise.all([load(undefined, published.articleId), loadCategories()]);
+      await Promise.all([load(undefined, saved.articleId), loadCategories()]);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Gagal menyimpan perubahan artikel.");
     } finally {

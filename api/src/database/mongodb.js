@@ -1,5 +1,6 @@
 import { MongoClient } from "mongodb";
 import { env } from "../config/env.js";
+import { ensureVectorCollection, syncKnowledgeVectors } from "./qdrant.js";
 
 let client;
 let database;
@@ -36,56 +37,26 @@ export async function closeMongo() {
   database = undefined;
 }
 
-function isAlreadyExistsError(error) {
-  const message = String(error?.message || "").toLowerCase();
-  return message.includes("already exists") || message.includes("indexalreadyexists");
+export async function ensureVectorSearchIndex() {
+  return ensureVectorCollection();
 }
 
-export async function ensureVectorSearchIndex() {
+export async function reconcileKnowledgeVectors() {
   if (!env.vectorSearchEnabled) {
-    return { enabled: false, created: false, reason: "disabled" };
+    return { enabled: false, upserted: 0, deleted: 0, reason: "disabled" };
   }
 
   const db = await getDb();
-
-  try {
-    await db.command({
-      createSearchIndexes: env.knowledgeCollection,
-      indexes: [
-        {
-          name: env.vectorIndexName,
-          type: "vectorSearch",
-          definition: {
-            fields: [
-              {
-                type: "vector",
-                path: env.vectorField,
-                numDimensions: env.embeddingDimensions,
-                similarity: "cosine",
-              },
-            ],
-          },
-        },
-      ],
-    });
-
-    return { enabled: true, created: true, name: env.vectorIndexName };
-  } catch (error) {
-    if (isAlreadyExistsError(error)) {
-      return { enabled: true, created: false, name: env.vectorIndexName, reason: "already-exists" };
-    }
-
-    // Vector retrieval tetap memiliki fallback lexical. Jangan membuat API mati hanya
-    // karena search index belum READY / user DB tidak punya hak membuat search index.
-    console.warn(`Vector index belum bisa dibuat otomatis: ${error?.message || error}`);
-    return {
-      enabled: true,
-      created: false,
-      name: env.vectorIndexName,
-      reason: "create-failed",
-      error: error?.message || String(error),
-    };
-  }
+  const docs = await db.collection(env.knowledgeCollection).find({}, {
+    projection: {
+      articleId: 1,
+      status: 1,
+      embedding: 1,
+      embedding_model: 1,
+      embedding_profile: 1,
+    },
+  }).toArray();
+  return syncKnowledgeVectors(docs);
 }
 
 export async function ensureIndexes() {
@@ -165,6 +136,10 @@ export async function ensureIndexes() {
   await tickets.createIndex({ created_at: -1, assigned_helpdesk_id: 1 }, { name: "ticket_created_assignee" });
   await tickets.createIndex({ status: 1, last_message_at: -1 }, { name: "ticket_status_last_message" });
   await tickets.createIndex({ assigned_helpdesk_id: 1, status: 1, last_message_at: -1 }, { name: "ticket_assignment_status_last_message" });
+  await tickets.createIndex(
+    { handover_status: 1, status: 1, assigned_helpdesk_id: 1 },
+    { name: "ticket_handover_count" }
+  );
   await helpdeskUsers.createIndex({ helpdesk_id: 1 }, { unique: true, name: "helpdesk_user_id_unique" });
 
   if (env.longTermMemoryEnabled) {
@@ -175,5 +150,5 @@ export async function ensureIndexes() {
     }
   }
 
-  return ensureVectorSearchIndex();
+  return ensureVectorCollection();
 }

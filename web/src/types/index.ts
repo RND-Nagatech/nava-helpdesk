@@ -109,6 +109,7 @@ export type HelpdeskUser = {
   role: "admin" | "helpdesk";
   tier: string;
   is_active: boolean;
+  created_at?: string | null;
 };
 
 export type KnowledgeArticleStatus = "draft" | "published" | "archived";

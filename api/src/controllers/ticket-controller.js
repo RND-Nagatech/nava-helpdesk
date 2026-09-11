@@ -1,6 +1,7 @@
 import { z } from "zod";
 import {
   acceptHandover,
+  countPendingHandover,
   createTicket,
   getTicketBySession,
   getTicketDetail,
@@ -21,6 +22,7 @@ function ticketFiltersFromQuery(query) {
     helpdeskId: query.helpdesk_id ? String(query.helpdesk_id) : "",
     startDate: query.start_date ? String(query.start_date) : "",
     endDate: query.end_date ? String(query.end_date) : "",
+    sort: query.sort ? String(query.sort) : "",
     page: query.page ? Number(query.page) : 0,
     limit: query.limit ? Number(query.limit) : 100,
   };
@@ -76,6 +78,15 @@ export async function listTicketsHandler(req, res, next) {
       return res.json({ success: true, data: result.data, pagination: result.pagination });
     }
     return res.json({ success: true, data: result });
+  } catch (error) {
+    next(error);
+  }
+}
+
+export async function handoverCountHandler(req, res, next) {
+  try {
+    const count = await countPendingHandover();
+    res.json({ success: true, data: { count } });
   } catch (error) {
     next(error);
   }

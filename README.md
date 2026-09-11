@@ -25,6 +25,26 @@ CORS_ORIGIN=http://localhost:8080
 
 ENV existing untuk MongoDB, DeepSeek, embedding, LangGraph Checkpointer, long-term memory, summarization, dan retrieval tetap berada di `api/.env`.
 
+Qdrant berjalan melalui Docker pada `http://localhost:6333`. Backend akan memastikan collection `knowledge_vector_index` tersedia dan melakukan rekonsiliasi vector saat startup.
+
+## Sinkronisasi Knowledge dan Qdrant
+
+Import knowledge sekarang otomatis membuat embedding dan menyinkronkan vector ke Qdrant:
+
+```bash
+cd api
+npm run knowledge:import -- /path/ke/nava-knowledge.json
+```
+
+Untuk memproses ulang embedding yang berubah atau melakukan rekonsiliasi manual:
+
+```bash
+npm run knowledge:embed
+npm run knowledge:vector-index
+```
+
+Artikel baru yang di-publish dari portal helpdesk otomatis dibuat embedding dan di-upsert ke Qdrant. Artikel draft atau archive dikeluarkan dari vector search.
+
 ## Menjalankan Frontend
 
 ```bash
