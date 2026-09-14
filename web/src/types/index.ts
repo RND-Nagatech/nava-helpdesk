@@ -22,6 +22,30 @@ export type ChatMessage = {
   created_at: string;
 };
 
+export type SiteCheckResult = {
+  domain: string;
+  origin: string;
+  frontend: {
+    status: "online" | "offline" | "unauthorized";
+    version?: string | null;
+    base_version?: string | null;
+    branch?: string;
+    http_status?: number | null;
+    error_code?: string;
+  };
+  backend: {
+    status: "online" | "offline" | "unauthorized";
+    version?: string | null;
+    base_version?: string | null;
+    branch?: string;
+    store?: { kode_toko?: string; nama_toko?: string; tgl_system?: string } | null;
+    http_status?: number | null;
+    error_code?: string;
+  };
+  compatibility: "match" | "mismatch" | "unknown";
+  checked_at: string;
+};
+
 export type TicketStatus = "new" | "pending" | "in_progress" | "resolved";
 export type HandoverStatus = "pending" | "active" | "resolved";
 export type Priority = "low" | "normal" | "high" | "urgent";
@@ -134,6 +158,13 @@ export type KnowledgeArticle = {
   troubleshootingSteps: KnowledgeStep[];
   escalationRules: string[];
   internalNotes?: string;
+  siteScope?: {
+    domain: string;
+    frontendVersion?: string | null;
+    backendVersion?: string | null;
+    frontendBranch?: string;
+    backendBranch?: string;
+  } | null;
   status: KnowledgeArticleStatus;
   embedding_status: "ready" | "stale";
   created_at?: string;
@@ -180,6 +211,7 @@ export type TrainingSession = {
   created_at: string;
   updated_at: string;
   knowledge_draft_id?: string | null;
+  customer_domain?: string;
   messages: TrainingMessage[];
 };
 

@@ -1,6 +1,6 @@
 import { FormEvent, useState } from "react";
 import { ArrowRight, Clock3, ShieldCheck, Store, UserRound, Zap } from "lucide-react";
-import { type CustomerProfile, normalizeCustomerDomain, saveCustomerProfile } from "../../lib/session";
+import { type CustomerProfile, isGoldstoreDomain, normalizeCustomerDomain, saveCustomerProfile } from "../../lib/session";
 
 export function ProfileGate({ initial, onSave }: { initial: CustomerProfile | null; onSave: (profile: CustomerProfile) => void }) {
   const [name, setName] = useState(initial?.name || "");
@@ -12,6 +12,10 @@ export function ProfileGate({ initial, onSave }: { initial: CustomerProfile | nu
     const next = { name: name.trim(), domain: normalizeCustomerDomain(domain) };
     if (!next.name || !next.domain) {
       setError("Nama dan domain/nama toko wajib diisi dulu.");
+      return;
+    }
+    if (!isGoldstoreDomain(next.domain)) {
+      setError("Masukkan domain Goldstore, misalnya italy atau italy.goldstore.id.");
       return;
     }
     setError("");
@@ -47,10 +51,11 @@ export function ProfileGate({ initial, onSave }: { initial: CustomerProfile | nu
           </div>
         </label>
         <label>
-          Domain / nama toko
+          Domain toko / program
+          <small className="profile-field-hint">Masukkan domain toko. Bisa ditulis dengan atau tanpa <code>.goldstore.id</code>.</small>
           <div className="field-with-icon">
             <Store size={17} />
-            <input value={domain} onChange={(event) => setDomain(event.target.value)} placeholder="Contoh: tokoanda.com" />
+            <input value={domain} onChange={(event) => setDomain(event.target.value)} placeholder="Contoh: italy atau italy.goldstore.id" />
           </div>
         </label>
         {error && <p className="public-profile-error">{error}</p>}

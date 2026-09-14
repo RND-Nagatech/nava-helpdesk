@@ -3,7 +3,7 @@ import { Bot, Headphones, ImagePlus, SendHorizontal, RefreshCw, Store, UserRound
 import { getStoredHelpdeskUser } from "../../lib/helpdeskAuth";
 import { subscribeHelpdeskConnection, subscribeHelpdeskEvent } from "../../lib/helpdeskEvents";
 import { api } from "../../services/api";
-import type { Attachment, ChatMessage, Ticket } from "../../types";
+import type { Attachment, ChatMessage, SiteCheckResult, Ticket } from "../../types";
 import { AttachmentGrid, PendingFiles } from "./AttachmentPreview";
 import { MessageContent } from "./MessageContent";
 
@@ -66,6 +66,7 @@ export function ChatWindow({
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState("");
   const [reconnecting, setReconnecting] = useState(false);
+  const [siteCheck, setSiteCheck] = useState<SiteCheckResult | null>(null);
   const [hasMore, setHasMore] = useState(false);
   const [loadingOlder, setLoadingOlder] = useState(false);
   const historyVersion = useRef(0);
@@ -87,6 +88,8 @@ export function ChatWindow({
         const page = await api.history(sessionId);
         if (version !== historyVersion.current) return;
         setMessages(page.items);
+        const latestSiteCheck = [...page.items].reverse().find((item) => item.metadata?.runtime_meta && (item.metadata.runtime_meta as { site_check?: SiteCheckResult }).site_check);
+        setSiteCheck((latestSiteCheck?.metadata?.runtime_meta as { site_check?: SiteCheckResult } | undefined)?.site_check || null);
         setHasMore(page.has_more);
         historyCursor.current = page.next_cursor;
       } catch (err) {
@@ -203,7 +206,7 @@ export function ChatWindow({
       }
 
       if (mode === "customer") {
-        await api.chat({
+        const response = await api.chat({
           question: content,
           session_id: sessionId,
           customer_id: customerId,
@@ -211,6 +214,7 @@ export function ChatWindow({
           customer_domain: customerDomain,
           attachments,
         });
+        if (response.meta?.site_check) setSiteCheck(response.meta.site_check);
       } else {
         const sentMessage = await api.helpdeskReply({
           session_id: sessionId,
@@ -268,6 +272,17 @@ export function ChatWindow({
         <div className="handover-banner resolved-banner">Ticket {ticket.ticket_code} sudah selesai. Anda tetap dapat melanjutkan percakapan dengan NAVA.</div>
       )}
       {!helpdeskClosed && readOnlyReason && <div className="handover-banner">{readOnlyReason}</div>}
+
+      {mode === "customer" && siteCheck && (
+        <div className="site-check-summary" role="status">
+          <strong>Hasil cek {siteCheck.domain}</strong>
+          <span>Frontend: <b className={siteCheck.frontend.status === "online" ? "site-online" : "site-offline"}>{siteCheck.frontend.status === "online" ? "Online" : "Offline"}</b></span>
+          <span>Backend: <b className={siteCheck.backend.status === "online" ? "site-online" : siteCheck.backend.status === "unauthorized" ? "site-unknown" : "site-offline"}>{siteCheck.backend.status === "online" ? "Online" : siteCheck.backend.status === "unauthorized" ? "Perlu kredensial" : "Offline"}</b></span>
+          {siteCheck.frontend.version && <span>Klien: {siteCheck.frontend.version}</span>}
+          {siteCheck.backend.version && <span>Server: {siteCheck.backend.version}</span>}
+          <span>Versi: <b>{siteCheck.compatibility === "match" ? "Match" : siteCheck.compatibility === "mismatch" ? "Mismatch" : "Unknown"}</b></span>
+        </div>
+      )}
 
       {ticket && ticket.status !== "resolved" && (
         <div className="handover-banner">

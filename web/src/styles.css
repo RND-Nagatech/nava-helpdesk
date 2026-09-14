@@ -160,6 +160,13 @@
   white-space: pre-wrap;
 }
 
+.training-message-delivery-error {
+  margin-top: 8px;
+  color: #b42318;
+  font-size: 11px;
+  font-weight: 700;
+}
+
 .training-message-actions {
   display: flex;
   gap: 8px;
@@ -1512,6 +1519,34 @@ input:disabled {
   border-radius: 14px;
   background: #ffffff;
   box-shadow: 0 12px 30px rgba(17, 24, 39, 0.04);
+}
+
+.site-check-summary {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 14px;
+  align-items: center;
+  padding: 10px 14px;
+  border: 1px solid #d9e5ef;
+  background: #f5f9fc;
+  color: #50627b;
+  font-size: 12px;
+}
+
+.site-check-summary strong {
+  color: #2f5276;
+}
+
+.site-online {
+  color: #16875a;
+}
+
+.site-offline {
+  color: #bd3b3b;
+}
+
+.site-unknown {
+  color: #a56b17;
 }
 
 .page-hero,
@@ -3349,6 +3384,19 @@ textarea:focus {
   color: #374151;
   font-size: 13px;
   font-weight: 800;
+}
+
+.profile-field-hint {
+  color: #718096;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.profile-field-hint code {
+  color: #365a7d;
+  font-family: inherit;
+  font-weight: 700;
 }
 
 .field-with-icon {

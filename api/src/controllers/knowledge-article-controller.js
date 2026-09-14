@@ -25,6 +25,14 @@ const sourceSchema = z.object({
   supersedes_article_id: z.string().trim().max(200).optional(),
 }).optional();
 
+const siteScopeSchema = z.object({
+  domain: z.string().trim().max(200),
+  frontendVersion: z.string().trim().max(40).nullable().optional(),
+  backendVersion: z.string().trim().max(40).nullable().optional(),
+  frontendBranch: z.string().trim().max(120).optional(),
+  backendBranch: z.string().trim().max(120).optional(),
+}).nullable().optional();
+
 const articleSchema = z.object({
   title: z.string().trim().max(300).optional(),
   category: z.string().trim().max(120).optional(),
@@ -36,6 +44,7 @@ const articleSchema = z.object({
   troubleshootingSteps: z.array(stepSchema).max(30).optional(),
   escalationRules: z.array(z.string().trim().max(500)).max(20).optional(),
   internalNotes: z.string().trim().max(4000).optional(),
+  siteScope: siteScopeSchema,
   source: sourceSchema,
 });
 

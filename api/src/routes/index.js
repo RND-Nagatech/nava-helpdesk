@@ -38,6 +38,7 @@ import {
 import { requireHelpdeskAdmin, requireHelpdeskAuth } from "../middleware/helpdesk-auth.js";
 import { filesToAttachments, UPLOAD_ROOT_DIR, uploadHelpdeskImages } from "../middleware/upload.js";
 import { getVectorStoreStatus } from "../database/qdrant.js";
+import { siteCheckHandler } from "../controllers/site-check-controller.js";
 import {
   closeTrainingSessionHandler,
   createTrainingSessionHandler,
@@ -99,6 +100,7 @@ apiRouter.get("/health", async (req, res) => {
 });
 
 apiRouter.post("/chat", chat);
+apiRouter.post("/site-check", siteCheckHandler);
 apiRouter.get("/chat/:session_id/messages", getSessionMessages);
 apiRouter.post("/training/session", requireHelpdeskAuth, createTrainingSessionHandler);
 apiRouter.get("/training/sessions", requireHelpdeskAuth, listTrainingSessionsHandler);

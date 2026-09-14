@@ -27,6 +27,7 @@ const runtimeContextSchema = z.object({
   customerId: z.string().nullable().optional(),
   longTermContext: z.string().default(""),
   trainingMode: z.boolean().default(false),
+  customerDomain: z.string().nullable().optional(),
 });
 
 function getModel() {
@@ -67,6 +68,7 @@ function buildMiddleware() {
         isFirstTurn: Boolean(runtime.context?.isFirstTurn),
         longTermContext: runtime.context?.longTermContext || "",
         trainingMode: Boolean(runtime.context?.trainingMode),
+        customerDomain: runtime.context?.customerDomain || "",
       })
     ),
     modelCallLimitMiddleware({
@@ -256,7 +258,7 @@ async function imageAttachmentParts(attachments = []) {
   return parts;
 }
 
-function buildRuntimeMeta({ toolTrace, searches, escalation, memoryContext, modelCallCount }) {
+function buildRuntimeMeta({ toolTrace, searches, escalation, memoryContext, modelCallCount, siteCheck }) {
   const primary = searches.find((item) => item.primary_article)?.primary_article || null;
   const primarySearch = searches.find((item) => item.primary_article) || null;
 
@@ -271,6 +273,7 @@ function buildRuntimeMeta({ toolTrace, searches, escalation, memoryContext, mode
     long_term_memory_used: Boolean(memoryContext?.text),
     long_term_memory_source: memoryContext?.source || "none",
     long_term_memory_items: memoryContext?.items || 0,
+    site_check: siteCheck || null,
   };
 }
 
@@ -288,6 +291,7 @@ export async function runHelpdeskAgent({
   isFirstTurn = false,
   memoryContext = { text: "", source: "none", items: 0 },
   trainingMode = false,
+  customerDomain = "",
 }) {
   const startedAt = Date.now();
   const runId = crypto.randomUUID();
@@ -313,6 +317,8 @@ export async function runHelpdeskAgent({
     firstSearchResult: null,
     bestSearchResult: null,
     searchResults: [],
+    customerDomain: String(customerDomain || "").trim(),
+    siteCheck: null,
   };
 
   const config = {
@@ -323,6 +329,7 @@ export async function runHelpdeskAgent({
       customerId,
       longTermContext: memoryContext.text || "",
       trainingMode,
+      customerDomain,
     },
   };
 
@@ -354,6 +361,7 @@ export async function runHelpdeskAgent({
     escalation,
     memoryContext,
     modelCallCount,
+    siteCheck: runState.siteCheck,
   });
   runtimeMeta.recursion_fallback = Boolean(recursionFallback);
   runtimeMeta.recursion_fallback_mode = recursionFallback?.mode || null;

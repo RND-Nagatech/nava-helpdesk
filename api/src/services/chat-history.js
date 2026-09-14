@@ -116,6 +116,7 @@ export async function getSessionMessagePage(sessionId, { limit = 50, before = ""
         content: 1,
         "metadata.attachments": 1,
         "metadata.helpdesk_name": 1,
+        "metadata.runtime_meta.site_check": 1,
         created_at: 1,
       },
       maxTimeMS: 5000,

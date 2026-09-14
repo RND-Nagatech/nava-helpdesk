@@ -54,6 +54,7 @@ export async function reconcileKnowledgeVectors() {
       embedding: 1,
       embedding_model: 1,
       embedding_profile: 1,
+      siteScope: 1,
     },
   }).toArray();
   return syncKnowledgeVectors(docs);
@@ -73,6 +74,7 @@ export async function ensureIndexes() {
   await knowledge.createIndex({ articleId: 1 }, { unique: true, name: "article_id_unique" });
   await knowledge.createIndex({ status: 1, updated_at: -1 }, { name: "knowledge_status_updated" });
   await knowledge.createIndex({ category: 1, status: 1 }, { name: "knowledge_category_status" });
+  await knowledge.createIndex({ "siteScope.domain": 1, "siteScope.frontendVersion": 1, "siteScope.backendVersion": 1 }, { name: "knowledge_site_scope" });
 
   // Lexical retrieval tetap dipertahankan sebagai bagian dari hybrid search dan fallback.
   try {

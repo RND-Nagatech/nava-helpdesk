@@ -9,6 +9,7 @@ import {
   problemMatchScore,
 } from "../utils/text.js";
 import { fuseHybridResults } from "../utils/hybrid.js";
+import { siteScopeMatches } from "./site-check-service.js";
 
 const PROJECTION = {
   _id: 0,
@@ -23,6 +24,7 @@ const PROJECTION = {
   userResponseTemplate: 1,
   tags: 1,
   status: 1,
+  siteScope: 1,
 };
 
 function dedupeDocuments(documents = []) {
@@ -63,10 +65,66 @@ export function rankLexicalCandidates(query, docs, limit) {
     .slice(0, limit);
 }
 
-async function textSearch(collection, query, limit) {
+function siteScopeQuery(siteCheck = null) {
+  const universal = [
+    { siteScope: { $exists: false } },
+    { siteScope: null },
+  ];
+  if (!siteCheck?.domain) return { $or: universal };
+
+  return {
+    $or: [
+      ...universal,
+      {
+        "siteScope.domain": siteCheck.domain,
+        $and: [
+          {
+            $or: [
+              { "siteScope.frontendVersion": { $exists: false } },
+              { "siteScope.frontendVersion": null },
+              { "siteScope.frontendVersion": siteCheck.frontend?.base_version || "" },
+            ],
+          },
+          {
+            $or: [
+              { "siteScope.backendVersion": { $exists: false } },
+              { "siteScope.backendVersion": null },
+              { "siteScope.backendVersion": siteCheck.backend?.base_version || "" },
+            ],
+          },
+          {
+            $or: [
+              { "siteScope.frontendBranch": { $exists: false } },
+              { "siteScope.frontendBranch": "" },
+              { "siteScope.frontendBranch": siteCheck.frontend?.branch || "" },
+            ],
+          },
+          {
+            $or: [
+              { "siteScope.backendBranch": { $exists: false } },
+              { "siteScope.backendBranch": "" },
+              { "siteScope.backendBranch": siteCheck.backend?.branch || "" },
+            ],
+          },
+        ],
+      },
+    ],
+  };
+}
+
+function publishedKnowledgeQuery(siteCheck = null) {
+  return {
+    $and: [
+      { $or: [{ status: "published" }, { status: { $exists: false } }] },
+      siteScopeQuery(siteCheck),
+    ],
+  };
+}
+
+async function textSearch(collection, query, limit, siteCheck) {
   return collection
     .find(
-      { ...publishedKnowledgeQuery(), $text: { $search: query } },
+      { $and: [publishedKnowledgeQuery(siteCheck), { $text: { $search: query } }] },
       { projection: { ...PROJECTION, mongoTextScore: { $meta: "textScore" } } }
     )
     .sort({ mongoTextScore: { $meta: "textScore" } })
@@ -79,7 +137,7 @@ function tokenRegex(token) {
   return new RegExp(safe, "i");
 }
 
-async function regexCandidateSearch(collection, query, limit, { broad = false } = {}) {
+async function regexCandidateSearch(collection, query, limit, { broad = false, siteCheck = null } = {}) {
   const tokens = importantQueryTokens(query);
   if (!tokens.length) return [];
 
@@ -95,21 +153,21 @@ async function regexCandidateSearch(collection, query, limit, { broad = false } 
 
   return collection
     .find(
-      { $and: [publishedKnowledgeQuery(), { $or: ors }] },
+      { $and: [publishedKnowledgeQuery(siteCheck), { $or: ors }] },
       { projection: PROJECTION }
     )
     .limit(limit)
     .toArray();
 }
 
-async function retrieveLexical(collection, query, limit) {
+async function retrieveLexical(collection, query, limit, siteCheck) {
   // MongoDB text search tetap dipakai, tetapi selalu disupplement dengan pencarian
   // token pembeda di title/symptoms/tags. Ini mencegah artikel exact terlempar dari
   // candidate pool hanya karena query hasil LLM memakai bentuk kata yang berbeda.
   const regexLimit = Math.max(limit * 2, 60);
   const [textSettled, targetedRegexSettled] = await Promise.allSettled([
-    textSearch(collection, query, limit),
-    regexCandidateSearch(collection, query, regexLimit),
+    textSearch(collection, query, limit, siteCheck),
+    regexCandidateSearch(collection, query, regexLimit, { siteCheck }),
   ]);
 
   const textDocuments = textSettled.status === "fulfilled" ? textSettled.value : [];
@@ -117,7 +175,7 @@ async function retrieveLexical(collection, query, limit) {
 
   if (!textDocuments.length && !regexDocuments.length) {
     try {
-      regexDocuments = await regexCandidateSearch(collection, query, regexLimit, { broad: true });
+      regexDocuments = await regexCandidateSearch(collection, query, regexLimit, { broad: true, siteCheck });
     } catch {
       regexDocuments = [];
     }
@@ -136,7 +194,7 @@ async function retrieveLexical(collection, query, limit) {
   };
 }
 
-async function retrieveVector(collection, query, limit) {
+async function retrieveVector(collection, query, limit, siteCheck) {
   if (!env.vectorSearchEnabled) {
     return { enabled: false, ok: false, documents: [] };
   }
@@ -149,16 +207,20 @@ async function retrieveVector(collection, query, limit) {
       .filter(Boolean);
     const documents = await collection
       .find(
-        { ...publishedKnowledgeQuery(), articleId: { $in: articleIds } },
+        { $and: [publishedKnowledgeQuery(siteCheck), { articleId: { $in: articleIds } }] },
         { projection: PROJECTION }
       )
       .toArray();
     const byArticleId = new Map(documents.map((doc) => [doc.articleId, doc]));
-    const scopedPoints = points.filter((point) => {
+    const eligiblePoints = points.filter((point) => {
+      const doc = byArticleId.get(point.payload?.articleId);
+      return doc && siteScopeMatches(doc.siteScope, siteCheck);
+    });
+    const scopedPoints = eligiblePoints.filter((point) => {
       const doc = byArticleId.get(point.payload?.articleId);
       return doc && articleDomainMatch(query, doc).coverage === 1;
     });
-    const selectedPoints = scopedPoints.length ? scopedPoints : points;
+    const selectedPoints = scopedPoints.length ? scopedPoints : eligiblePoints;
     const rankedDocuments = selectedPoints
       .map((point) => {
         const articleId = point.payload?.articleId;
@@ -179,10 +241,6 @@ async function retrieveVector(collection, query, limit) {
   }
 }
 
-function publishedKnowledgeQuery() {
-  return { $or: [{ status: "published" }, { status: { $exists: false } }] };
-}
-
 function retrievalMode({ lexicalMode, vectorResult, lexicalDocs }) {
   if (!vectorResult.enabled) return lexicalMode;
   if (!vectorResult.ok) return `${lexicalMode}+vector-fallback`;
@@ -194,6 +252,7 @@ export async function retrieveKnowledge(query, options = {}) {
   const topK = Math.max(1, Number(options.topK || env.knowledgeTopK));
   const lexicalLimit = Math.max(topK * 8, 30);
   const vectorLimit = Math.max(topK * 4, env.vectorCandidateLimit);
+  const siteCheck = options.siteCheck || null;
   const db = await getDb();
   const collection = db.collection(env.knowledgeCollection);
 
@@ -201,12 +260,12 @@ export async function retrieveKnowledge(query, options = {}) {
   const [lexicalTimed, vectorTimed] = await Promise.all([
     (async () => {
       const started = Date.now();
-      const result = await retrieveLexical(collection, query, lexicalLimit);
+      const result = await retrieveLexical(collection, query, lexicalLimit, siteCheck);
       return { result, ms: Date.now() - started };
     })(),
     (async () => {
       const started = Date.now();
-      const result = await retrieveVector(collection, query, vectorLimit);
+      const result = await retrieveVector(collection, query, vectorLimit, siteCheck);
       return { result, ms: Date.now() - started };
     })(),
   ]);

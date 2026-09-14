@@ -27,6 +27,11 @@ export const env = {
   ticketCollection: process.env.TICKET_COLLECTION || "tt_ticket_helpdesk",
   helpdeskUserCollection: process.env.HELPDESK_USER_COLLECTION || "tm_helpdesk_user",
   uploadBaseUrl: process.env.UPLOAD_BASE_URL || "/uploads",
+  siteCheckTimeoutMs: numberFromEnv("SITE_CHECK_TIMEOUT_MS", 8000),
+  siteCheckCacheTtlMs: numberFromEnv("SITE_CHECK_CACHE_TTL_MS", 60000),
+  siteCheckApiKey: process.env.SITE_CHECK_API_KEY || "nagagold-api-key",
+  siteCheckSigningSecret: process.env.SITE_CHECK_SIGNING_SECRET || "",
+  siteCheckBackendToken: process.env.SITE_CHECK_BACKEND_TOKEN || "",
 
   deepseekApiKey: process.env.DEEPSEEK_API_KEY || "",
   deepseekModel: process.env.DEEPSEEK_MODEL || "deepseek-v4-flash",

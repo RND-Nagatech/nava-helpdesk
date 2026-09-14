@@ -1,5 +1,5 @@
 import { getHelpdeskToken } from "../lib/helpdeskAuth";
-import type { Attachment, ChatMessage, DashboardSummary, HelpdeskUser, KnowledgeArticle, Ticket, TrainingDraft, TrainingGenerateResult, TrainingSession } from "../types";
+import type { Attachment, ChatMessage, DashboardSummary, HelpdeskUser, KnowledgeArticle, SiteCheckResult, Ticket, TrainingDraft, TrainingGenerateResult, TrainingSession } from "../types";
 
 const API_URL = import.meta.env.VITE_API_URL as string;
 const REQUEST_TIMEOUT_MS = 15000;
@@ -153,6 +153,12 @@ export const api = {
   handoverCount() {
     return request<{ count: number }>("/api/helpdesk/handover/count");
   },
+  siteCheck(domain: string, force = false) {
+    return request<SiteCheckResult>("/api/site-check", {
+      method: "POST",
+      body: JSON.stringify({ domain, force }),
+    });
+  },
   helpdeskUsers(search = "") {
     const suffix = search ? `?search=${encodeURIComponent(search)}` : "";
     return request<HelpdeskUser[]>(`/api/helpdesk/users${suffix}`);
@@ -250,6 +256,7 @@ export const api = {
       answer: string;
       handover_active?: boolean;
       ticket?: Partial<Ticket>;
+      meta?: { site_check?: SiteCheckResult | null; [key: string]: unknown };
     }>("/api/chat", {
       method: "POST",
       body: JSON.stringify(input),

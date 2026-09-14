@@ -43,6 +43,7 @@ export function normalizeCustomerDomain(value: string) {
   }
   raw = raw.replace(/\s+/g, " ").trim();
   if (raw.includes(" ") && !/^https?:\/\//i.test(raw)) return raw;
+  if (/^[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/i.test(raw)) return `${raw}.goldstore.id`;
   const withProtocol = /^https?:\/\//i.test(raw) ? raw : `https://${raw}`;
   try {
     const url = new URL(withProtocol);
@@ -50,6 +51,12 @@ export function normalizeCustomerDomain(value: string) {
   } catch {
     return raw.replace(/[^a-z0-9.\- ]/g, "").replace(/\s+/g, " ").trim();
   }
+}
+
+export function isGoldstoreDomain(value: string) {
+  const normalized = normalizeCustomerDomain(value);
+  if (["localhost.goldstore.id", "local.goldstore.id", "127.goldstore.id", "0.goldstore.id", "internal.goldstore.id"].includes(normalized)) return false;
+  return /^[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.goldstore\.id$/i.test(normalized);
 }
 
 export function loadCustomerProfile(): CustomerProfile | null {

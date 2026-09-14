@@ -374,6 +374,7 @@ export async function chat(req, res, next) {
       attachments: input.attachments || [],
       isFirstTurn,
       memoryContext,
+      customerDomain: input.customer_domain || "",
     });
 
     const searches = publicSearches(result.searches);

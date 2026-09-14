@@ -6,6 +6,7 @@ import { getDb } from "../database/mongodb.js";
 import { runHelpdeskAgent } from "../agents/helpdesk-agent.js";
 import { createKnowledgeArticle, getKnowledgeArticle } from "./knowledge-article-service.js";
 import { retrieveKnowledge } from "./knowledge-retriever.js";
+import { normalizeGoldstoreDomain } from "./site-check-service.js";
 
 const TRAINING_ROLES = new Set(["helpdesk", "assistant", "correction"]);
 const MAX_TRAINING_MESSAGES_FOR_DRAFT = 80;
@@ -50,6 +51,19 @@ function cleanText(value, max = 4000) {
   return String(value || "").replace(/\s+/g, " ").trim().slice(0, max);
 }
 
+function extractTrainingDomain(value) {
+  const source = String(value || "");
+  const candidates = source.match(/(?:https?:\/\/)?[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.goldstore\.id\b/gi) || [];
+  for (const candidate of candidates) {
+    try {
+      return normalizeGoldstoreDomain(candidate).hostname;
+    } catch {
+      // Abaikan domain yang tidak lolos validasi checker.
+    }
+  }
+  return "";
+}
+
 function stringList(value, maxItems = 30, maxChars = 500) {
   return [...new Set((Array.isArray(value) ? value : []).map((item) => cleanText(item, maxChars)).filter(Boolean))].slice(0, maxItems);
 }
@@ -89,6 +103,7 @@ function serializeSession(doc, messages = []) {
     created_at: doc.created_at,
     updated_at: doc.updated_at,
     knowledge_draft_id: doc.knowledge_draft_id || null,
+    customer_domain: doc.customer_domain || "",
     messages,
   };
 }
@@ -174,6 +189,7 @@ export async function createTrainingSession(helpdeskUser, title = "Training baru
     created_at: createdAt,
     updated_at: createdAt,
     knowledge_draft_id: null,
+    customer_domain: "",
   };
   await db.collection(env.trainingSessionCollection).insertOne(doc);
   return serializeSession(doc, []);
@@ -215,7 +231,7 @@ function knowledgeMetadata(result) {
   }));
 }
 
-async function runTrainingAgent(trainingId, question, isFirstTurn) {
+async function runTrainingAgent(trainingId, question, isFirstTurn, customerDomain = "") {
   return runHelpdeskAgent({
     sessionId: trainingThreadId(trainingId),
     customerId: null,
@@ -224,6 +240,7 @@ async function runTrainingAgent(trainingId, question, isFirstTurn) {
     isFirstTurn,
     memoryContext: { text: "", source: "none", items: 0 },
     trainingMode: true,
+    customerDomain,
   });
 }
 
@@ -238,12 +255,19 @@ export async function sendTrainingMessage({ trainingId, helpdeskUser, question }
   const { db, session } = await getOwnedSession(trainingId, helpdeskUser.helpdesk_id);
   if (session.status !== "active") throw invalid("Training session sudah ditutup.");
   const existingMessages = await readMessages(db, trainingId);
+  const customerDomain = extractTrainingDomain(question) || session.customer_domain || "";
+  if (customerDomain !== (session.customer_domain || "")) {
+    await db.collection(env.trainingSessionCollection).updateOne(
+      { training_id: trainingId },
+      { $set: { customer_domain: customerDomain } },
+    );
+  }
   const helpdeskMessage = await appendMessage(db, {
     trainingId,
     role: "helpdesk",
     content: question,
   });
-  const result = await runTrainingAgent(trainingId, cleanText(question, 4000), existingMessages.length === 0);
+  const result = await runTrainingAgent(trainingId, cleanText(question, 4000), existingMessages.length === 0, customerDomain);
   const assistantMessage = await appendMessage(db, {
     trainingId,
     role: "assistant",
@@ -251,11 +275,12 @@ export async function sendTrainingMessage({ trainingId, helpdeskUser, question }
     metadata: {
       knowledge_used: knowledgeMetadata(result),
       runtime_meta: result.runtimeMeta,
+      site_check: result.runtimeMeta?.site_check || null,
     },
   });
   await touchSession(db, trainingId);
   return {
-    session: serializeSession({ ...session, updated_at: assistantMessage.created_at }, [...existingMessages, helpdeskMessage, assistantMessage]),
+    session: serializeSession({ ...session, customer_domain: customerDomain, updated_at: assistantMessage.created_at }, [...existingMessages, helpdeskMessage, assistantMessage]),
     assistant: assistantMessage,
   };
 }
@@ -264,6 +289,7 @@ export async function sendTrainingCorrection({ trainingId, helpdeskUser, correct
   const { db, session } = await getOwnedSession(trainingId, helpdeskUser.helpdesk_id);
   if (session.status !== "active") throw invalid("Training session sudah ditutup.");
   const existingMessages = await readMessages(db, trainingId);
+  const customerDomain = session.customer_domain || "";
   const targetMessage = messageId
     ? existingMessages.find((message) => message._id === messageId && message.role === "assistant")
     : [...existingMessages].reverse().find((message) => message.role === "assistant");
@@ -288,7 +314,7 @@ export async function sendTrainingCorrection({ trainingId, helpdeskUser, correct
     `Koreksi ini ditujukan untuk jawaban NAVA: "${cleanText(targetMessage.content, 3000)}".`,
     "Gunakan koreksi tersebut bersama history training. Jawab ulang pertanyaan terkait secara ringkas dan tepat. Jangan mempertahankan jawaban lama jika bertentangan dengan koreksi.",
   ].join("\n\n");
-  const result = await runTrainingAgent(trainingId, agentPrompt, false);
+  const result = await runTrainingAgent(trainingId, agentPrompt, false, customerDomain);
   const assistantMessage = await appendMessage(db, {
     trainingId,
     role: "assistant",
@@ -296,6 +322,7 @@ export async function sendTrainingCorrection({ trainingId, helpdeskUser, correct
     metadata: {
       knowledge_used: knowledgeMetadata(result),
       runtime_meta: result.runtimeMeta,
+      site_check: result.runtimeMeta?.site_check || null,
       corrected_from_helpdesk: true,
     },
   });
@@ -304,7 +331,7 @@ export async function sendTrainingCorrection({ trainingId, helpdeskUser, correct
     ? { ...message, metadata: { ...message.metadata, evaluation: "needs_correction", evaluated_at: evaluatedAt } }
     : message);
   return {
-    session: serializeSession({ ...session, updated_at: assistantMessage.created_at }, [...evaluatedMessages, correctionMessage, assistantMessage]),
+    session: serializeSession({ ...session, customer_domain: customerDomain, updated_at: assistantMessage.created_at }, [...evaluatedMessages, correctionMessage, assistantMessage]),
     assistant: assistantMessage,
   };
 }
@@ -506,3 +533,7 @@ export async function closeTrainingSession({ trainingId, helpdeskUser }) {
   );
   return serializeSession({ ...session, status: "closed", updated_at: now() }, await readMessages(db, trainingId));
 }
+
+export const __trainingInternals = {
+  extractTrainingDomain,
+};

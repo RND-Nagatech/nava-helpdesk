@@ -4,6 +4,7 @@ import { retrieveKnowledge } from "../services/knowledge-retriever.js";
 import { env } from "../config/env.js";
 import { agentRunContext } from "../services/agent-run-context.js";
 import { isLowInformationToken, mergeSearchQuery, normalizeText, tokenize } from "../utils/text.js";
+import { checkCustomerSite } from "../services/site-check-service.js";
 
 function hasCurrentTopic(question = "") {
   const tokens = tokenize(question, { removeStopWords: true, expand: false });
@@ -163,7 +164,7 @@ const searchKnowledgeTool = tool(
     const currentQuestionIsSpecific = prefersCurrentQuestion(originalQuestion);
     const primaryQuery = currentQuestionIsSpecific ? originalQuestion : effectiveQuery;
     const alternateQuery = currentQuestionIsSpecific ? effectiveQuery : originalQuestion;
-    let result = await retrieveKnowledge(primaryQuery, { topK: top_k });
+    let result = await retrieveKnowledge(primaryQuery, { topK: top_k, siteCheck: state?.siteCheck || null });
 
     // Bila pertanyaan terbaru terlalu pendek/ambigu atau anchor utama benar-benar
     // tidak menemukan apa-apa, baru gunakan query hasil rewrite + history.
@@ -171,7 +172,7 @@ const searchKnowledgeTool = tool(
       normalizeText(alternateQuery) !== normalizeText(primaryQuery) &&
       !result.found
     ) {
-      const alternateResult = await retrieveKnowledge(alternateQuery, { topK: top_k });
+      const alternateResult = await retrieveKnowledge(alternateQuery, { topK: top_k, siteCheck: state?.siteCheck || null });
       if (alternateResult.found || !result.candidates?.length) result = alternateResult;
     }
     rememberSearchResult(state, result);
@@ -192,6 +193,40 @@ Jika hasil belum cukup dan perlu klarifikasi, pertanyaan klarifikasi harus dibua
       top_k: z.number().int().min(1).max(8).optional().describe("Jumlah artikel terbaik yang dibutuhkan. Default mengikuti konfigurasi server."),
     }),
   }
+);
+
+const checkCustomerSiteTool = tool(
+  async () => {
+    const state = agentRunContext.getStore();
+    const domain = state?.customerDomain || "";
+    if (!domain) {
+      return JSON.stringify({
+        status: "domain_missing",
+        instruction_to_agent: "Domain customer belum tersedia. Jangan menebak status website; minta customer mengisi domain toko/program terlebih dahulu bila memang diperlukan.",
+      });
+    }
+
+    try {
+      const result = await checkCustomerSite(domain);
+      if (state) state.siteCheck = result;
+      return JSON.stringify({
+        status: "success",
+        ...result,
+        instruction_to_agent: "Gunakan data frontend/backend dan status compatibility ini sebagai fakta pengecekan terbaru. Jika status offline atau versi unknown, jelaskan apa yang berhasil dan belum berhasil dicek.",
+      });
+    } catch (error) {
+      return JSON.stringify({
+        status: "failed",
+        error_code: error?.code || "SITE_CHECK_FAILED",
+        instruction_to_agent: "Pengecekan website gagal. Sampaikan secara singkat bahwa status belum dapat dipastikan dan jangan mengarang versi atau penyebab.",
+      });
+    }
+  },
+  {
+    name: "check_customer_site",
+    description: "Periksa website Goldstore customer yang sudah ada di profile. Gunakan hanya jika customer menanyakan website tidak bisa dibuka, login, status online/offline, versi frontend/backend, atau kemungkinan versi tidak cocok. Jangan gunakan pada pertanyaan penggunaan menu biasa.",
+    schema: z.object({}),
+  },
 );
 
 const escalateHelpdeskTool = tool(
@@ -215,7 +250,7 @@ const escalateHelpdeskTool = tool(
   }
 );
 
-export const helpdeskTools = [searchKnowledgeTool, escalateHelpdeskTool];
+export const helpdeskTools = [searchKnowledgeTool, checkCustomerSiteTool, escalateHelpdeskTool];
 
 export const __toolInternals = {
   resultQuality,

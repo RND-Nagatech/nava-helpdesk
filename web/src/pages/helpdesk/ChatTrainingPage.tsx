@@ -140,14 +140,31 @@ export function ChatTrainingPage() {
   async function submitQuestion(event: FormEvent) {
     event.preventDefault();
     if (!session || !question.trim() || sending || session.status !== "active") return;
+    const submittedQuestion = question.trim();
+    const optimisticId = `optimistic-training-${Date.now()}`;
+    const optimisticMessage: TrainingMessage = {
+      _id: optimisticId,
+      training_id: session.training_id,
+      role: "helpdesk",
+      content: submittedQuestion,
+      metadata: { delivery_status: "sending" },
+      created_at: new Date().toISOString(),
+    };
+    setSession((current) => current ? { ...current, messages: [...current.messages, optimisticMessage], updated_at: optimisticMessage.created_at } : current);
+    setQuestion("");
     try {
       setSending(true);
       setError("");
-      const result = await api.trainingMessage(session.training_id, question.trim());
+      const result = await api.trainingMessage(session.training_id, submittedQuestion);
       updateSession(result.session);
       sessionStorage.setItem(ACTIVE_TRAINING_SESSION_KEY, result.session.training_id);
-      setQuestion("");
     } catch (err) {
+      setSession((current) => current ? {
+        ...current,
+        messages: current.messages.map((message) => message._id === optimisticId
+          ? { ...message, metadata: { ...message.metadata, delivery_status: "failed" } }
+          : message),
+      } : current);
       setError(err instanceof Error ? err.message : "Gagal meminta jawaban NAVA.");
     } finally {
       setSending(false);
@@ -157,15 +174,32 @@ export function ChatTrainingPage() {
   async function submitCorrection(event: FormEvent) {
     event.preventDefault();
     if (!session || !correction.trim() || sending || session.status !== "active") return;
+    const submittedCorrection = correction.trim();
+    const optimisticId = `optimistic-training-correction-${Date.now()}`;
+    const optimisticMessage: TrainingMessage = {
+      _id: optimisticId,
+      training_id: session.training_id,
+      role: "correction",
+      content: submittedCorrection,
+      metadata: { delivery_status: "sending", corrects_message_id: correctionFor || undefined },
+      created_at: new Date().toISOString(),
+    };
+    setSession((current) => current ? { ...current, messages: [...current.messages, optimisticMessage], updated_at: optimisticMessage.created_at } : current);
+    setCorrection("");
+    setCorrectionFor(null);
     try {
       setSending(true);
       setError("");
-      const result = await api.trainingCorrection(session.training_id, correction.trim(), correctionFor || "");
+      const result = await api.trainingCorrection(session.training_id, submittedCorrection, correctionFor || "");
       updateSession(result.session);
       sessionStorage.setItem(ACTIVE_TRAINING_SESSION_KEY, result.session.training_id);
-      setCorrection("");
-      setCorrectionFor(null);
     } catch (err) {
+      setSession((current) => current ? {
+        ...current,
+        messages: current.messages.map((message) => message._id === optimisticId
+          ? { ...message, metadata: { ...message.metadata, delivery_status: "failed" } }
+          : message),
+      } : current);
       setError(err instanceof Error ? err.message : "Gagal mengirim koreksi.");
     } finally {
       setSending(false);
@@ -262,7 +296,10 @@ export function ChatTrainingPage() {
                 <span className="eyebrow"><MessageSquare size={14} /> Conversation</span>
                 <h2>{session?.title || "Memuat training..."}</h2>
               </div>
-              <small>{session?.training_id || "-"}</small>
+              <small>
+                {session?.training_id || "-"}
+                {session?.customer_domain ? ` · ${session.customer_domain}` : ""}
+              </small>
             </div>
 
             <div className="training-message-list">
@@ -279,6 +316,7 @@ export function ChatTrainingPage() {
                     <div className="training-message-content">
                       {message.role === "correction" ? <p>{message.content}</p> : <MessageContent content={message.content} />}
                     </div>
+                    {message.metadata?.delivery_status === "failed" && <div className="training-message-delivery-error">Pesan belum mendapat jawaban. Coba kirim ulang jika diperlukan.</div>}
                     {message.role === "assistant" && message.metadata?.evaluation && (
                       <div className={`training-evaluation ${message.metadata.evaluation === "correct" ? "is-correct" : "needs-correction"}`}>
                         {message.metadata.evaluation === "correct" ? "✓ Ditandai benar" : "Perlu koreksi"}

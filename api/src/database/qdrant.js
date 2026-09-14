@@ -145,6 +145,11 @@ function toPoint(doc) {
       status: doc.status || "published",
       embeddingModel: doc.embedding_model || env.embeddingModel,
       embeddingProfile: doc.embedding_profile || env.embeddingProfile,
+      siteScopeDomain: doc.siteScope?.domain || null,
+      siteScopeFrontendVersion: doc.siteScope?.frontendVersion || null,
+      siteScopeBackendVersion: doc.siteScope?.backendVersion || null,
+      siteScopeFrontendBranch: doc.siteScope?.frontendBranch || "",
+      siteScopeBackendBranch: doc.siteScope?.backendBranch || "",
     },
   };
 }

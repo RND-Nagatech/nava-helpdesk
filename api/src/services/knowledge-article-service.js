@@ -32,6 +32,17 @@ function normalizeSteps(steps = []) {
     .map((step, index) => ({ ...step, order: index + 1, title: step.title || `Langkah ${index + 1}` }));
 }
 
+function normalizeSiteScope(value) {
+  if (!value || typeof value !== "object" || !String(value.domain || "").trim()) return null;
+  return {
+    domain: String(value.domain).trim().toLowerCase(),
+    frontendVersion: String(value.frontendVersion || "").trim() || null,
+    backendVersion: String(value.backendVersion || "").trim() || null,
+    frontendBranch: String(value.frontendBranch || "").trim(),
+    backendBranch: String(value.backendBranch || "").trim(),
+  };
+}
+
 function deriveTags(article) {
   const source = [
     article.title,
@@ -66,6 +77,7 @@ export function normalizeKnowledgeArticleInput(input = {}, { status = "draft" } 
     troubleshootingSteps: [],
     escalationRules: normalizeList(input.escalationRules),
     internalNotes: String(input.internalNotes || "").trim(),
+    siteScope: normalizeSiteScope(input.siteScope),
     status: ARTICLE_STATUSES.has(input.status) ? input.status : status,
   };
   if (!article.symptoms.length && article.title) article.symptoms = [article.title];
