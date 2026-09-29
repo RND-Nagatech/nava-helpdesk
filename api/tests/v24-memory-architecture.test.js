@@ -39,3 +39,9 @@ test("long-term memory hanya menyimpan kasus grounded atau eskalasi", () => {
   assert.match(customerMemorySource, /primary_article_id/);
   assert.match(customerMemorySource, /if \(!runtimeMeta\?\.primary_article_id && !escalation\) return false/);
 });
+
+test("customer memory mendukung mode hybrid dan hindsight-only", () => {
+  assert.match(customerMemorySource, /customerMemoryBackend/);
+  assert.match(customerMemorySource, /env\.customerMemoryBackend === "hindsight"/);
+  assert.match(agentSource, /customer_memory_backend: env\.customerMemoryBackend/);
+});

@@ -22,7 +22,7 @@ function emptyMemory() {
 }
 
 export async function getCustomerLongTermMemory(customerId) {
-  if (!env.longTermMemoryEnabled || !customerId) return emptyMemory();
+  if (env.customerMemoryBackend === "hindsight" || !env.longTermMemoryEnabled || !customerId) return emptyMemory();
   const store = getLongTermStore();
   if (!store) return emptyMemory();
 
@@ -135,7 +135,9 @@ export async function loadCustomerMemoryContext({ customerId, currentSessionId, 
   }
 
   const [memory, hindsight] = await Promise.all([
-    getCustomerLongTermMemory(customerId),
+    env.customerMemoryBackend === "hindsight"
+      ? Promise.resolve(emptyMemory())
+      : getCustomerLongTermMemory(customerId),
     recallCustomerMemory({ customerId, query: currentQuestion }),
   ]);
   const relevantCases = selectRelevantLongTermCases(memory, currentQuestion);
@@ -161,7 +163,8 @@ export async function loadCustomerMemoryContext({ customerId, currentSessionId, 
   }
 
   // Migration/fallback ringan untuk customer yang belum punya memory v2.4.
-  if (env.crossSessionContextEnabled) {
+  // Full Hindsight mode intentionally does not read old chat-history memory.
+  if (env.customerMemoryBackend !== "hindsight" && env.crossSessionContextEnabled) {
     const legacy = await getCrossSessionContext({ customerId, currentSessionId });
     const relevantLegacy = selectRelevantLegacyItems(legacy, currentQuestion);
     const legacyText = formatCrossSessionContext(relevantLegacy);
@@ -188,7 +191,7 @@ export async function rememberGroundedCase({
   runtimeMeta,
   escalation = null,
 }) {
-  if (!env.longTermMemoryEnabled || !customerId) return false;
+  if (env.customerMemoryBackend === "hindsight" || !env.longTermMemoryEnabled || !customerId) return false;
   if (!runtimeMeta?.primary_article_id && !escalation) return false;
 
   const store = getLongTermStore();

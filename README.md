@@ -31,6 +31,11 @@ Qdrant berjalan melalui Docker pada `http://localhost:6333`. Backend akan memast
 
 NAVA memakai arsitektur hybrid: RAG/Qdrant tetap menjadi sumber fakta resmi produk, sedangkan Hindsight dipakai untuk memori historis customer seperti kasus sebelumnya, langkah yang sudah dicoba, hasil troubleshooting, dan kejadian berbasis waktu.
 
+Backend memory customer dapat dipilih melalui `CUSTOMER_MEMORY_BACKEND`:
+
+- `hybrid` (default): MongoDBStore dan Hindsight dipakai bersama, dengan fallback chat lama.
+- `hindsight`: Hindsight menjadi satu-satunya memory jangka panjang customer. MongoDB tetap dipakai untuk chat, ticket, dan data operasional.
+
 Hindsight tidak aktif secara default. Setelah service Hindsight siap, isi konfigurasi berikut di `api/.env`:
 
 ```env
@@ -40,6 +45,11 @@ HINDSIGHT_API_KEY=
 HINDSIGHT_RECALL_BUDGET=low
 HINDSIGHT_RECALL_MAX_TOKENS=1200
 HINDSIGHT_RETAIN_ASYNC=true
+
+# Opsional: gunakan Hindsight sebagai satu-satunya long-term customer memory.
+# CUSTOMER_MEMORY_BACKEND=hindsight
+# LONG_TERM_MEMORY_ENABLED=false
+# CROSS_SESSION_CONTEXT_ENABLED=false
 ```
 
 Service opsional dapat dijalankan dengan:

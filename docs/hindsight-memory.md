@@ -4,6 +4,20 @@
 
 Integrasi ini menambahkan memori historis customer tanpa mengganti knowledge resmi NAVA.
 
+## Mode memory
+
+`CUSTOMER_MEMORY_BACKEND=hybrid` adalah mode default. Mode ini menggabungkan memory customer MongoDB dengan recall Hindsight dan tetap menyediakan fallback dari chat lama.
+
+Untuk membuat Hindsight menjadi satu-satunya long-term memory customer, gunakan:
+
+```env
+CUSTOMER_MEMORY_BACKEND=hindsight
+LONG_TERM_MEMORY_ENABLED=false
+CROSS_SESSION_CONTEXT_ENABLED=false
+```
+
+Mode penuh ini tidak menghapus MongoDB dari NAVA. MongoDB tetap menyimpan chat, ticket, audit, dan data operasional. Yang diganti hanya backend memory jangka panjang customer.
+
 | Jenis informasi | Sumber utama |
 | --- | --- |
 | Prosedur, menu, langkah troubleshooting | NAVA RAG + knowledge published |
@@ -21,6 +35,8 @@ Integrasi ini menambahkan memori historis customer tanpa mengganti knowledge res
 5. Setelah jawaban selesai, kasus grounded atau eskalasi dikirim ke Hindsight melalui `retain` asynchronous.
 
 Jika Hindsight tidak aktif, tidak tersedia, timeout, atau gagal, NAVA tetap memakai MongoDB memory dan RAG seperti sebelumnya.
+
+Dalam mode `hindsight`, NAVA tidak melakukan fallback ke MongoDB memory atau chat-history memory; kegagalan Hindsight berarti tidak ada konteks memory customer pada request tersebut.
 
 ## Isolasi dan keamanan
 

@@ -97,6 +97,12 @@ export const env = {
   longTermMemoryCaseLimit: numberFromEnv("LONG_TERM_MEMORY_CASE_LIMIT", 8),
   longTermMemoryAnswerMaxChars: numberFromEnv("LONG_TERM_MEMORY_ANSWER_MAX_CHARS", 500),
 
+  // Customer memory backend. "hybrid" keeps the MongoDB memory and adds Hindsight;
+  // "hindsight" makes Hindsight the only long-term customer-memory source.
+  customerMemoryBackend: String(process.env.CUSTOMER_MEMORY_BACKEND || "hybrid").trim().toLowerCase() === "hindsight"
+    ? "hindsight"
+    : "hybrid",
+
   // Optional Hindsight memory layer. RAG and MongoDB memory remain the source of
   // truth unless this explicitly enabled integration is available.
   hindsightEnabled: boolFromEnv("HINDSIGHT_ENABLED", false),
