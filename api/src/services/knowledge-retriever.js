@@ -25,6 +25,8 @@ const PROJECTION = {
   tags: 1,
   status: 1,
   siteScope: 1,
+  internalNotes: 1,
+  linked_operation_ids: 1,
 };
 
 function dedupeDocuments(documents = []) {
@@ -112,19 +114,23 @@ function siteScopeQuery(siteCheck = null) {
   };
 }
 
-function publishedKnowledgeQuery(siteCheck = null) {
+function publishedKnowledgeQuery(siteCheck = null, audience = "customer") {
+  const audienceQuery = audience === "helpdesk"
+    ? { $or: [{ audience: "helpdesk" }, { audience: "both" }, { audience: { $exists: false } }] }
+    : { $or: [{ audience: "customer" }, { audience: "both" }, { audience: { $exists: false } }] };
   return {
     $and: [
       { $or: [{ status: "published" }, { status: { $exists: false } }] },
+      audienceQuery,
       siteScopeQuery(siteCheck),
     ],
   };
 }
 
-async function textSearch(collection, query, limit, siteCheck) {
+async function textSearch(collection, query, limit, siteCheck, audience) {
   return collection
     .find(
-      { $and: [publishedKnowledgeQuery(siteCheck), { $text: { $search: query } }] },
+      { $and: [publishedKnowledgeQuery(siteCheck, audience), { $text: { $search: query } }] },
       { projection: { ...PROJECTION, mongoTextScore: { $meta: "textScore" } } }
     )
     .sort({ mongoTextScore: { $meta: "textScore" } })
@@ -137,13 +143,13 @@ function tokenRegex(token) {
   return new RegExp(safe, "i");
 }
 
-async function regexCandidateSearch(collection, query, limit, { broad = false, siteCheck = null } = {}) {
+async function regexCandidateSearch(collection, query, limit, { broad = false, siteCheck = null, audience = "customer" } = {}) {
   const tokens = importantQueryTokens(query);
   if (!tokens.length) return [];
 
   const fields = broad
-    ? ["title", "symptoms", "tags", "category", "userResponseTemplate", "troubleshootingSteps.instruction"]
-    : ["title", "symptoms", "tags", "category"];
+    ? ["title", "symptoms", "tags", "category", "userResponseTemplate", "troubleshootingSteps.instruction", ...(audience === "helpdesk" ? ["internalNotes", "linked_operation_ids"] : [])]
+    : ["title", "symptoms", "tags", "category", ...(audience === "helpdesk" ? ["internalNotes", "linked_operation_ids"] : [])];
 
   const ors = [];
   for (const token of tokens) {
@@ -153,21 +159,21 @@ async function regexCandidateSearch(collection, query, limit, { broad = false, s
 
   return collection
     .find(
-      { $and: [publishedKnowledgeQuery(siteCheck), { $or: ors }] },
+      { $and: [publishedKnowledgeQuery(siteCheck, audience), { $or: ors }] },
       { projection: PROJECTION }
     )
     .limit(limit)
     .toArray();
 }
 
-async function retrieveLexical(collection, query, limit, siteCheck) {
+async function retrieveLexical(collection, query, limit, siteCheck, audience) {
   // MongoDB text search tetap dipakai, tetapi selalu disupplement dengan pencarian
   // token pembeda di title/symptoms/tags. Ini mencegah artikel exact terlempar dari
   // candidate pool hanya karena query hasil LLM memakai bentuk kata yang berbeda.
   const regexLimit = Math.max(limit * 2, 60);
   const [textSettled, targetedRegexSettled] = await Promise.allSettled([
-    textSearch(collection, query, limit, siteCheck),
-    regexCandidateSearch(collection, query, regexLimit, { siteCheck }),
+    textSearch(collection, query, limit, siteCheck, audience),
+    regexCandidateSearch(collection, query, regexLimit, { siteCheck, audience }),
   ]);
 
   const textDocuments = textSettled.status === "fulfilled" ? textSettled.value : [];
@@ -175,7 +181,7 @@ async function retrieveLexical(collection, query, limit, siteCheck) {
 
   if (!textDocuments.length && !regexDocuments.length) {
     try {
-      regexDocuments = await regexCandidateSearch(collection, query, regexLimit, { broad: true, siteCheck });
+      regexDocuments = await regexCandidateSearch(collection, query, regexLimit, { broad: true, siteCheck, audience });
     } catch {
       regexDocuments = [];
     }
@@ -194,7 +200,7 @@ async function retrieveLexical(collection, query, limit, siteCheck) {
   };
 }
 
-async function retrieveVector(collection, query, limit, siteCheck) {
+async function retrieveVector(collection, query, limit, siteCheck, audience) {
   if (!env.vectorSearchEnabled) {
     return { enabled: false, ok: false, documents: [] };
   }
@@ -207,7 +213,7 @@ async function retrieveVector(collection, query, limit, siteCheck) {
       .filter(Boolean);
     const documents = await collection
       .find(
-        { $and: [publishedKnowledgeQuery(siteCheck), { articleId: { $in: articleIds } }] },
+        { $and: [publishedKnowledgeQuery(siteCheck, audience), { articleId: { $in: articleIds } }] },
         { projection: PROJECTION }
       )
       .toArray();
@@ -253,19 +259,24 @@ export async function retrieveKnowledge(query, options = {}) {
   const lexicalLimit = Math.max(topK * 8, 30);
   const vectorLimit = Math.max(topK * 4, env.vectorCandidateLimit);
   const siteCheck = options.siteCheck || null;
+  const audience = options.audience || "customer";
+  const collectionName = options.collectionName || env.knowledgeCollection;
+  const useVector = options.useVector !== false && collectionName === env.knowledgeCollection;
   const db = await getDb();
-  const collection = db.collection(env.knowledgeCollection);
+  const collection = db.collection(collectionName);
 
   const startedAt = Date.now();
   const [lexicalTimed, vectorTimed] = await Promise.all([
     (async () => {
       const started = Date.now();
-      const result = await retrieveLexical(collection, query, lexicalLimit, siteCheck);
+      const result = await retrieveLexical(collection, query, lexicalLimit, siteCheck, audience);
       return { result, ms: Date.now() - started };
     })(),
     (async () => {
       const started = Date.now();
-      const result = await retrieveVector(collection, query, vectorLimit, siteCheck);
+      const result = useVector
+        ? await retrieveVector(collection, query, vectorLimit, siteCheck, audience)
+        : { enabled: false, ok: false, documents: [] };
       return { result, ms: Date.now() - started };
     })(),
   ]);

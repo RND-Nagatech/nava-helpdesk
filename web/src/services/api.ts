@@ -1,5 +1,5 @@
 import { getHelpdeskToken } from "../lib/helpdeskAuth";
-import type { Attachment, ChatMessage, DashboardSummary, HelpdeskUser, KnowledgeArticle, SiteCheckResult, Ticket, TrainingDraft, TrainingGenerateResult, TrainingSession } from "../types";
+import type { Attachment, ChatMessage, DashboardSummary, HelpdeskUser, InvestigationDefinition, InvestigationKnowledge, InvestigationPlaybook, InvestigationSession, InvestigationTarget, KnowledgeArticle, SiteCheckResult, Ticket, TrainingDraft, TrainingGenerateResult, TrainingSession } from "../types";
 
 const API_URL = import.meta.env.VITE_API_URL as string;
 const REQUEST_TIMEOUT_MS = 15000;
@@ -238,6 +238,122 @@ export const api = {
   },
   closeTrainingSession(trainingId: string) {
     return request<TrainingSession>(`/api/training/${encodeURIComponent(trainingId)}/close`, {
+      method: "POST",
+      body: JSON.stringify({}),
+    });
+  },
+  investigationTargets() {
+    return request<InvestigationTarget[]>("/api/investigation/targets");
+  },
+  saveInvestigationTarget(input: { domain: string; connection_profile?: string; database_name?: string; display_name?: string; status?: "active" | "disabled" }) {
+    return request<InvestigationTarget>("/api/investigation/targets", {
+      method: "POST",
+      body: JSON.stringify(input),
+    });
+  },
+  investigationDefinitions(status = "") {
+    const query = status ? `?status=${encodeURIComponent(status)}` : "";
+    return request<InvestigationDefinition[]>(`/api/investigation/definitions${query}`);
+  },
+  createInvestigationDefinition(input: Omit<InvestigationDefinition, "created_at" | "updated_at">) {
+    return request<InvestigationDefinition>("/api/investigation/definitions", {
+      method: "POST",
+      body: JSON.stringify(input),
+    });
+  },
+  updateInvestigationDefinition(operationId: string, input: Omit<InvestigationDefinition, "created_at" | "updated_at">) {
+    return request<InvestigationDefinition>(`/api/investigation/definitions/${encodeURIComponent(operationId)}`, {
+      method: "PUT",
+      body: JSON.stringify(input),
+    });
+  },
+  publishInvestigationDefinition(operationId: string) {
+    return request<InvestigationDefinition>(`/api/investigation/definitions/${encodeURIComponent(operationId)}/publish`, {
+      method: "POST",
+      body: JSON.stringify({}),
+    });
+  },
+  archiveInvestigationDefinition(operationId: string) {
+    return request<InvestigationDefinition>(`/api/investigation/definitions/${encodeURIComponent(operationId)}/archive`, {
+      method: "POST",
+      body: JSON.stringify({}),
+    });
+  },
+  investigationKnowledge() {
+    return request<InvestigationKnowledge[]>("/api/investigation/knowledge");
+  },
+  createInvestigationKnowledge(input: Omit<InvestigationKnowledge, "created_at" | "updated_at">) {
+    return request<InvestigationKnowledge>("/api/investigation/knowledge", {
+      method: "POST",
+      body: JSON.stringify(input),
+    });
+  },
+  updateInvestigationKnowledge(articleId: string, input: Omit<InvestigationKnowledge, "created_at" | "updated_at">) {
+    return request<InvestigationKnowledge>(`/api/investigation/knowledge/${encodeURIComponent(articleId)}`, {
+      method: "PUT",
+      body: JSON.stringify(input),
+    });
+  },
+  publishInvestigationKnowledge(articleId: string) {
+    return request<InvestigationKnowledge>(`/api/investigation/knowledge/${encodeURIComponent(articleId)}/publish`, {
+      method: "POST",
+      body: JSON.stringify({}),
+    });
+  },
+  archiveInvestigationKnowledge(articleId: string) {
+    return request<InvestigationKnowledge>(`/api/investigation/knowledge/${encodeURIComponent(articleId)}/archive`, {
+      method: "POST",
+      body: JSON.stringify({}),
+    });
+  },
+  investigationPlaybooks(status = "") {
+    const query = status ? `?status=${encodeURIComponent(status)}` : "";
+    return request<InvestigationPlaybook[]>(`/api/investigation/playbooks${query}`);
+  },
+  createInvestigationPlaybook(input: Partial<Omit<InvestigationPlaybook, "created_at" | "updated_at">>) {
+    return request<InvestigationPlaybook>("/api/investigation/playbooks", {
+      method: "POST",
+      body: JSON.stringify(input),
+    });
+  },
+  updateInvestigationPlaybook(playbookId: string, input: Partial<Omit<InvestigationPlaybook, "created_at" | "updated_at">>) {
+    return request<InvestigationPlaybook>(`/api/investigation/playbooks/${encodeURIComponent(playbookId)}`, {
+      method: "PUT",
+      body: JSON.stringify(input),
+    });
+  },
+  publishInvestigationPlaybook(playbookId: string) {
+    return request<InvestigationPlaybook>(`/api/investigation/playbooks/${encodeURIComponent(playbookId)}/publish`, {
+      method: "POST",
+      body: JSON.stringify({}),
+    });
+  },
+  archiveInvestigationPlaybook(playbookId: string) {
+    return request<InvestigationPlaybook>(`/api/investigation/playbooks/${encodeURIComponent(playbookId)}/archive`, {
+      method: "POST",
+      body: JSON.stringify({}),
+    });
+  },
+  createInvestigationSession() {
+    return request<InvestigationSession>("/api/investigation/session", {
+      method: "POST",
+      body: JSON.stringify({}),
+    });
+  },
+  investigationSessions() {
+    return request<InvestigationSession[]>("/api/investigation/sessions");
+  },
+  investigationSession(trainingId: string) {
+    return request<InvestigationSession>(`/api/investigation/${encodeURIComponent(trainingId)}`);
+  },
+  investigationMessage(trainingId: string, question: string, domain = "") {
+    return request<{ session: InvestigationSession; assistant: InvestigationSession["messages"][number] }>(`/api/investigation/${encodeURIComponent(trainingId)}/message`, {
+      method: "POST",
+      body: JSON.stringify({ question, domain: domain || undefined }),
+    }, 90000);
+  },
+  closeInvestigationSession(trainingId: string) {
+    return request<InvestigationSession>(`/api/investigation/${encodeURIComponent(trainingId)}/close`, {
       method: "POST",
       body: JSON.stringify({}),
     });

@@ -17,6 +17,8 @@ import { agentRunContext } from "../services/agent-run-context.js";
 import { getAgentCheckpointer, getLongTermStore } from "../services/agent-memory.js";
 import { effectiveRecursionLimit, fallbackFromSearchState, isGraphRecursionError } from "../services/agent-limit-safety.js";
 import { UPLOAD_ROOT_DIR } from "../middleware/upload.js";
+import { listPublishedInvestigationDefinitions } from "../services/investigation-definition-service.js";
+import { listPublishedInvestigationPlaybooks } from "../services/investigation-playbook-service.js";
 
 let model;
 let summaryModel;
@@ -27,7 +29,23 @@ const runtimeContextSchema = z.object({
   customerId: z.string().nullable().optional(),
   longTermContext: z.string().default(""),
   trainingMode: z.boolean().default(false),
+  investigationMode: z.boolean().default(false),
+  investigationDefinitions: z.array(z.object({
+    operation_id: z.string(),
+    name: z.string(),
+    description: z.string().optional(),
+    executable: z.boolean().optional(),
+  })).default([]),
+  investigationPlaybooks: z.array(z.object({
+    playbook_id: z.string(),
+    name: z.string(),
+    description: z.string().optional(),
+    trigger_examples: z.array(z.string()).optional(),
+    parameters: z.array(z.object({ key: z.string(), label: z.string().optional(), required: z.boolean().optional() })).optional(),
+  })).default([]),
   customerDomain: z.string().nullable().optional(),
+  helpdeskId: z.string().nullable().optional(),
+  helpdeskName: z.string().nullable().optional(),
 });
 
 function getModel() {
@@ -68,7 +86,10 @@ function buildMiddleware() {
         isFirstTurn: Boolean(runtime.context?.isFirstTurn),
         longTermContext: runtime.context?.longTermContext || "",
         trainingMode: Boolean(runtime.context?.trainingMode),
+        investigationMode: Boolean(runtime.context?.investigationMode),
         customerDomain: runtime.context?.customerDomain || "",
+        investigationDefinitions: runtime.context?.investigationDefinitions || [],
+        investigationPlaybooks: runtime.context?.investigationPlaybooks || [],
       })
     ),
     modelCallLimitMiddleware({
@@ -274,6 +295,12 @@ function buildRuntimeMeta({ toolTrace, searches, escalation, memoryContext, mode
     long_term_memory_source: memoryContext?.source || "none",
     long_term_memory_items: memoryContext?.items || 0,
     site_check: siteCheck || null,
+    database_checks: toolTrace.filter((item) => item.name === "inspect_customer_database").map((item) => ({
+      status: item.result?.status || null,
+      operation_id: item.result?.operation_id || item.args?.operation_id || null,
+      query_hash: item.result?.query_hash || null,
+      duration_ms: item.result?.duration_ms || null,
+    })),
   };
 }
 
@@ -291,12 +318,34 @@ export async function runHelpdeskAgent({
   isFirstTurn = false,
   memoryContext = { text: "", source: "none", items: 0 },
   trainingMode = false,
+  investigationMode = false,
   customerDomain = "",
+  helpdeskId = "",
+  helpdeskName = "",
 }) {
   const startedAt = Date.now();
   const runId = crypto.randomUUID();
   const markerId = `nava-user-${runId}`;
   const imageParts = await imageAttachmentParts(attachments);
+  let investigationDefinitions = [];
+  let investigationPlaybooks = [];
+  if (investigationMode) {
+    try {
+      investigationDefinitions = (await listPublishedInvestigationDefinitions()).map((definition) => ({
+        operation_id: definition.operation_id,
+        name: definition.name,
+        description: definition.description || "",
+        executable: Boolean(definition.execution?.pipeline?.length),
+      }));
+    } catch (error) {
+      console.warn("Catalog definition investigasi tidak dapat dimuat: " + (error?.message || error));
+    }
+    try {
+      investigationPlaybooks = await listPublishedInvestigationPlaybooks();
+    } catch (error) {
+      console.warn("Catalog Playbook investigasi tidak dapat dimuat: " + (error?.message || error));
+    }
+  }
   const userMessage = new HumanMessage({
     id: markerId,
     content: imageParts.length
@@ -319,6 +368,12 @@ export async function runHelpdeskAgent({
     searchResults: [],
     customerDomain: String(customerDomain || "").trim(),
     siteCheck: null,
+    investigationMode: Boolean(investigationMode),
+    investigationDomain: String(customerDomain || "").trim(),
+    investigationSessionId: investigationMode ? sessionId.replace(/^investigation:/, "") : "",
+    helpdeskId: String(helpdeskId || "").trim(),
+    helpdeskName: String(helpdeskName || "").trim(),
+    databaseChecks: [],
   };
 
   const config = {
@@ -329,7 +384,12 @@ export async function runHelpdeskAgent({
       customerId,
       longTermContext: memoryContext.text || "",
       trainingMode,
+      investigationMode,
       customerDomain,
+      investigationDefinitions,
+      investigationPlaybooks,
+      helpdeskId,
+      helpdeskName,
     },
   };
 

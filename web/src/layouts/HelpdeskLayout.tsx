@@ -1,5 +1,5 @@
 import { useEffect, useState, type ReactNode } from "react";
-import { BookOpenText, LayoutDashboard, LogOut, MessageSquare, Ticket, UserRound, Users } from "lucide-react";
+import { BookOpenText, Database, LayoutDashboard, LogOut, MessageSquare, Ticket, UserRound, Users } from "lucide-react";
 import { clearHelpdeskSession, getHelpdeskToken, getStoredHelpdeskUser } from "../lib/helpdeskAuth";
 import { subscribeHelpdeskEvent } from "../lib/helpdeskEvents";
 import { handleHelpdeskNavigation } from "../lib/navigation";
@@ -10,6 +10,7 @@ const baseMenu = [
   { href: "/helpdesk/chat", label: "Chat Aktif", icon: MessageSquare },
   { href: "/helpdesk/handover", label: "Handover", icon: Ticket },
   { href: "/helpdesk/tickets", label: "Daftar Tiket", icon: Ticket },
+  { href: "/helpdesk/investigation", label: "Investigasi", icon: Database },
   { href: "/helpdesk/articles", label: "Artikel", icon: BookOpenText },
   { href: "/helpdesk/dashboard", label: "Dashboard", icon: LayoutDashboard },
 ];
@@ -22,6 +23,7 @@ export function HelpdeskLayout({ children }: { children: ReactNode }) {
   const [authError, setAuthError] = useState("");
   const [handoverCount, setHandoverCount] = useState(0);
   const [confirmLogout, setConfirmLogout] = useState(false);
+  const [profileMenuOpen, setProfileMenuOpen] = useState(false);
 
   useEffect(() => {
     let cancelled = false;
@@ -85,7 +87,7 @@ export function HelpdeskLayout({ children }: { children: ReactNode }) {
   }
 
   return (
-    <div className={`ops-frame ${path === "/chat-training" ? "training-shell" : ""}`}>
+    <div className={`ops-frame ${path === "/chat-training" || path === "/helpdesk/investigation" ? "training-shell" : ""}`}>
       <header className="ops-topbar">
           <a className="ops-brand" href="/helpdesk/chat" onClick={handleHelpdeskNavigation}>
           <div className="brand-mark">N</div>
@@ -95,7 +97,7 @@ export function HelpdeskLayout({ children }: { children: ReactNode }) {
           </div>
         </a>
         <nav className="ops-nav" aria-label="Navigasi helpdesk">
-          {[...baseMenu, ...(user?.role === "admin" ? [usersMenuItem] : [])].map((item) => {
+          {[...baseMenu].map((item) => {
             const Icon = item.icon;
             const active = path === item.href || path.startsWith(`${item.href}/`);
             return (
@@ -115,14 +117,33 @@ export function HelpdeskLayout({ children }: { children: ReactNode }) {
           })}
         </nav>
         <div className="ops-userbar">
-          <div className="operator-name">
-            <strong>{user?.name || "Helpdesk"}</strong>
-            <span>{user?.tier || "Helpdesk"}</span>
+          <div className="ops-profile-menu">
+            <button
+              className="user-profile-trigger"
+              type="button"
+              onClick={() => setProfileMenuOpen((current) => !current)}
+              aria-expanded={profileMenuOpen}
+              aria-haspopup="menu"
+            >
+              <div className="operator-name">
+                <strong>{user?.name || "Helpdesk"}</strong>
+                <span>{user?.tier || "Helpdesk"}</span>
+              </div>
+              <div className="user-avatar"><UserRound size={18} /></div>
+            </button>
+            {profileMenuOpen && (
+              <div className="ops-profile-dropdown" role="menu">
+                {user?.role === "admin" && (
+                  <a href={usersMenuItem.href} onClick={(event) => { setProfileMenuOpen(false); handleHelpdeskNavigation(event); }} role="menuitem">
+                    <Users size={15} /> Kelola Users
+                  </a>
+                )}
+                <button type="button" onClick={() => { setProfileMenuOpen(false); setConfirmLogout(true); }} role="menuitem">
+                  <LogOut size={15} /> Logout
+                </button>
+              </div>
+            )}
           </div>
-          <div className="user-avatar"><UserRound size={18} /></div>
-          <button className="logout-button" type="button" onClick={() => setConfirmLogout(true)} title="Logout">
-            <LogOut size={16} />
-          </button>
         </div>
       </header>
       <main className="ops-main">{children}</main>

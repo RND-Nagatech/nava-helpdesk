@@ -70,6 +70,11 @@ export async function ensureIndexes() {
   const longTermMemory = db.collection(env.longTermMemoryCollection);
   const tickets = db.collection(env.ticketCollection);
   const helpdeskUsers = db.collection(env.helpdeskUserCollection);
+  const investigationTargets = db.collection(env.investigationTargetCollection);
+  const investigationRuns = db.collection(env.investigationRunCollection);
+  const investigationKnowledge = db.collection(env.investigationKnowledgeCollection);
+  const investigationDefinitions = db.collection(env.investigationDefinitionCollection);
+  const investigationPlaybooks = db.collection(env.investigationPlaybookCollection);
 
   await knowledge.createIndex({ articleId: 1 }, { unique: true, name: "article_id_unique" });
   await knowledge.createIndex({ status: 1, updated_at: -1 }, { name: "knowledge_status_updated" });
@@ -150,6 +155,32 @@ export async function ensureIndexes() {
     { name: "ticket_handover_count" }
   );
   await helpdeskUsers.createIndex({ helpdesk_id: 1 }, { unique: true, name: "helpdesk_user_id_unique" });
+  await investigationTargets.createIndex({ domain: 1 }, { unique: true, name: "investigation_target_domain_unique" });
+  await investigationTargets.createIndex({ status: 1, updated_at: -1 }, { name: "investigation_target_status_updated" });
+  await investigationRuns.createIndex({ training_id: 1, created_at: -1 }, { name: "investigation_run_training_created" });
+  await investigationRuns.createIndex({ domain: 1, created_at: -1 }, { name: "investigation_run_domain_created" });
+  await investigationKnowledge.createIndex({ articleId: 1 }, { unique: true, name: "investigation_knowledge_article_unique" });
+  await investigationKnowledge.createIndex({ status: 1, updated_at: -1 }, { name: "investigation_knowledge_status_updated" });
+  try {
+    await investigationKnowledge.createIndex(
+      {
+        title: "text",
+        symptoms: "text",
+        tags: "text",
+        userResponseTemplate: "text",
+        "troubleshootingSteps.instruction": "text",
+        category: "text",
+        internalNotes: "text",
+      },
+      { name: "investigation_knowledge_text_search", default_language: "none" },
+    );
+  } catch (error) {
+    if (!String(error?.message || "").toLowerCase().includes("text index")) throw error;
+  }
+  await investigationDefinitions.createIndex({ operation_id: 1 }, { unique: true, name: "investigation_definition_operation_unique" });
+  await investigationDefinitions.createIndex({ status: 1, updated_at: -1 }, { name: "investigation_definition_status_updated" });
+  await investigationPlaybooks.createIndex({ playbook_id: 1 }, { unique: true, name: "investigation_playbook_id_unique" });
+  await investigationPlaybooks.createIndex({ status: 1, updated_at: -1 }, { name: "investigation_playbook_status_updated" });
 
   if (env.longTermMemoryEnabled) {
     try {

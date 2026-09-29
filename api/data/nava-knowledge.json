@@ -1,7 +1,7 @@
 {
   "generatedAt": "2026-09-08T09:36:47.747939+00:00",
   "source": "NAVA_Knowledge_Kategori.xls",
-  "articleCount": 575,
+  "articleCount": 584,
   "warnings": [],
   "articles": [
     {
@@ -37701,6 +37701,290 @@
       "sourceRow": 591,
       "sourceNo": "575",
       "sourceQuestion": "Apa arti dari mengikat dan tidak mengikat di menu transaksi pesanan?"
+    },
+    {
+      "articleId": "cd48e5e3-2cd7-4f6e-ab52-4a4d34dc4f73",
+      "title": "Investigasi selisih Laporan Barang Detail dan Summary",
+      "category": "barang",
+      "product": "nagagold",
+      "audience": "helpdesk",
+      "clientScope": [
+        "all"
+      ],
+      "symptoms": [
+        "Laporan Barang Detail berbeda dengan Laporan Barang Summary",
+        "Jumlah atau berat stok pada laporan tidak sama",
+        "Helpdesk ingin mengetahui collection dan field untuk investigasi selisih"
+      ],
+      "troubleshootingSteps": [
+        {
+          "order": 1,
+          "title": "Samakan parameter laporan",
+          "instruction": "Catat dan samakan tanggal atau periode, toko, gudang, departemen, group, supplier, pabrik, kadar, konsinyasi, kategori harga, dan jenis grouping dari kedua laporan.",
+          "expectedResult": "Kedua laporan menggunakan parameter yang sama."
+        },
+        {
+          "order": 2,
+          "title": "Pastikan sumber tanggal",
+          "instruction": "Untuk tanggal yang sama dengan tgl_system, saldo memakai tt_barang_saldo. Untuk tanggal historis, saldo memakai th_barang_saldo. Laporan detail membaca master tm_barang.",
+          "expectedResult": "Collection yang dibandingkan sesuai dengan tanggal laporan."
+        },
+        {
+          "order": 3,
+          "title": "Samakan tingkat pengelompokan",
+          "instruction": "Bandingkan pada grain yang sama, minimal kode_toko dan kode_gudang. Jika masih berbeda, pecah per kode_barcode. Jangan membandingkan detail per barcode dengan summary per toko atau gudang.",
+          "expectedResult": "Perbandingan dilakukan pada tingkat data yang sama."
+        },
+        {
+          "order": 4,
+          "title": "Pahami field stok",
+          "instruction": "Laporan detail menggunakan tm_barang.stock_on_hand, sedangkan laporan saldo menggunakan stock_akhir dari collection saldo. Kedua field dapat berbeda karena sumber dan waktu pembentukannya berbeda.",
+          "expectedResult": "Perbedaan field tidak langsung dianggap sebagai kerusakan data."
+        },
+        {
+          "order": 5,
+          "title": "Cek filter laporan",
+          "instruction": "Periksa kembali filter kode_group, kode_dept, supplier, kode_pabrik, is_consignment_barang, kadar, kategori harga, dan opsi baki tersembunyi.",
+          "expectedResult": "Tidak ada filter yang hanya aktif pada salah satu laporan."
+        },
+        {
+          "order": 6,
+          "title": "Lanjut ke database bila diminta",
+          "instruction": "Jika Helpdesk menanyakan relasi database atau meminta contoh query, gunakan aggregation read-only pada internalNotes. Jangan mengatakan query sudah dijalankan oleh NAVA.",
+          "expectedResult": "Relasi dan contoh query diberikan tanpa menjalankan perubahan data."
+        }
+      ],
+      "escalationRules": [
+        "Selisih tetap ada setelah parameter dan grain laporan disamakan",
+        "Ditemukan saldo tanpa master barang atau master tanpa group",
+        "Ditemukan beberapa saldo pada kombinasi barcode, toko, gudang, dan tanggal yang sama",
+        "Membutuhkan validasi transaksi atau perubahan data oleh developer"
+      ],
+      "userResponseTemplate": "Mulai dengan menyamakan tanggal atau periode, toko, gudang, dan seluruh filter laporan. Perlu diingat bahwa Laporan Barang Detail memakai tm_barang.stock_on_hand, sedangkan saldo memakai stock_akhir dari tt_barang_saldo untuk tanggal sistem atau th_barang_saldo untuk tanggal historis. Jika parameter dan tingkat pengelompokan sudah sama tetapi masih selisih, baru lanjutkan pengecekan relasi database secara read-only.",
+      "internalNotes": "[RELASI COLLECTION]\n- tm_barang.kode_barcode -> tt_barang_saldo.kode_barcode atau th_barang_saldo.kode_barcode\n- tm_barang.kode_group -> tm_group.kode_group\n- tm_barang.kode_barcode -> tm_berlian.kode_barcode\n- tt_barang_summary menyimpan kode_toko, kode_gudang, dan tanggal, tetapi tidak menyimpan kode_barcode.\n\n[FIELD UTAMA]\n- tm_barang: stock_on_hand, berat, kode_barcode, kode_toko, kode_gudang, kode_group\n- saldo: tanggal, stock_awal, stock_in, stock_out, stock_tambah, stock_jual, stock_beli, stock_hancur, stock_akhir, berat_akhir\n- tm_group: jenis_group, is_consignment, is_berlian\n\n[CONTOH AGGREGATION READ-ONLY]\n// Ganti placeholder sebelum dipakai. Gunakan database tenant yang benar.\n\n// 1. Bandingkan master dan saldo per barcode\ndb.tm_barang.aggregate([\n  { $match: { kode_toko: \"<kode_toko>\", kode_gudang: \"<kode_gudang>\", stock_on_hand: { $gt: 0 } } },\n  { $lookup: { from: \"tt_barang_saldo\", let: { barcode: \"$kode_barcode\" }, pipeline: [\n    { $match: { $expr: { $and: [\n      { $eq: [\"$kode_barcode\", \"$$barcode\"] },\n      { $eq: [\"$tanggal\", \"<tanggal>\"] },\n      { $eq: [\"$kode_toko\", \"<kode_toko>\"] },\n      { $eq: [\"$kode_gudang\", \"<kode_gudang>\"] }\n    ] } } },\n    { $project: { _id: 0, kode_barcode: 1, stock_akhir: 1, berat_akhir: 1 } }\n  ], as: \"saldo\" } },\n  { $unwind: { path: \"$saldo\", preserveNullAndEmptyArrays: true } },\n  { $project: { _id: 0, kode_barcode: 1, nama_barang: 1, stock_on_hand: 1, stock_akhir: { $ifNull: [\"$saldo.stock_akhir\", 0] }, selisih_stock: { $subtract: [\"$stock_on_hand\", { $ifNull: [\"$saldo.stock_akhir\", 0] }] }, berat_master: \"$berat\", berat_akhir: { $ifNull: [\"$saldo.berat_akhir\", 0] } } },\n  { $match: { selisih_stock: { $ne: 0 } } }\n]);\n\n// 2. Cari saldo yang tidak memiliki master barang\ndb.tt_barang_saldo.aggregate([\n  { $match: { tanggal: \"<tanggal>\" } },\n  { $lookup: { from: \"tm_barang\", localField: \"kode_barcode\", foreignField: \"kode_barcode\", as: \"barang\" } },\n  { $match: { $expr: { $eq: [{ $size: \"$barang\" }, 0] } } },\n  { $project: { _id: 0, tanggal: 1, kode_barcode: 1, kode_toko: 1, kode_gudang: 1, stock_akhir: 1, berat_akhir: 1 } }\n]);\n\n// 3. Cari master yang group-nya tidak ditemukan\ndb.tm_barang.aggregate([\n  { $lookup: { from: \"tm_group\", localField: \"kode_group\", foreignField: \"kode_group\", as: \"group\" } },\n  { $match: { $expr: { $eq: [{ $size: \"$group\" }, 0] } } },\n  { $project: { _id: 0, kode_barcode: 1, kode_barang: 1, kode_group: 1, kode_toko: 1, kode_gudang: 1, stock_on_hand: 1 } }\n]);\n\n// Untuk tanggal historis, ganti tt_barang_saldo menjadi th_barang_saldo.\n// Semua query di atas hanya membaca data; tidak dijalankan otomatis oleh NAVA.",
+      "tags": [
+        "barang",
+        "laporan",
+        "detail",
+        "summary",
+        "saldo",
+        "stock_on_hand",
+        "stock_akhir",
+        "kode_barcode",
+        "tm_barang",
+        "tt_barang_saldo",
+        "th_barang_saldo",
+        "tm_group"
+      ],
+      "status": "draft",
+      "sourceQuestion": "Investigasi selisih Laporan Barang Detail dan Summary"
+    },
+    {
+      "articleId": "8f2f4f2d-63f3-4cf3-bb1a-9cfab19f3101",
+      "title": "Investigasi selisih keuangan dan penjualan",
+      "category": "investigasi keuangan",
+      "product": "nagagold",
+      "audience": "helpdesk",
+      "clientScope": ["all"],
+      "symptoms": [
+        "Laporan penjualan berbeda dengan laporan keuangan",
+        "Penjualan tidak sama dengan cash masuk",
+        "Cek relasi tt_jual_detail dan tt_cash_daily",
+        "Collection dan aggregation selisih penjualan"
+      ],
+      "troubleshootingSteps": [
+        {"order": 1, "title": "Pastikan konteks report", "instruction": "Samakan tanggal bisnis, toko, gudang, metode pembayaran, status transaksi, dan tingkat grouping pada laporan penjualan dan laporan keuangan.", "expectedResult": "Kedua report membandingkan scope yang sama."},
+        {"order": 2, "title": "Ringkas sisi penjualan", "instruction": "Gunakan tt_jual_detail dan group berdasarkan no_faktur_group. Jumlahkan harga_total atau field nilai yang memang dipakai report.", "expectedResult": "Satu faktur/group hanya menjadi satu baris pembanding."},
+        {"order": 3, "title": "Hubungkan ke kas", "instruction": "Relasikan tt_jual_detail.no_faktur_group dengan tt_cash_daily.deskripsi. Pisahkan jumlah_in, jumlah_out, jenis, kategori, dan status kas.", "expectedResult": "Setiap group dapat ditelusuri ke jurnal kas atau menjadi kandidat tanpa pasangan."},
+        {"order": 4, "title": "Periksa pembatalan", "instruction": "Telusuri tt_jual_batal serta status_kembali dan status_valid. Hitung penjualan batal sebagai reversal atau net adjustment, bukan sebagai penjualan aktif.", "expectedResult": "Penjualan gross dan net tidak tercampur."},
+        {"order": 5, "title": "Buka aggregation bila diminta", "instruction": "Gunakan contoh aggregation read-only pada internalNotes. Query belum dijalankan oleh NAVA dan field terenkripsi harus memakai mekanisme aplikasi.", "expectedResult": "Helpdesk mendapat relasi dan kandidat selisih tanpa perubahan data.\n"}
+      ],
+      "userResponseTemplate": "Untuk selisih penjualan dan keuangan, samakan dulu tanggal, toko, gudang, metode pembayaran, status, dan grouping. Ringkas tt_jual_detail per no_faktur_group, lalu cocokkan dengan tt_cash_daily melalui deskripsi. Jika ada selisih, cek transaksi batal, pembayaran multi-metode, kredit/hutang, perbedaan tanggal, dan format deskripsi kas.",
+      "internalNotes": "[KONTEKS]\nLaporan penjualan berbeda dengan cash atau laporan keuangan. Jangan membandingkan detail barang langsung dengan jurnal kas.\n\n[RELASI COLLECTION]\ntt_jual_detail.no_faktur_group = tt_cash_daily.deskripsi.\ntt_jual_detail dapat memiliki banyak detail per satu group, sedangkan tt_cash_daily dapat memiliki beberapa baris berdasarkan metode pembayaran.\ntt_jual_batal dipakai untuk reversal/batal penjualan. tm_group.kode_group membantu memisahkan kategori barang.\n\n[FIELD UTAMA]\ntt_jual_detail: no_faktur_group, no_faktur_jual, tgl_system, kode_barcode, kode_gudang, harga_total, pembayaran, cash_rp, transfer_rp, debet_rp, tukar_rp, status_kembali, status_valid.\ntt_cash_daily: deskripsi, tanggal, jenis, kategori, jumlah_in, jumlah_out, status, no_reff, no_faktur_list, detail_transaction.\n\n[STATUS]\nKeluarkan status_kembali=CANC dari penjualan net. Status_valid OPEN/DONE harus mengikuti report. Banyak report cash menggunakan status OPEN, tetapi status wajib dicocokkan dengan report yang sedang ditiru. Batal penjualan tidak menghapus baris awal; cari cash kategori BATAL PENJUALAN atau reversal.\n\n[KEMUNGKINAN CELAH]\n1. Penjualan valid tidak punya cash row.\n2. Cash row tidak punya pasangan penjualan.\n3. Cash in lebih besar karena lebih bayar, uang muka, atau deskripsi dipakai beberapa transaksi.\n4. Penjualan CANC masih masuk omzet.\n5. Tanggal tgl_system dan tanggal cash berbeda.\n6. Pembayaran CREDIT/HUTANG belum menjadi cash in hari yang sama.\n7. Join dilakukan sebelum grouping sehingga double count.\n\n[CONTOH AGGREGATION READ-ONLY]\n// Ringkas penjualan lalu lookup cash.\ndb.tt_jual_detail.aggregate([\n  { $match: { tgl_system: { $gte: \"<tanggal_awal>\", $lte: \"<tanggal_akhir>\" }, status_kembali: { $ne: \"CANC\" } } },\n  { $group: { _id: \"$no_faktur_group\", total_jual: { $sum: { $ifNull: [\"$harga_total\", 0] } }, jumlah_detail: { $sum: 1 } } },\n  { $lookup: { from: \"tt_cash_daily\", let: { group: \"$_id\" }, pipeline: [\n    { $match: { $expr: { $eq: [\"$deskripsi\", \"$$group\"] }, status: \"OPEN\" } },\n    { $group: { _id: \"$deskripsi\", cash_in: { $sum: { $ifNull: [\"$jumlah_in\", 0] } }, cash_out: { $sum: { $ifNull: [\"$jumlah_out\", 0] } }, jenis: { $addToSet: \"$jenis\" }, kategori: { $addToSet: \"$kategori\" } } }\n  ], as: \"cash\" } },\n  { $set: { cash_in: { $ifNull: [ { $first: \"$cash.cash_in\" }, 0 ] }, cash_out: { $ifNull: [ { $first: \"$cash.cash_out\" }, 0 ] } } },\n  { $set: { selisih: { $subtract: [\"$total_jual\", \"$cash_in\"] } } }\n]);\n\n[INTERPRETASI]\nCash kosong adalah kandidat, bukan bukti error. Cek kredit, format deskripsi, pembayaran manual, dan tanggal lain. Selisih positif berarti penjualan lebih besar dari cash in; selisih negatif dapat berarti lebih bayar, transaksi lain, atau double count. Field jenis/kategori tt_cash_daily dapat terenkripsi; query literal mungkin tidak menemukan data.",
+      "tags": ["investigasi", "keuangan", "penjualan", "selisih", "tt_jual_detail", "tt_cash_daily", "no_faktur_group", "aggregation", "lookup"],
+      "status": "published",
+      "sourceQuestion": "Investigasi selisih keuangan dan penjualan"
+    },
+    {
+      "articleId": "1e2d6b5e-a0d7-4df7-8b9f-5e2dd16cb6b0",
+      "title": "Investigasi selisih keuangan dan pembelian kembali (buyback)",
+      "category": "investigasi keuangan",
+      "product": "nagagold",
+      "audience": "helpdesk",
+      "clientScope": ["all"],
+      "symptoms": [
+        "Laporan pembelian kembali dari customer berbeda dengan laporan keuangan",
+        "Nilai pembayaran buyback tidak sama dengan cash out",
+        "Cek relasi tt_beli_detail dan tt_cash_daily",
+        "Collection dan aggregation selisih pembelian kembali"
+      ],
+      "troubleshootingSteps": [
+        {"order": 1, "title": "Pastikan konteks buyback", "instruction": "Di NAGAGOLD, pembelian adalah pembelian kembali barang dari customer (buyback), bukan pembelian dari supplier. Gunakan no_faktur_group sebagai identitas transaksi dan no_faktur_beli sebagai identitas detail/faktur buyback.", "expectedResult": "Transaksi buyback customer tidak tercampur dengan alur supplier atau hutang supplier."},
+        {"order": 2, "title": "Ringkas transaksi buyback", "instruction": "Gunakan tt_beli_detail dan group berdasarkan no_faktur_group, lalu no_faktur_beli bila perlu. Jumlahkan harga, harga_nota, cash_rp, atau field nilai yang memang dipakai report. Perhatikan bahwa satu transaksi dapat memiliki beberapa detail barang.", "expectedResult": "Nilai buyback menjadi satu baris per transaksi/group tanpa double count detail."},
+        {"order": 3, "title": "Hubungkan ke cash", "instruction": "Saat pembayaran buyback dibuat, NAGAGOLD menyimpan tt_cash_daily dengan kategori PEMBELIAN, deskripsi no_faktur_group, jumlah_out sebagai uang yang dibayarkan ke customer, dan no_faktur_list berisi nomor faktur buyback. Cocokkan juga jenis pembayaran dan status cash.", "expectedResult": "Nilai buyback dapat dibandingkan dengan cash out berdasarkan group/faktur yang benar."},
+        {"order": 4, "title": "Periksa pembatalan dan barang asal", "instruction": "Gunakan tt_beli_batal untuk pembatalan buyback dan cocokkan reversal cash dengan kategori BATAL BELI. Jika perlu telusuri no_faktur_jual karena barang buyback dapat berasal dari transaksi penjualan sebelumnya. Status_valid, status_terima, status_sortir, dan status_hancur harus dibaca sesuai prosesnya.", "expectedResult": "Pembelian aktif, pembatalan, pembayaran, dan histori barang tidak tercampur."},
+        {"order": 5, "title": "Gunakan query read-only", "instruction": "Contoh aggregation ada di internalNotes. NAVA hanya memberi pola query dan belum menjalankannya.", "expectedResult": "Helpdesk dapat menelusuri kandidat selisih dengan aman."}
+      ],
+      "userResponseTemplate": "Untuk selisih pembelian dan keuangan di NAGAGOLD, pahami bahwa pembelian adalah buyback dari customer. Ringkas tt_beli_detail per no_faktur_group/no_faktur_beli, lalu cocokkan dengan tt_cash_daily melalui deskripsi no_faktur_group, jumlah_out, no_faktur_list, jenis, kategori PEMBELIAN, dan status. Setelah itu cek tt_beli_batal serta no_faktur_jual bila perlu. Jangan memakai alur supplier atau hutang supplier sebagai asumsi default.",
+      "internalNotes": "[KONTEKS]\nDi NAGAGOLD, pembelian berarti pembelian kembali barang dari customer (buyback). Transaksi buyback menyimpan data customer dan barang yang dibeli kembali di tt_beli_detail. Selisih yang diperiksa adalah nilai buyback versus uang yang keluar, status transaksi, pembatalan, dan dampaknya pada stok. Jangan menganggap ini sebagai pembelian barang dari supplier.\n\n[RELASI COLLECTION]\ntt_beli_detail.no_faktur_group = tt_cash_daily.deskripsi pada alur pembayaran buyback. tt_cash_daily juga menyimpan no_faktur_list berisi no_faktur_beli dan detail_transaction.\ntt_beli_detail berhubungan dengan tt_beli_batal melalui no_faktur_beli/no_faktur_group. Pembatalan mengembalikan pembayaran melalui cash kategori BATAL BELI.\ntt_beli_detail.no_faktur_jual dapat dipakai untuk menelusuri penjualan asal barang yang kemudian dibuyback, bila field tersebut terisi.\n\n[FIELD UTAMA]\ntt_beli_detail: no_faktur_group, no_faktur_beli, no_faktur_jual, tgl_system, kode_member, nama_customer, kode_barcode, kode_gudang, harga, harga_nota, cash_rp, pembayaran, status_valid, status_sortir, status_kirim, status_terima, status_hancur, biaya_admin.\ntt_cash_daily: deskripsi, tanggal, jenis, kategori, jumlah_in, jumlah_out, status, no_faktur_list, detail_transaction. Untuk pembayaran buyback, kategori utamanya PEMBELIAN dan jumlah_out adalah uang yang dibayarkan ke customer.\ntt_beli_batal: no_faktur_beli, no_faktur_group, no_faktur_batal, tgl_system, harga, berat, status_valid, alasan.\n\n[STATUS]\nKeluarkan status_valid=CANC dari buyback aktif. Status_valid transaksi buyback berbeda dari status cash; cocokkan status cash sesuai alur validasi yang sedang digunakan, jangan memaksa OPEN atau CLOS tanpa melihat report. Status_terima/status_sortir/status_hancur menjelaskan proses barang, bukan status pembayaran customer.\n\n[KEMUNGKINAN CELAH]\n1. Satu no_faktur_group memiliki banyak detail tetapi dijumlahkan tanpa grouping sehingga double count.\n2. Cash out dicari berdasarkan tanggal saja, padahal relasi utamanya adalah no_faktur_group/deskripsi atau no_faktur_list.\n3. Pembayaran buyback terpecah menjadi beberapa jenis dan tidak semuanya ikut dihitung.\n4. Buyback CANC masih masuk nilai pembelian.\n5. Batal buyback ada di tt_beli_batal tetapi cash reversal kategori BATAL BELI tidak ikut dihitung.\n6. Harga, harga_nota, cash_rp, potongan, biaya_admin, dan field pembayaran dipakai bergantian oleh report.\n7. no_faktur_jual yang menjadi asal barang tidak ditelusuri ketika investigasi membutuhkan riwayat barang.\n\n[CONTOH AGGREGATION READ-ONLY]\n// Ringkas buyback per no_faktur_group lalu cocokkan dengan cash out.\ndb.tt_beli_detail.aggregate([\n  { $match: { tgl_system: { $gte: \"<tanggal_awal>\", $lte: \"<tanggal_akhir>\" }, status_valid: { $ne: \"CANC\" } } },\n  { $group: { _id: \"$no_faktur_group\", no_faktur_beli: { $addToSet: \"$no_faktur_beli\" }, total_buyback: { $sum: { $ifNull: [\"$harga\", 0] } }, total_harga_nota: { $sum: { $ifNull: [\"$harga_nota\", 0] } }, total_cash_rp: { $sum: { $ifNull: [\"$cash_rp\", 0] } }, jumlah_detail: { $sum: 1 } } },\n  { $lookup: { from: \"tt_cash_daily\", let: { group: \"$_id\" }, pipeline: [\n    { $match: { $expr: { $eq: [\"$deskripsi\", \"$$group\"] }, kategori: \"PEMBELIAN\" } },\n    { $group: { _id: \"$deskripsi\", cash_out: { $sum: { $ifNull: [\"$jumlah_out\", 0] } }, jenis: { $addToSet: \"$jenis\" }, status: { $addToSet: \"$status\" }, no_faktur_list: { $addToSet: \"$no_faktur_list\" } } }\n  ], as: \"cash\" } },\n  { $set: { cash_out: { $ifNull: [ { $first: \"$cash.cash_out\" }, 0 ] } } },\n  { $set: { selisih_buyback_cash: { $subtract: [\"$total_buyback\", \"$cash_out\"] } } }\n]);\n\n// Cari buyback yang dibatalkan dan detail cash reversal-nya.\ndb.tt_beli_batal.aggregate([\n  { $match: { tgl_system: { $gte: \"<tanggal_awal>\", $lte: \"<tanggal_akhir>\" } } },\n  { $lookup: { from: \"tt_cash_daily\", localField: \"no_faktur_beli\", foreignField: \"deskripsi\", as: \"reversal_cash\" } },\n  { $project: { _id: 0, no_faktur_batal: 1, no_faktur_group: 1, no_faktur_beli: 1, harga: 1, status_valid: 1, alasan: 1, reversal_cash: { jumlah_in: 1, jumlah_out: 1, kategori: 1, status: 1 } } }\n]);\n\n[INTERPRETASI]\nCash out kosong adalah kandidat yang harus dicek berdasarkan jenis pembayaran dan status validasi, bukan bukti otomatis bahwa buyback salah. Selisih dapat berasal dari grouping, pembayaran terpecah, perbedaan field nilai, pembatalan, atau tanggal cash. Jika perlu riwayat barang, lanjutkan dari no_faktur_jual ke detail penjualan; jangan berpindah ke alur supplier.",
+      "tags": ["investigasi", "keuangan", "pembelian", "selisih", "tt_beli_detail", "tt_cash_daily", "tt_hutang_detail", "tt_beli_batal", "aggregation", "lookup"],
+      "status": "published",
+      "sourceQuestion": "Investigasi selisih keuangan dan pembelian"
+    },
+    {
+      "articleId": "6c2d9e93-d4c3-4ac5-9c9f-2cb5b9d2d6e3",
+      "title": "Investigasi opening saldo hari ini dan closing saldo hari sebelumnya",
+      "category": "investigasi barang",
+      "product": "nagagold",
+      "audience": "helpdesk",
+      "clientScope": ["all"],
+      "symptoms": [
+        "Saldo hari ini tidak sama dengan closing kemarin",
+        "Selisih stok dari hari kemarin sampai hari ini",
+        "Continuity tt_barang_saldo dan th_barang_saldo",
+        "Aggregation saldo per barcode toko gudang"
+      ],
+      "troubleshootingSteps": [
+        {"order": 1, "title": "Samakan key", "instruction": "Bandingkan dengan tanggal, kode_barcode, kode_toko, dan kode_gudang yang sama. Untuk summary, gunakan level kode_toko, kode_gudang, dan tanggal.", "expectedResult": "Closing dan opening berada pada grain yang sama."},
+        {"order": 2, "title": "Pilih collection tanggal", "instruction": "Saldo berjalan memakai tt_barang_saldo. Saldo historis dapat memakai th_barang_saldo. Periodic report dapat memakai tt_barang_summary atau fallback histori.", "expectedResult": "Sumber data sesuai tanggal laporan."},
+        {"order": 3, "title": "Bandingkan flow", "instruction": "Gunakan formula konsep ending = opening + arus masuk - arus keluar +/- koreksi. Cek penjualan, pembelian, transfer, penerimaan, opname, hancur, dan retur.", "expectedResult": "Selisih dijelaskan oleh mutasi atau koreksi yang nyata."},
+        {"order": 4, "title": "Periksa cutoff", "instruction": "Cek transaksi malam, transaksi yang diposting terlambat, pergantian hari system, dan perbedaan tanggal bisnis dengan tanggal input.", "expectedResult": "Perbedaan tanggal tidak salah dianggap sebagai selisih saldo."},
+        {"order": 5, "title": "Aggregation read-only", "instruction": "Gunakan contoh continuity pada internalNotes. Nama field stock flow harus dicocokkan dengan schema/report actual.", "expectedResult": "Kandidat selisih dapat dipisahkan dari perbedaan definisi report."}
+      ],
+      "userResponseTemplate": "Untuk membandingkan saldo hari ini dan kemarin, gunakan key tanggal, barcode, toko, dan gudang yang sama. Cek closing hari sebelumnya, opening hari ini, lalu telusuri arus masuk, arus keluar, transfer, opname, dan transaksi yang melewati cutoff. Hari historis dan hari berjalan dapat memakai collection saldo yang berbeda.",
+      "internalNotes": "[KONTEKS]\nOpening hari ini tidak sama dengan closing hari sebelumnya. Ini adalah investigasi continuity saldo.\n\n[RELASI COLLECTION]\nth_barang_saldo menyimpan saldo histori. tt_barang_saldo menyimpan saldo tanggal/sistem berjalan. tt_barang_summary menyimpan summary pada kode_toko, kode_gudang, tanggal dan tidak mempunyai kode_barcode.\nSumber mutasi dapat berasal dari tt_jual_detail, tt_beli_detail, transfer, tt_terima_suplier, opname, hancur, retur, tukar, dan pembatalan.\n\n[FIELD UTAMA]\nGunakan tanggal, kode_barcode, kode_toko, kode_gudang, stock_awal/opening, stock_in/masuk, stock_out/keluar, stock_jual, stock_beli, stock_hancur, stock_akhir/ending, dan field berat yang benar-benar dipakai report. Nama field flow perlu dikonfirmasi pada schema.\n\n[KEMUNGKINAN CELAH]\n1. Hari lama memakai th_barang_saldo/summary sedangkan hari ini memakai tt_barang_saldo.\n2. Transaksi malam masuk tanggal berbeda.\n3. Transfer hanya selesai di satu sisi.\n4. Opname mengubah saldo tanpa transaksi jual/beli.\n5. Mutasi diposting setelah cutoff.\n6. Detail barcode dibandingkan langsung dengan summary toko/gudang.\n\n[CONTOH AGGREGATION READ-ONLY]\n// Cek dua tanggal untuk satu barcode.\ndb.th_barang_saldo.aggregate([\n  { $match: { kode_barcode: \"<barcode>\", kode_toko: \"<toko>\", kode_gudang: \"<gudang>\", tanggal: { $in: [\"<D-1>\", \"<D>\"] } } },\n  { $sort: { tanggal: 1 } },\n  { $project: { tanggal: 1, opening: \"$stock_awal\", masuk: \"$stock_masuk\", keluar: \"$stock_keluar\", ending: \"$stock_akhir\" } }\n]);\n\n// Ringkas detail ke level summary.\ndb.tt_barang_saldo.aggregate([\n  { $match: { tanggal: { $gte: \"<awal>\", $lte: \"<akhir>\" }, kode_toko: \"<toko>\", kode_gudang: \"<gudang>\" } },\n  { $group: { _id: { tanggal: \"$tanggal\", toko: \"$kode_toko\", gudang: \"$kode_gudang\" }, detail_akhir: { $sum: { $ifNull: [\"$stock_akhir\", 0] } }, detail_masuk: { $sum: { $ifNull: [\"$stock_masuk\", 0] } }, detail_keluar: { $sum: { $ifNull: [\"$stock_keluar\", 0] } } } }\n]);\n\n[INTERPRETASI]\nClosing D-1 sama dengan opening D berarti continuity dasar terpenuhi. Jika berbeda, cari opname, transfer, cutoff, dan posting terlambat. Jika detail cocok tetapi summary berbeda, periksa pipeline summary dan filter group.",
+      "tags": ["investigasi", "barang", "stok", "saldo", "opening", "closing", "kemarin", "hari ini", "tt_barang_saldo", "th_barang_saldo", "tt_barang_summary", "aggregation"],
+      "status": "published",
+      "sourceQuestion": "Investigasi opening saldo hari ini dan closing saldo hari sebelumnya"
+    },
+    {
+      "articleId": "b4cc6e8f-3fdb-4b5e-8cb5-f8f512a12a41",
+      "title": "Investigasi penjualan yang tidak mengurangi stok",
+      "category": "investigasi barang",
+      "product": "nagagold",
+      "audience": "helpdesk",
+      "clientScope": ["all"],
+      "symptoms": [
+        "Barang terjual tetapi saldo tidak berkurang",
+        "Penjualan berbeda dengan saldo barang",
+        "Relasi tt_jual_detail ke tt_barang_saldo",
+        "Aggregation penjualan per kode_barcode"
+      ],
+      "troubleshootingSteps": [
+        {"order": 1, "title": "Samakan grain", "instruction": "Gunakan kode_barcode, tanggal, kode_toko, dan kode_gudang. Bedakan berat fisik, berat murni, dan qty sesuai report.", "expectedResult": "Penjualan dan saldo dibandingkan pada unit dan lokasi yang sama."},
+        {"order": 2, "title": "Ringkas penjualan", "instruction": "Group tt_jual_detail per tanggal, barcode, toko, dan gudang. Jumlahkan qty, berat, dan harga_total sesuai kebutuhan.", "expectedResult": "Penjualan menjadi flow pada grain saldo."},
+        {"order": 3, "title": "Cek status dan pengecualian", "instruction": "Periksa status_kembali, status_valid, status_tukar, no_titip_group, marketplace, dan tt_jual_batal.", "expectedResult": "Penjualan batal, tukar, dan titipan tidak tercampur."},
+        {"order": 4, "title": "Bandingkan flow saldo", "instruction": "Cocokkan agregat penjualan dengan stock_jual atau field flow penjualan yang dipakai saldo.", "expectedResult": "Ditemukan apakah saldo belum berubah atau hanya berbeda unit."},
+        {"order": 5, "title": "Telusuri sumber lain", "instruction": "Jika penjualan tidak menjelaskan pengurangan, cek opname, transfer, tukar, transaksi manual, atau koreksi saldo.", "expectedResult": "Tidak ada perubahan saldo yang dianggap berasal dari sumber yang salah."}
+      ],
+      "userResponseTemplate": "Jika penjualan tidak mengurangi stok, bandingkan per kode_barcode, tanggal, toko, dan gudang. Ringkas tt_jual_detail, keluarkan transaksi batal, lalu cocokkan dengan flow penjualan pada tt_barang_saldo atau th_barang_saldo. Periksa juga transaksi tukar, titipan, opname, transfer, dan input manual.",
+      "internalNotes": "[RELASI COLLECTION]\ntt_jual_detail.kode_barcode + tgl_system + kode_gudang -> saldo tanggal + kode_barcode + kode_toko + kode_gudang.\ntt_jual_detail.kode_barcode -> tm_barang.kode_barcode untuk atribut master saat ini.\ntt_jual_detail.kode_group -> tm_group.kode_group.\ntt_jual_batal menjelaskan reversal/batal.\n\n[FIELD UTAMA]\ntt_jual_detail: tgl_system, kode_barcode, kode_gudang, kode_group, harga_total, qty, berat, berat_murni, status_kembali, status_valid, status_tukar, no_titip_group.\nsaldo: tanggal, kode_barcode, kode_toko, kode_gudang, stock_jual, stock_akhir, berat flow, field opening/ending sesuai report.\n\n[KEMUNGKINAN CELAH]\n1. Penjualan valid ada tetapi stock_jual nol.\n2. Pengurangan berasal dari transfer, opname, manual, atau tukar, bukan penjualan biasa.\n3. Penjualan CANC masih ikut report.\n4. Barcode sama tetapi toko/gudang atau tanggal berbeda.\n5. Report memakai berat murni sedangkan penjualan memakai berat fisik/qty.\n6. Master tm_barang saat ini bukan snapshot historis.\n\n[CONTOH AGGREGATION READ-ONLY]\ndb.tt_jual_detail.aggregate([\n  { $match: { tgl_system: { $gte: \"<awal>\", $lte: \"<akhir>\" }, kode_gudang: \"<gudang>\", status_kembali: { $ne: \"CANC\" } } },\n  { $group: { _id: { tanggal: \"$tgl_system\", barcode: \"$kode_barcode\", gudang: \"$kode_gudang\" }, qty_jual: { $sum: { $ifNull: [\"$qty\", 1] } }, berat_jual: { $sum: { $ifNull: [\"$berat\", 0] } }, nilai_jual: { $sum: { $ifNull: [\"$harga_total\", 0] } } } }\n]);\n\n[INTERPRETASI]\nAda penjualan tetapi flow saldo nol: cek posting saldo, tanggal, toko/gudang, atau status. Flow saldo lebih besar: cari opname/manual/tukar. Nilai cocok tetapi berat berbeda: cek satuan dan berat murni.",
+      "tags": ["investigasi", "penjualan", "stok", "selisih", "kode_barcode", "tt_jual_detail", "tt_barang_saldo", "th_barang_saldo", "stock_jual", "aggregation"],
+      "status": "published",
+      "sourceQuestion": "Investigasi penjualan yang tidak mengurangi stok"
+    },
+    {
+      "articleId": "e9df3d6d-9df5-46fb-b7d7-2be721c1d8e8",
+      "title": "Investigasi pembelian yang tidak menambah stok",
+      "category": "investigasi barang",
+      "product": "nagagold",
+      "audience": "helpdesk",
+      "clientScope": ["all"],
+      "symptoms": [
+        "Pembelian sudah ada tetapi stok belum bertambah",
+        "Barang masuk tanpa pembelian yang jelas",
+        "Relasi tt_beli_detail ke tt_terima_suplier dan saldo",
+        "Aggregation pembelian dan penerimaan supplier"
+      ],
+      "troubleshootingSteps": [
+        {"order": 1, "title": "Bedakan pembelian dan penerimaan", "instruction": "Pembelian tercatat tidak selalu berarti barang sudah diterima atau sudah masuk saldo. Periksa status penerimaan dan lokasi.", "expectedResult": "Pembayaran, pembelian, penerimaan, dan saldo dipisahkan."},
+        {"order": 2, "title": "Periksa detail pembelian", "instruction": "Gunakan no_faktur_beli, no_faktur_group, kode_barcode, tanggal, gudang, berat, harga, dan status_valid pada tt_beli_detail.", "expectedResult": "Dokumen pembelian dapat dilacak sampai barangnya."},
+        {"order": 3, "title": "Cek penerimaan", "instruction": "Relasikan tt_beli_detail dengan tt_terima_suplier menggunakan nomor faktur/barcode sesuai schema actual.", "expectedResult": "Diketahui apakah barang sudah diterima atau masih proses."},
+        {"order": 4, "title": "Cocokkan saldo", "instruction": "Bandingkan flow pembelian/masuk pada saldo dengan barcode, toko, gudang, dan tanggal yang sama.", "expectedResult": "Diketahui apakah posting saldo terlambat atau tidak ada."},
+        {"order": 5, "title": "Periksa batal dan konsinyasi", "instruction": "Telusuri tt_beli_batal, status_hancur, status konsinyasi, transfer, dan pembelian manual bila angka masih berbeda.", "expectedResult": "Perbedaan tidak salah dianggap sebagai pembelian normal."}
+      ],
+      "userResponseTemplate": "Jika pembelian belum menambah stok, cek urutannya: tt_beli_detail, penerimaan supplier, lalu saldo. Bedakan pembelian yang sudah dibayar dari barang yang sudah diterima. Periksa status_valid, status_terima, pembatalan, konsinyasi, transfer, dan tanggal posting.",
+      "internalNotes": "[RELASI COLLECTION]\ntt_beli_detail -> tt_terima_suplier -> tt_barang_saldo/th_barang_saldo.\ntt_beli_detail -> tt_cash_daily untuk pembayaran langsung melalui nomor group/deskripsi.\nPembelian kredit dapat berlanjut ke tt_hutang_detail lalu cash saat pelunasan.\ntt_beli_batal menjelaskan pembatalan.\n\n[FIELD UTAMA]\ntt_beli_detail: no_faktur_beli, no_faktur_group, kode_barcode, tgl_system, kode_gudang, berat, harga, status_valid, status_sortir, status_kirim, status_terima, status_hancur.\nPenerimaan: nomor penerimaan/faktur, barcode/barang, lokasi, tanggal, dan status sesuai schema aktual.\nSaldo: tanggal, barcode, toko, gudang, flow pembelian/masuk, ending.\n\n[KEMUNGKINAN CELAH]\n1. Pembelian sudah dibayar tetapi belum diterima.\n2. Barang sudah diterima tetapi posting saldo belum terjadi.\n3. Key penerimaan berbeda dari nomor faktur pembelian.\n4. Pembelian CANC masih ikut.\n5. Stok bertambah dari transfer, opname, tukar, atau input manual.\n6. Konsinyasi memiliki aturan kepemilikan berbeda.\n\n[CONTOH AGGREGATION READ-ONLY]\n// Kerangka. Nama field tt_terima_suplier harus dicocokkan dengan schema.\ndb.tt_beli_detail.aggregate([\n  { $match: { status_valid: { $ne: \"CANC\" } } },\n  { $lookup: { from: \"tt_terima_suplier\", let: { faktur: \"$no_faktur_beli\", barcode: \"$kode_barcode\" }, pipeline: [\n    { $match: { $expr: { $and: [ { $eq: [\"$no_faktur_beli\", \"$$faktur\"] }, { $eq: [\"$kode_barcode\", \"$$barcode\"] } ] } } }\n  ], as: \"penerimaan\" } },\n  { $match: { penerimaan: { $size: 0 } } },\n  { $project: { no_faktur_beli: 1, no_faktur_group: 1, kode_barcode: 1, tgl_system: 1, berat: 1, harga: 1, status_valid: 1, status_terima: 1 } }\n]);\n\n[INTERPRETASI]\nPenerimaan kosong adalah kandidat, bukan bukti error. Cocokkan nama field dan periksa apakah alur pembelian memang memakai penerimaan berbeda. Penerimaan ada tetapi saldo belum naik berarti lanjut cek posting, tanggal, gudang, dan barcode.",
+      "tags": ["investigasi", "pembelian", "stok", "selisih", "tt_beli_detail", "tt_terima_suplier", "tt_beli_batal", "tt_barang_saldo", "aggregation"],
+      "status": "archived",
+      "sourceQuestion": "Investigasi pembelian yang tidak menambah stok"
+    },
+    {
+      "articleId": "c4d5b8f0-4a55-48d7-9b32-2b64d8ed1f70",
+      "title": "Investigasi buyback yang tidak menambah stok",
+      "category": "investigasi barang",
+      "product": "nagagold",
+      "audience": "helpdesk",
+      "clientScope": ["all"],
+      "symptoms": [
+        "Transaksi buyback sudah ada tetapi stok belum bertambah",
+        "Stok bertambah tidak sesuai dengan pembelian kembali dari customer",
+        "Relasi tt_beli_detail ke saldo barang",
+        "Aggregation buyback dan mutasi stok"
+      ],
+      "troubleshootingSteps": [
+        {"order": 1, "title": "Pastikan konteks buyback", "instruction": "Di NAGAGOLD, pembelian adalah pembelian kembali barang dari customer. Mulai dari tt_beli_detail, bukan alur penerimaan supplier.", "expectedResult": "Transaksi buyback customer dipisahkan dari pembelian supplier."},
+        {"order": 2, "title": "Lacak transaksi dan barang", "instruction": "Gunakan no_faktur_group, no_faktur_beli, kode_barcode, tgl_system, kode_gudang, harga, berat, dan status_valid. Satu group dapat memiliki beberapa detail barang.", "expectedResult": "Detail buyback dapat diringkas tanpa double count."},
+        {"order": 3, "title": "Bandingkan mutasi saldo", "instruction": "Cocokkan barcode, toko, gudang, dan tanggal antara tt_beli_detail dengan tt_barang_saldo untuk tanggal berjalan atau th_barang_saldo untuk histori. Periksa field flow pembelian/masuk dan stock_akhir sesuai schema report.", "expectedResult": "Diketahui apakah posting saldo terlambat, salah key, atau memang tidak terjadi."},
+        {"order": 4, "title": "Periksa pembatalan dan kondisi barang", "instruction": "Telusuri tt_beli_batal, status_valid, status_hancur, status_sortir, status_kirim, dan status_terima. Jika perlu gunakan no_faktur_jual untuk melacak barang asal yang dibuyback.", "expectedResult": "Buyback aktif, batal, hancur, dan riwayat barang tidak tercampur."},
+        {"order": 5, "title": "Gunakan query read-only", "instruction": "Contoh aggregation pada internalNotes hanya pola pemeriksaan dan belum dijalankan oleh NAVA.", "expectedResult": "Helpdesk memperoleh kandidat selisih tanpa mengubah data."}
+      ],
+      "userResponseTemplate": "Jika buyback sudah tercatat tetapi stok belum bertambah, cek urutannya: tt_beli_detail, key barcode/toko/gudang/tanggal, lalu tt_barang_saldo atau th_barang_saldo. Setelah itu periksa status_valid, pembatalan, hancur, dan posting saldo. Ini adalah alur pembelian kembali dari customer, bukan penerimaan supplier.",
+      "internalNotes": "[KONTEKS]\nPembelian di NAGAGOLD adalah buyback dari customer. tt_beli_detail menyimpan detail barang yang dibeli kembali, customer, nilai buyback, pembayaran, dan status proses.\n\n[RELASI COLLECTION]\ntt_beli_detail -> tt_barang_saldo untuk saldo berjalan atau th_barang_saldo untuk saldo historis, melalui kode_barcode, kode_gudang, kode_toko, dan tanggal sesuai schema aktual.\ntt_beli_detail -> tt_beli_batal melalui no_faktur_beli/no_faktur_group.\ntt_beli_detail.no_faktur_jual dapat dipakai untuk menelusuri transaksi penjualan asal barang jika tersedia.\n\n[FIELD UTAMA]\ntt_beli_detail: no_faktur_group, no_faktur_beli, no_faktur_jual, tgl_system, kode_barcode, kode_gudang, kode_group, berat, berat_real, harga, harga_nota, cash_rp, status_valid, status_sortir, status_kirim, status_terima, status_hancur.\nsaldo: tanggal, kode_barcode, kode_toko, kode_gudang, stock_awal/opening, stock_in/masuk, stock_beli, stock_out/keluar, stock_akhir/ending.\n\n[KEMUNGKINAN CELAH]\n1. Buyback sudah tersimpan tetapi mutasi saldo belum diposting.\n2. Barcode, toko, gudang, atau tanggal yang dibandingkan berbeda.\n3. Satu no_faktur_group memiliki banyak detail dan dijumlahkan ganda.\n4. Buyback CANC masih ikut laporan.\n5. Barang dibuyback lalu dihancurkan, dipindahkan, atau diproses pada alur lain.\n6. Laporan memakai harga/harga_nota/cash_rp dengan definisi berbeda.\n\n[CONTOH AGGREGATION READ-ONLY]\n// Ringkas buyback per barcode lalu cari saldo pada key yang sama.\ndb.tt_beli_detail.aggregate([\n  { $match: { tgl_system: { $gte: \"<tanggal_awal>\", $lte: \"<tanggal_akhir>\" }, status_valid: { $ne: \"CANC\" }, kode_gudang: \"<kode_gudang>\" } },\n  { $group: { _id: { barcode: \"$kode_barcode\", gudang: \"$kode_gudang\", tanggal: \"$tgl_system\" }, total_buyback: { $sum: { $ifNull: [\"$harga\", 0] } }, total_berat: { $sum: { $ifNull: [\"$berat\", 0] } }, jumlah_detail: { $sum: 1 }, no_faktur_group: { $addToSet: \"$no_faktur_group\" } } },\n  { $lookup: { from: \"tt_barang_saldo\", let: { barcode: \"$_id.barcode\", gudang: \"$_id.gudang\", tanggal: \"$_id.tanggal\" }, pipeline: [\n    { $match: { $expr: { $and: [ { $eq: [\"$kode_barcode\", \"$$barcode\"] }, { $eq: [\"$kode_gudang\", \"$$gudang\"] }, { $eq: [\"$tanggal\", \"$$tanggal\"] } ] } } },\n    { $project: { _id: 0, stock_beli: 1, stock_in: 1, stock_akhir: 1, berat_akhir: 1 } }\n  ], as: \"saldo\" } },\n  { $project: { _id: 0, key: \"$_id\", total_buyback: 1, total_berat: 1, jumlah_detail: 1, no_faktur_group: 1, saldo: 1 } }\n]);\n\n// Untuk tanggal historis, ganti tt_barang_saldo menjadi th_barang_saldo.\n// Semua query hanya membaca data; NAVA tidak menjalankannya otomatis.",
+      "tags": ["investigasi", "buyback", "pembelian_customer", "stok", "saldo", "tt_beli_detail", "tt_beli_batal", "tt_barang_saldo", "th_barang_saldo", "kode_barcode", "aggregation"],
+      "status": "published",
+      "sourceQuestion": "Investigasi buyback yang tidak menambah stok"
+    },
+    {
+      "articleId": "a7b76a01-8ccf-4bf1-94c4-3c3ee5d94c1a",
+      "title": "Investigasi transfer stok yang belum diterima",
+      "category": "investigasi barang",
+      "product": "nagagold",
+      "audience": "helpdesk",
+      "clientScope": ["all"],
+      "symptoms": [
+        "Stok berkurang di gudang asal tetapi belum masuk tujuan",
+        "Transfer barang belum diterima",
+        "Relasi collection kirim dan terima barang",
+        "Aggregation transfer status OPEN"
+      ],
+      "troubleshootingSteps": [
+        {"order": 1, "title": "Ambil nomor pengiriman", "instruction": "Catat no_kirim atau identifier transfer, barcode, lokasi asal, lokasi tujuan, dan tanggal kirim.", "expectedResult": "Satu transfer dapat ditelusuri pada kedua sisi."},
+        {"order": 2, "title": "Periksa status penerimaan", "instruction": "Source menggunakan status_terima OPEN dan CLOS pada alur penerimaan. OPEN berarti proses belum selesai menurut alur tersebut.", "expectedResult": "Transfer belum selesai tidak dianggap sudah masuk tujuan."},
+        {"order": 3, "title": "Bandingkan dua saldo", "instruction": "Cek pengurangan di asal dan penambahan di tujuan menggunakan barcode, toko, gudang, dan tanggal receive.", "expectedResult": "Diketahui sisi transfer yang belum terposting."},
+        {"order": 4, "title": "Aggregation read-only", "instruction": "Gunakan contoh lookup nomor kirim dan barcode pada internalNotes. Sesuaikan nama collection penerimaan dengan entity aktual.", "expectedResult": "Ditemukan transfer open atau orphan."}
+      ],
+      "userResponseTemplate": "Untuk stok yang berkurang di asal tetapi belum muncul di tujuan, cek no_kirim, barcode, lokasi asal/tujuan, dan status penerimaan. Status OPEN belum berarti barang sudah diterima. Bandingkan saldo kedua lokasi setelah memastikan tanggal posting sama.",
+      "internalNotes": "[RELASI COLLECTION]\nCollection pengiriman dapat berupa tt_kirim_barang_online atau tt_kirim_barang_bos. Hubungkan dengan collection penerimaan menggunakan no_kirim/no_pengiriman, kode_barcode, dan lokasi. Saldo asal/tujuan diperiksa pada tt_barang_saldo atau th_barang_saldo.\n\n[STATUS]\nSource memakai status_terima OPEN dan CLOS pada alur terima barang. OPEN berarti masih proses atau belum selesai. Jangan menyimpulkan barang hilang tanpa mengecek tanggal receive dan sisi tujuan.\n\n[KEMUNGKINAN CELAH]\n1. Kirim selesai tetapi receive belum dibuat.\n2. Receive ada tetapi status masih OPEN.\n3. Asal sudah berkurang, tujuan belum posting.\n4. Nomor transfer atau nama field berbeda.\n5. Barcode sama tetapi gudang/toko berbeda.\n\n[CONTOH AGGREGATION READ-ONLY]\n// Nama collection dan field penerimaan wajib dicocokkan dengan schema.\ndb.tt_kirim_barang_online.aggregate([\n  { $match: { status_terima: \"OPEN\", tanggal: { $lte: \"<tanggal>\" } } },\n  { $lookup: { from: \"tt_terima_barang\", let: { noKirim: \"$no_kirim\", barcode: \"$kode_barcode\" }, pipeline: [\n    { $match: { $expr: { $and: [ { $eq: [\"$no_kirim\", \"$$noKirim\"] }, { $eq: [\"$kode_barcode\", \"$$barcode\"] } ] } } }\n  ], as: \"receive\" } },\n  { $match: { receive: { $size: 0 } } },\n  { $project: { no_kirim: 1, kode_barcode: 1, kode_gudang: 1, tujuan: 1, status_terima: 1 } }\n]);\n\n[INTERPRETASI]\nHasil tanpa receive adalah kandidat transfer belum diterima atau key tidak cocok. Validasi dengan UI dan dokumen transfer. Query hanya membaca data.",
+      "tags": ["investigasi", "transfer", "kirim", "terima", "stok", "saldo", "no_kirim", "status_terima", "aggregation", "lookup"],
+      "status": "published",
+      "sourceQuestion": "Investigasi transfer stok yang belum diterima"
+    },
+    {
+      "articleId": "f0e0ec17-f0cd-4c6a-93c2-3c6d71d9a5ed",
+      "title": "Investigasi selisih titipan dan penjualan",
+      "category": "investigasi titipan",
+      "product": "nagagold",
+      "audience": "helpdesk",
+      "clientScope": ["all"],
+      "symptoms": [
+        "Selisih stok dan uang pada barang titipan",
+        "Barang titipan sudah terjual tetapi status belum selesai",
+        "Relasi tt_titip dan tt_jual_detail",
+        "Aggregation titipan konsinyasi"
+      ],
+      "troubleshootingSteps": [
+        {"order": 1, "title": "Pastikan barang konsinyasi", "instruction": "Periksa tm_group.is_consignment dan tm_barang.is_consignment_barang. Barang titipan tidak boleh langsung diperlakukan seperti barang milik toko.", "expectedResult": "Scope kepemilikan barang sudah jelas."},
+        {"order": 2, "title": "Cek status titipan", "instruction": "Telusuri tt_titip berdasarkan no_titip_group, barcode, dan status_titipan OPEN, FINISH, atau CLOSE sesuai alur.", "expectedResult": "Posisi titipan saat ini diketahui."},
+        {"order": 3, "title": "Hubungkan ke penjualan", "instruction": "Relasikan tt_titip.no_titip_group dengan tt_jual_detail.no_titip_group. Cek apakah penjualan memang mengambil atau menjual barang titipan.", "expectedResult": "Barang terjual dapat ditelusuri ke group titipan."},
+        {"order": 4, "title": "Hubungkan ke kas", "instruction": "Telusuri tt_cash_daily untuk penjualan, batal titip, pembayaran owner, atau transaksi terkait sesuai kategori yang digunakan alur.", "expectedResult": "Nilai fisik, penjualan, komisi, dan pembayaran owner tidak tercampur."},
+        {"order": 5, "title": "Aggregation read-only", "instruction": "Gunakan contoh ringkasan titipan dan lookup penjualan pada internalNotes.", "expectedResult": "Ditemukan titipan open, titipan terjual, atau status yang tidak konsisten."}
+      ],
+      "userResponseTemplate": "Untuk selisih titipan, bedakan dulu barang milik toko dan konsinyasi. Cek tt_titip berdasarkan no_titip_group dan status_titipan, lalu hubungkan ke tt_jual_detail.no_titip_group dan jurnal kas terkait. Jangan menyamakan stok fisik, nilai penjualan, komisi, dan pembayaran owner.",
+      "internalNotes": "[RELASI COLLECTION]\ntt_titip.no_titip_group -> tt_jual_detail.no_titip_group.\ntm_group.kode_group -> is_consignment/jenis_group. tm_barang dapat memiliki is_consignment_barang.\ntt_titip -> tt_cash_daily melalui kategori/deskripsi sesuai alur penjualan atau pembayaran owner.\n\n[STATUS]\nSource memakai status_titipan OPEN, FINISH, dan CLOSE pada beberapa alur. Arti bisnis status harus divalidasi dari UI/prosedur cabang. OPEN tidak sama dengan barang siap dijual bebas.\n\n[KEMUNGKINAN CELAH]\n1. Titipan OPEN sudah ada penjualan tetapi pembayaran owner belum tercatat.\n2. Titipan CLOSE masih ikut report tersedia.\n3. Penjualan titipan masuk kategori kas seperti penjualan biasa.\n4. Barang diambil kembali tetapi reversal/status belum berubah.\n5. Stok fisik benar tetapi kepemilikan dan nilai uang berbeda.\n\n[CONTOH AGGREGATION READ-ONLY]\ndb.tt_titip.aggregate([\n  { $match: { status_titipan: { $nin: [\"CLOSE\"] } } },\n  { $group: { _id: \"$no_titip_group\", barcode: { $addToSet: \"$kode_barcode\" }, jumlah: { $sum: 1 }, status: { $addToSet: \"$status_titipan\" } } },\n  { $lookup: { from: \"tt_jual_detail\", localField: \"_id\", foreignField: \"no_titip_group\", as: \"jual\" } },\n  { $project: { _id: 1, barcode: 1, jumlah: 1, status: 1, jumlah_terjual: { $size: \"$jual\" } } }\n]);\n\n[INTERPRETASI]\nTitipan OPEN dengan penjualan perlu dicek pembayaran owner dan perubahan status. Titipan CLOSE yang masih muncul perlu dicek filter report. Jumlah fisik yang benar tidak otomatis berarti nilai uang sudah benar.",
+      "tags": ["investigasi", "titipan", "konsinyasi", "penjualan", "keuangan", "tt_titip", "tt_jual_detail", "no_titip_group", "status_titipan", "aggregation"],
+      "status": "published",
+      "sourceQuestion": "Investigasi selisih titipan dan penjualan"
     }
   ]
 }

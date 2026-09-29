@@ -8,6 +8,11 @@ import { LoginPage } from "./pages/helpdesk/LoginPage";
 import { TicketPage } from "./pages/helpdesk/TicketPage";
 import { UsersPage } from "./pages/helpdesk/UsersPage";
 import { ChatTrainingPage } from "./pages/helpdesk/ChatTrainingPage";
+import { InvestigationPage } from "./pages/helpdesk/InvestigationPage";
+import { InvestigationTargetsPage } from "./pages/helpdesk/InvestigationTargetsPage";
+import { InvestigationDefinitionsPage } from "./pages/helpdesk/InvestigationDefinitionsPage";
+import { InvestigationKnowledgePage } from "./pages/helpdesk/InvestigationKnowledgePage";
+import { InvestigationPlaybooksPage } from "./pages/helpdesk/InvestigationPlaybooksPage";
 
 export default function App() {
   const [path, setPath] = useState(() => window.location.pathname);
@@ -30,6 +35,11 @@ export default function App() {
   if (path === "/helpdesk/tickets") return <TicketPage />;
   if (path === "/helpdesk/handover") return <HandoverPage />;
   if (path === "/helpdesk/users") return <UsersPage />;
+  if (path === "/helpdesk/investigation") return <InvestigationPage />;
+  if (path === "/helpdesk/investigation-targets") return <InvestigationTargetsPage />;
+  if (path === "/helpdesk/investigation-definitions") return <InvestigationDefinitionsPage />;
+  if (path === "/helpdesk/investigation-knowledge") return <InvestigationKnowledgePage />;
+  if (path === "/helpdesk/investigation-playbooks") return <InvestigationPlaybooksPage />;
   if (path === "/helpdesk/chat") return <ChatRoomPage />;
   if (path.startsWith("/helpdesk/chat/")) {
     return <ChatRoomPage sessionId={decodeURIComponent(path.replace("/helpdesk/chat/", ""))} />;

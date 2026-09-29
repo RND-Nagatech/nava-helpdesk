@@ -12,6 +12,8 @@
     "knowledge:import:published": "node scripts/import-knowledge.js --publish",
     "knowledge:embed": "node scripts/embed-knowledge.js",
     "knowledge:vector-index": "node scripts/create-vector-index.js",
+    "investigation:knowledge:import": "node scripts/import-investigation-knowledge.js",
+    "investigation:knowledge:import:published": "node scripts/import-investigation-knowledge.js --publish",
     "helpdesk:seed": "node scripts/seed-helpdesk-user.js",
     "test": "node --test",
     "check": "find src scripts tests -name '*.js' -print0 | xargs -0 -n1 node --check",

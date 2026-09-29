@@ -13,6 +13,20 @@ function boolFromEnv(name, fallback = false) {
   return ["1", "true", "yes", "on"].includes(String(value).toLowerCase());
 }
 
+function investigationProfilesFromEnv() {
+  const profiles = {};
+  for (const [name, value] of Object.entries(process.env)) {
+    if (!name.startsWith("INVESTIGATION_MONGODB_URI_") || !value) continue;
+    const profile = name.slice("INVESTIGATION_MONGODB_URI_".length).toLowerCase();
+    if (/^[a-z0-9][a-z0-9_-]{0,63}$/.test(profile)) profiles[profile] = value;
+  }
+  // Backward-compatible fallback for a single-VM setup.
+  if (process.env.INVESTIGATION_MONGODB_URI && !profiles.default) {
+    profiles.default = process.env.INVESTIGATION_MONGODB_URI;
+  }
+  return profiles;
+}
+
 export const env = {
   port: numberFromEnv("PORT", 3000),
   corsOrigin: process.env.CORS_ORIGIN || false,
@@ -26,6 +40,18 @@ export const env = {
   agentTraceCollection: process.env.AGENT_TRACE_COLLECTION || "tt_agent_trace",
   ticketCollection: process.env.TICKET_COLLECTION || "tt_ticket_helpdesk",
   helpdeskUserCollection: process.env.HELPDESK_USER_COLLECTION || "tm_helpdesk_user",
+  investigationTargetCollection: process.env.INVESTIGATION_TARGET_COLLECTION || "tm_investigation_target",
+  investigationRunCollection: process.env.INVESTIGATION_RUN_COLLECTION || "tt_investigation_run",
+  investigationKnowledgeCollection: process.env.INVESTIGATION_KNOWLEDGE_COLLECTION || "tm_investigation_knowledge",
+  investigationDefinitionCollection: process.env.INVESTIGATION_DEFINITION_COLLECTION || "tm_investigation_definition",
+  // Registry Playbook baru. Tidak diisi otomatis dari collection legacy.
+  investigationPlaybookCollection: process.env.INVESTIGATION_PLAYBOOK_COLLECTION || "tm_investigation_playbook",
+  investigationMongoUri: process.env.INVESTIGATION_MONGODB_URI || "",
+  investigationMongoProfiles: investigationProfilesFromEnv(),
+  investigationMongoDefaultProfile: (process.env.INVESTIGATION_MONGODB_DEFAULT_PROFILE || "default").toLowerCase(),
+  investigationMongoDb: process.env.INVESTIGATION_MONGODB_DB || "",
+  investigationQueryTimeoutMs: numberFromEnv("INVESTIGATION_QUERY_TIMEOUT_MS", 8000),
+  investigationMaxRows: numberFromEnv("INVESTIGATION_MAX_ROWS", 50),
   uploadBaseUrl: process.env.UPLOAD_BASE_URL || "/uploads",
   siteCheckTimeoutMs: numberFromEnv("SITE_CHECK_TIMEOUT_MS", 8000),
   siteCheckCacheTtlMs: numberFromEnv("SITE_CHECK_CACHE_TTL_MS", 60000),

@@ -5,6 +5,26 @@ import { env } from "../config/env.js";
 import { agentRunContext } from "../services/agent-run-context.js";
 import { isLowInformationToken, mergeSearchQuery, normalizeText, tokenize } from "../utils/text.js";
 import { checkCustomerSite } from "../services/site-check-service.js";
+import {
+  inspectBuybackVsCash,
+  inspectBuybackVsStock,
+  inspectDailyRolloverDifference,
+  inspectDebtVsCash,
+  inspectHancurVsSaldo,
+  inspectInternalTransferVsSaldo,
+  inspectOpnameVsSaldo,
+  inspectReportVisibility,
+  inspectSalesVsCash,
+  inspectServiceVsCash,
+  inspectStockDifference,
+  resolveInvestigationDate,
+} from "../services/investigation-service.js";
+import { executeInvestigationDefinition, getInvestigationDefinition } from "../services/investigation-definition-service.js";
+import {
+  executeInvestigationPlaybook,
+  findInvestigationPlaybooks,
+  getInvestigationPlaybook,
+} from "../services/investigation-playbook-service.js";
 
 function hasCurrentTopic(question = "") {
   const tokens = tokenize(question, { removeStopWords: true, expand: false });
@@ -18,7 +38,7 @@ function prefersCurrentQuestion(question = "") {
   return hasCurrentTopic(question);
 }
 
-function compactPrimaryArticle(doc) {
+function compactPrimaryArticle(doc, { internal = false } = {}) {
   return {
     article_id: doc.articleId,
     title: doc.title,
@@ -32,6 +52,10 @@ function compactPrimaryArticle(doc) {
     })),
     escalation_rules: doc.escalationRules || [],
     user_response_template: doc.userResponseTemplate || "",
+    ...(internal ? {
+      internal_notes: doc.internalNotes || "",
+      linked_operation_ids: doc.linked_operation_ids || [],
+    } : {}),
     retrieval: buildRetrievalMeta(doc),
   };
 }
@@ -66,17 +90,20 @@ function compactSupportingArticle(doc) {
   };
 }
 
-function buildSearchPayload(result, { status, requestedQuery = "", reusedPrimary = false } = {}) {
+function buildSearchPayload(result, { status, requestedQuery = "", reusedPrimary = false, internal = false } = {}) {
   const primaryDoc = result.documents[0] || null;
   const evidenceStrength = result.primaryEvidence?.strength || primaryDoc?.retrieval?.evidenceStrength || "none";
   const isStrongEvidence = evidenceStrength === "strong";
-  const primaryArticle = primaryDoc ? compactPrimaryArticle(primaryDoc) : null;
+  const primaryArticle = primaryDoc ? compactPrimaryArticle(primaryDoc, { internal }) : null;
 
   // Strong evidence cukup membawa primary article agar konteks LLM tidak tercampur kandidat lemah.
   // Jika primary tidak menjawab kebutuhan aktual, agent masih boleh memakai search kedua.
   const supportingCandidates = isStrongEvidence
     ? []
-    : result.documents.slice(1, 3).map(compactSupportingArticle);
+    : result.documents.slice(1, 3).map((doc) => ({
+      ...compactSupportingArticle(doc),
+      ...(internal ? { linked_operation_ids: doc.linked_operation_ids || [] } : {}),
+    }));
 
   return {
     status: status || (result.found ? "success" : "not_found"),
@@ -95,7 +122,10 @@ function buildSearchPayload(result, { status, requestedQuery = "", reusedPrimary
       error: result.vector.error || null,
     },
     timing: result.timing || null,
-    candidates: result.found ? undefined : result.candidates.slice(0, 3).map(compactSupportingArticle),
+    candidates: result.found ? undefined : result.candidates.slice(0, 3).map((doc) => ({
+      ...compactSupportingArticle(doc),
+      ...(internal ? { linked_operation_ids: doc.linked_operation_ids || [] } : {}),
+    })),
     instruction_to_agent: result.found
       ? evidenceStrength === "strong"
         ? "PRIMARY_ARTICLE adalah kandidat kuat. Jawab langsung jika judul/objek dan kebutuhan customer memang cocok. Jika customer secara eksplisit menyebut fitur/objek yang berbeda, atau PRIMARY_ARTICLE tidak menjawab kebutuhan saat ini, Anda boleh memakai satu pencarian tersisa dengan query yang lebih spesifik; jangan terikat pada hasil pertama."
@@ -158,13 +188,20 @@ const searchKnowledgeTool = tool(
         status: "reused_same_query",
         requestedQuery: query,
         reusedPrimary: true,
+        internal: Boolean(state?.investigationMode),
       }));
     }
 
     const currentQuestionIsSpecific = prefersCurrentQuestion(originalQuestion);
     const primaryQuery = currentQuestionIsSpecific ? originalQuestion : effectiveQuery;
     const alternateQuery = currentQuestionIsSpecific ? effectiveQuery : originalQuestion;
-    let result = await retrieveKnowledge(primaryQuery, { topK: top_k, siteCheck: state?.siteCheck || null });
+    const retrievalOptions = {
+      topK: top_k,
+      siteCheck: state?.siteCheck || null,
+      audience: state?.investigationMode ? "helpdesk" : "customer",
+      ...(state?.investigationMode ? { collectionName: env.investigationKnowledgeCollection, useVector: false } : {}),
+    };
+    let result = await retrieveKnowledge(primaryQuery, retrievalOptions);
 
     // Bila pertanyaan terbaru terlalu pendek/ambigu atau anchor utama benar-benar
     // tidak menemukan apa-apa, baru gunakan query hasil rewrite + history.
@@ -172,11 +209,11 @@ const searchKnowledgeTool = tool(
       normalizeText(alternateQuery) !== normalizeText(primaryQuery) &&
       !result.found
     ) {
-      const alternateResult = await retrieveKnowledge(alternateQuery, { topK: top_k, siteCheck: state?.siteCheck || null });
+      const alternateResult = await retrieveKnowledge(alternateQuery, retrievalOptions);
       if (alternateResult.found || !result.candidates?.length) result = alternateResult;
     }
     rememberSearchResult(state, result);
-    return JSON.stringify(buildSearchPayload(result, { requestedQuery: query }));
+    return JSON.stringify(buildSearchPayload(result, { requestedQuery: query, internal: Boolean(state?.investigationMode) }));
   },
   {
     name: "search_knowledge",
@@ -229,6 +266,282 @@ const checkCustomerSiteTool = tool(
   },
 );
 
+const naturalDateSchema = z.string().trim().min(2).max(80).describe("Tanggal, misalnya 'hari ini', 'kemarin', atau YYYY-MM-DD.");
+
+const investigationDateFields = new Set([
+  "tanggal",
+  "tanggal_awal",
+  "tanggal_akhir",
+  "tanggal_sebelumnya",
+  "tanggal_sesudahnya",
+]);
+
+function normalizeInvestigationParams(params) {
+  return Object.fromEntries(Object.entries(params || {}).map(([key, value]) => [
+    key,
+    investigationDateFields.has(key) && typeof value === "string"
+      ? resolveInvestigationDate(value)
+      : value,
+  ]));
+}
+
+const detailStockParamsSchema = z.object({
+  kode_barcode: z.string().trim().min(1).max(120),
+  tanggal: naturalDateSchema,
+  kode_toko: z.string().trim().max(80).optional(),
+  kode_baki: z.string().trim().max(80).optional(),
+  kode_gudang: z.string().trim().max(80).optional(),
+});
+
+const rolloverStockParamsSchema = z.object({
+  tanggal_sebelumnya: naturalDateSchema,
+  tanggal_sesudahnya: naturalDateSchema,
+  kode_toko: z.string().trim().max(80).optional(),
+  kode_baki: z.string().trim().max(80).optional(),
+  kode_gudang: z.string().trim().max(80).optional(),
+});
+
+const serviceCashParamsSchema = z.object({
+  tanggal_awal: naturalDateSchema,
+  tanggal_akhir: naturalDateSchema,
+  no_faktur_service: z.string().trim().max(160).optional(),
+  status_proses: z.string().trim().max(20).optional(),
+  max_rows: z.number().int().min(1).max(200).optional(),
+});
+
+const internalTransferParamsSchema = z.object({
+  tanggal_awal: naturalDateSchema,
+  tanggal_akhir: naturalDateSchema,
+  no_pindah: z.string().trim().max(160).optional(),
+  kode_dept: z.string().trim().max(120).optional(),
+  kode_gudang_asal: z.string().trim().max(80).optional(),
+  kode_toko_asal: z.string().trim().max(80).optional(),
+  kode_baki_asal: z.string().trim().max(80).optional(),
+  kode_gudang_tujuan: z.string().trim().max(80).optional(),
+  kode_toko_tujuan: z.string().trim().max(80).optional(),
+  kode_baki_tujuan: z.string().trim().max(80).optional(),
+  max_rows: z.number().int().min(1).max(200).optional(),
+});
+
+const opnameParamsSchema = z.object({
+  tanggal_awal: naturalDateSchema,
+  tanggal_akhir: naturalDateSchema,
+  kode_barcode: z.string().trim().max(120).optional(),
+  kode_toko: z.string().trim().max(80).optional(),
+  kode_baki: z.string().trim().max(80).optional(),
+  kode_gudang: z.string().trim().max(80).optional(),
+  max_rows: z.number().int().min(1).max(200).optional(),
+});
+
+const hancurParamsSchema = z.object({
+  tanggal_awal: naturalDateSchema,
+  tanggal_akhir: naturalDateSchema,
+  no_hancur: z.string().trim().max(160).optional(),
+  kode_barcode: z.string().trim().max(120).optional(),
+  kode_toko: z.string().trim().max(80).optional(),
+  kode_baki: z.string().trim().max(80).optional(),
+  kode_gudang: z.string().trim().max(80).optional(),
+  max_rows: z.number().int().min(1).max(200).optional(),
+});
+
+const debtCashParamsSchema = z.object({
+  tanggal_awal: naturalDateSchema,
+  tanggal_akhir: naturalDateSchema,
+  identifier: z.string().trim().max(160).optional(),
+  no_faktur_hutang: z.string().trim().max(160).optional(),
+  no_faktur_cicil: z.string().trim().max(160).optional(),
+  jenis_transaksi: z.enum(["hutang", "cicilan", "all"]).optional(),
+  max_rows: z.number().int().min(1).max(200).optional(),
+});
+
+const salesCashParamsSchema = z.object({
+  tanggal_awal: naturalDateSchema,
+  tanggal_akhir: naturalDateSchema,
+  no_faktur_group: z.string().trim().max(160).optional(),
+  jenis_pembayaran: z.string().trim().max(80).optional(),
+  max_rows: z.number().int().min(1).max(200).optional(),
+});
+
+const buybackCashParamsSchema = z.object({
+  tanggal_awal: naturalDateSchema,
+  tanggal_akhir: naturalDateSchema,
+  no_faktur_group: z.string().trim().max(160).optional(),
+  no_faktur_beli: z.string().trim().max(160).optional(),
+  kode_barcode: z.string().trim().max(120).optional(),
+  kode_gudang: z.string().trim().max(80).optional(),
+  max_rows: z.number().int().min(1).max(200).optional(),
+});
+
+const buybackStockParamsSchema = z.object({
+  tanggal_awal: naturalDateSchema,
+  tanggal_akhir: naturalDateSchema,
+  kode_barcode: z.string().trim().max(120).optional(),
+  kode_gudang: z.string().trim().max(80).optional(),
+  max_rows: z.number().int().min(1).max(200).optional(),
+});
+
+const reportVisibilityParamsSchema = z.object({
+  report_context: z.enum(["buyback", "sales", "cash", "service", "debt", "stock"]),
+  tanggal_awal: naturalDateSchema,
+  tanggal_akhir: naturalDateSchema,
+  identifier: z.string().trim().max(160).optional(),
+  kode_gudang: z.string().trim().max(80).optional(),
+  max_rows: z.number().int().min(1).max(100).optional(),
+});
+
+const inspectCustomerDatabaseTool = tool(
+  async ({ operation_id, playbook_id, params = {} }) => {
+    const state = agentRunContext.getStore();
+    if (!state?.investigationMode) {
+      return JSON.stringify({
+        status: "not_available",
+        instruction_to_agent: "Pemeriksaan database hanya tersedia di room Investigasi Helpdesk. Jangan gunakan tool ini pada customer chat.",
+      });
+    }
+
+    if (!state.investigationDomain) {
+      return JSON.stringify({
+        status: "domain_missing",
+        instruction_to_agent: "Domain toko belum tersedia. Minta Helpdesk menyebutkan domain Goldstore sebelum menjalankan pemeriksaan database.",
+      });
+    }
+
+    try {
+      const inspectInput = {
+        domain: state.investigationDomain,
+        params,
+        trainingId: state.investigationSessionId || "",
+        helpdeskUser: { helpdesk_id: state.helpdeskId || "", name: state.helpdeskName || "Helpdesk" },
+      };
+      let result;
+      if (playbook_id) {
+        const playbook = await getInvestigationPlaybook(playbook_id);
+        if (!playbook || playbook.status !== "published") {
+          return JSON.stringify({
+            status: "playbook_not_available",
+            playbook_id,
+            instruction_to_agent: "Playbook tersebut belum published atau tidak ditemukan. Jangan mengarang hasil database.",
+          });
+        }
+        result = await executeInvestigationPlaybook({ ...inspectInput, playbook });
+      } else if ([
+        "stock.opening_vs_previous_closing",
+        "stock.detail_vs_summary",
+        "stock.opname_vs_saldo",
+        "stock.hancur_vs_saldo",
+        "finance.debt_vs_cash",
+        "service.status_vs_cash",
+        "stock.internal_transfer_vs_saldo",
+        "finance.sales_vs_cash",
+        "finance.buyback_vs_cash",
+        "stock.buyback_vs_saldo",
+        "report.visibility_diagnostic",
+      ].includes(operation_id)) {
+        const parsedParams = operation_id === "stock.opening_vs_previous_closing"
+          ? rolloverStockParamsSchema.parse(params)
+          : operation_id === "stock.detail_vs_summary"
+            ? detailStockParamsSchema.parse(params)
+            : operation_id === "stock.opname_vs_saldo"
+              ? opnameParamsSchema.parse(params)
+              : operation_id === "stock.hancur_vs_saldo"
+                ? hancurParamsSchema.parse(params)
+                : operation_id === "finance.debt_vs_cash"
+                  ? debtCashParamsSchema.parse(params)
+            : operation_id === "service.status_vs_cash"
+              ? serviceCashParamsSchema.parse(params)
+              : operation_id === "stock.internal_transfer_vs_saldo"
+                ? internalTransferParamsSchema.parse(params)
+                : operation_id === "finance.sales_vs_cash"
+              ? salesCashParamsSchema.parse(params)
+              : operation_id === "finance.buyback_vs_cash"
+                ? buybackCashParamsSchema.parse(params)
+                : operation_id === "stock.buyback_vs_saldo"
+                  ? buybackStockParamsSchema.parse(params)
+                  : reportVisibilityParamsSchema.parse(params);
+        const validatedParams = normalizeInvestigationParams(parsedParams);
+        if (["finance.sales_vs_cash", "finance.buyback_vs_cash", "stock.buyback_vs_saldo", "report.visibility_diagnostic", "service.status_vs_cash", "stock.internal_transfer_vs_saldo"].includes(operation_id)) {
+          const definition = await getInvestigationDefinition(operation_id);
+          if (!definition || definition.status !== "published") {
+            return JSON.stringify({
+              status: "operation_not_available",
+              operation_id,
+              instruction_to_agent: `Operation ${operation_id} belum published atau sedang diarsipkan. Jangan mengarang hasil database.`,
+            });
+          }
+        }
+        result = operation_id === "stock.opening_vs_previous_closing"
+          ? await inspectDailyRolloverDifference({ ...inspectInput, params: validatedParams })
+          : operation_id === "stock.detail_vs_summary"
+            ? await inspectStockDifference({ ...inspectInput, params: validatedParams })
+            : operation_id === "stock.opname_vs_saldo"
+              ? await inspectOpnameVsSaldo({ ...inspectInput, params: validatedParams })
+              : operation_id === "stock.hancur_vs_saldo"
+                ? await inspectHancurVsSaldo({ ...inspectInput, params: validatedParams })
+                : operation_id === "finance.debt_vs_cash"
+                  ? await inspectDebtVsCash({ ...inspectInput, params: validatedParams })
+            : operation_id === "service.status_vs_cash"
+              ? await inspectServiceVsCash({ ...inspectInput, params: validatedParams })
+              : operation_id === "stock.internal_transfer_vs_saldo"
+                ? await inspectInternalTransferVsSaldo({ ...inspectInput, params: validatedParams })
+                : operation_id === "finance.sales_vs_cash"
+              ? await inspectSalesVsCash({ ...inspectInput, params: validatedParams })
+              : operation_id === "finance.buyback_vs_cash"
+                ? await inspectBuybackVsCash({ ...inspectInput, params: validatedParams })
+                : operation_id === "stock.buyback_vs_saldo"
+                  ? await inspectBuybackVsStock({ ...inspectInput, params: validatedParams })
+                  : await inspectReportVisibility({ ...inspectInput, params: validatedParams });
+      } else {
+        const definition = await getInvestigationDefinition(operation_id);
+        if (!definition || definition.status !== "published") {
+          return JSON.stringify({
+            status: "operation_not_available",
+            operation_id,
+            instruction_to_agent: "Operation investigasi tersebut belum tersedia atau belum published. Jangan mengarang hasil database.",
+          });
+        }
+        result = await executeInvestigationDefinition({ ...inspectInput, definition });
+      }
+      if (state.databaseChecks) state.databaseChecks.push(result);
+      return JSON.stringify(result);
+    } catch (error) {
+      return JSON.stringify({
+        status: "failed",
+        error_code: error?.code || "INVESTIGATION_FAILED",
+        message: error?.message || "Pemeriksaan database belum berhasil.",
+        instruction_to_agent: "Sampaikan kegagalan secara jujur. Jangan mengarang isi database atau menyatakan ada selisih jika query belum berhasil.",
+      });
+    }
+  },
+  {
+    name: "inspect_customer_database",
+    description: "Tool internal read-only untuk Investigasi Helpdesk. Gunakan playbook_id untuk Playbook published yang berisi aggregation, filter, aturan temuan, dan saran koreksi. Gunakan operation_id hanya untuk operation legacy yang sudah tersedia. Jangan gunakan pada customer chat dan jangan membuat aggregation bebas.",
+    // Jangan memakai z.discriminatedUnion di sini. Adapter tool LangChain yang
+    // dipakai provider saat ini mengubahnya menjadi schema null. Validasi detail
+    // parameter dilakukan di callback berdasarkan operation_id.
+    schema: z.object({
+      operation_id: z.string().trim().min(3).max(100).optional(),
+      playbook_id: z.string().trim().min(3).max(160).optional(),
+      params: z.record(z.string(), z.union([z.string().trim().max(200), z.number(), z.boolean(), z.null()])).optional().default({}),
+    }),
+  },
+);
+
+const findInvestigationPlaybookTool = tool(
+  async ({ query }) => JSON.stringify({
+    status: "success",
+    query,
+    candidates: await findInvestigationPlaybooks(query),
+    instruction_to_agent: "Pilih satu Playbook yang paling cocok. Setelah itu panggil inspect_customer_database menggunakan playbook_id dan kirim parameter yang diminta. Jika belum ada yang cocok, gunakan operation legacy bila tersedia atau minta klarifikasi; jangan mengarang aggregation.",
+  }),
+  {
+    name: "find_investigation_playbook",
+    description: "Cari Playbook investigasi Helpdesk yang sudah published berdasarkan keluhan natural language. Gunakan sebelum inspect_customer_database jika pertanyaan tidak jelas operation_id-nya atau kemungkinan memakai Playbook baru.",
+    schema: z.object({
+      query: z.string().trim().min(2).max(1200).describe("Keluhan Helpdesk, misalnya laporan summary dan detail barang berbeda atau total cash dan penjualan tidak sama."),
+    }),
+  },
+);
+
 const escalateHelpdeskTool = tool(
   async ({ issue_summary, reason, attempted_steps }) => {
     return JSON.stringify({
@@ -250,7 +563,7 @@ const escalateHelpdeskTool = tool(
   }
 );
 
-export const helpdeskTools = [searchKnowledgeTool, checkCustomerSiteTool, escalateHelpdeskTool];
+export const helpdeskTools = [searchKnowledgeTool, checkCustomerSiteTool, findInvestigationPlaybookTool, inspectCustomerDatabaseTool, escalateHelpdeskTool];
 
 export const __toolInternals = {
   resultQuality,

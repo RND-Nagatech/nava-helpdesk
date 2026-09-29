@@ -50,6 +50,41 @@ import {
   sendTrainingMessageHandler,
   trainingFeedbackHandler,
 } from "../controllers/chat-training-controller.js";
+import {
+  closeInvestigationSessionHandler,
+  createInvestigationSessionHandler,
+  getInvestigationSessionHandler,
+  investigationDatabaseCheckHandler,
+  investigationRunsHandler,
+  investigationTargetsHandler,
+  listInvestigationSessionsHandler,
+  sendInvestigationMessageHandler,
+  upsertInvestigationTargetHandler,
+} from "../controllers/investigation-controller.js";
+import {
+  archiveInvestigationDefinitionHandler,
+  createInvestigationDefinitionHandler,
+  getInvestigationDefinitionHandler,
+  listInvestigationDefinitionsHandler,
+  publishInvestigationDefinitionHandler,
+  updateInvestigationDefinitionHandler,
+} from "../controllers/investigation-definition-controller.js";
+import {
+  archiveInvestigationKnowledgeHandler,
+  createInvestigationKnowledgeHandler,
+  getInvestigationKnowledgeHandler,
+  listInvestigationKnowledgeHandler,
+  publishInvestigationKnowledgeHandler,
+  updateInvestigationKnowledgeHandler,
+} from "../controllers/investigation-knowledge-controller.js";
+import {
+  archiveInvestigationPlaybookHandler,
+  createInvestigationPlaybookHandler,
+  getInvestigationPlaybookHandler,
+  listInvestigationPlaybooksHandler,
+  publishInvestigationPlaybookHandler,
+  updateInvestigationPlaybookHandler,
+} from "../controllers/investigation-playbook-controller.js";
 
 export const apiRouter = Router();
 
@@ -111,6 +146,33 @@ apiRouter.post("/training/:trainingId/feedback", requireHelpdeskAuth, trainingFe
 apiRouter.post("/training/:trainingId/generate-knowledge", requireHelpdeskAuth, generateTrainingKnowledgeHandler);
 apiRouter.post("/training/:trainingId/save-draft", requireHelpdeskAuth, saveTrainingDraftHandler);
 apiRouter.post("/training/:trainingId/close", requireHelpdeskAuth, closeTrainingSessionHandler);
+apiRouter.get("/investigation/targets", requireHelpdeskAuth, investigationTargetsHandler);
+apiRouter.post("/investigation/targets", requireHelpdeskAuth, requireHelpdeskAdmin, upsertInvestigationTargetHandler);
+apiRouter.get("/investigation/definitions", requireHelpdeskAuth, listInvestigationDefinitionsHandler);
+apiRouter.post("/investigation/definitions", requireHelpdeskAuth, requireHelpdeskAdmin, createInvestigationDefinitionHandler);
+apiRouter.get("/investigation/definitions/:operationId", requireHelpdeskAuth, getInvestigationDefinitionHandler);
+apiRouter.put("/investigation/definitions/:operationId", requireHelpdeskAuth, requireHelpdeskAdmin, updateInvestigationDefinitionHandler);
+apiRouter.post("/investigation/definitions/:operationId/publish", requireHelpdeskAuth, requireHelpdeskAdmin, publishInvestigationDefinitionHandler);
+apiRouter.post("/investigation/definitions/:operationId/archive", requireHelpdeskAuth, requireHelpdeskAdmin, archiveInvestigationDefinitionHandler);
+apiRouter.get("/investigation/knowledge", requireHelpdeskAuth, listInvestigationKnowledgeHandler);
+apiRouter.post("/investigation/knowledge", requireHelpdeskAuth, requireHelpdeskAdmin, createInvestigationKnowledgeHandler);
+apiRouter.get("/investigation/knowledge/:articleId", requireHelpdeskAuth, getInvestigationKnowledgeHandler);
+apiRouter.put("/investigation/knowledge/:articleId", requireHelpdeskAuth, requireHelpdeskAdmin, updateInvestigationKnowledgeHandler);
+apiRouter.post("/investigation/knowledge/:articleId/publish", requireHelpdeskAuth, requireHelpdeskAdmin, publishInvestigationKnowledgeHandler);
+apiRouter.post("/investigation/knowledge/:articleId/archive", requireHelpdeskAuth, requireHelpdeskAdmin, archiveInvestigationKnowledgeHandler);
+apiRouter.get("/investigation/playbooks", requireHelpdeskAuth, listInvestigationPlaybooksHandler);
+apiRouter.post("/investigation/playbooks", requireHelpdeskAuth, requireHelpdeskAdmin, createInvestigationPlaybookHandler);
+apiRouter.get("/investigation/playbooks/:playbookId", requireHelpdeskAuth, getInvestigationPlaybookHandler);
+apiRouter.put("/investigation/playbooks/:playbookId", requireHelpdeskAuth, requireHelpdeskAdmin, updateInvestigationPlaybookHandler);
+apiRouter.post("/investigation/playbooks/:playbookId/publish", requireHelpdeskAuth, requireHelpdeskAdmin, publishInvestigationPlaybookHandler);
+apiRouter.post("/investigation/playbooks/:playbookId/archive", requireHelpdeskAuth, requireHelpdeskAdmin, archiveInvestigationPlaybookHandler);
+apiRouter.post("/investigation/session", requireHelpdeskAuth, createInvestigationSessionHandler);
+apiRouter.get("/investigation/sessions", requireHelpdeskAuth, listInvestigationSessionsHandler);
+apiRouter.get("/investigation/:trainingId", requireHelpdeskAuth, getInvestigationSessionHandler);
+apiRouter.post("/investigation/:trainingId/message", requireHelpdeskAuth, sendInvestigationMessageHandler);
+apiRouter.post("/investigation/:trainingId/database-check", requireHelpdeskAuth, investigationDatabaseCheckHandler);
+apiRouter.get("/investigation/:trainingId/runs", requireHelpdeskAuth, investigationRunsHandler);
+apiRouter.post("/investigation/:trainingId/close", requireHelpdeskAuth, closeInvestigationSessionHandler);
 apiRouter.get("/customer/:customer_id/context", getCustomerContext);
 apiRouter.delete("/chat/:session_id", resetChatSession);
 apiRouter.post("/knowledge/search", searchKnowledge);

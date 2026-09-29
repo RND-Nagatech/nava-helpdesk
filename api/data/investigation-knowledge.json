@@ -1,0 +1,393 @@
+[
+  {
+    "articleId": "INV-KB-NAGAGOLD-LOCATION-SEMANTICS",
+    "title": "Terminologi lokasi saldo NAGAGOLD",
+    "category": "struktur-lokasi",
+    "symptoms": [
+      "kode toko bukan cabang",
+      "kode baki perhiasan",
+      "kode nampan saldo barang",
+      "gudang toko dan posisi baki",
+      "kode_gudang dan kode_toko"
+    ],
+    "tags": [
+      "kode_gudang",
+      "kode_toko",
+      "kode_baki",
+      "baki",
+      "nampan",
+      "posisi perhiasan",
+      "stock"
+    ],
+    "troubleshootingSteps": [
+      {
+        "order": 1,
+        "title": "Bedakan bangunan dan posisi baki",
+        "instruction": "Dalam data NAGAGOLD, kode_gudang menunjukkan gudang atau ruangan/bangunan penyimpanan. kode_toko menunjukkan kode baki atau posisi nampan tempat perhiasan berada; kode_toko bukan nama toko dan bukan kode cabang.",
+        "expectedResult": "Filter lokasi dipahami pada level gudang dan posisi baki yang benar."
+      },
+      {
+        "order": 2,
+        "title": "Gunakan istilah Helpdesk yang jelas",
+        "instruction": "Jika Helpdesk menyebut kode_baki, petakan ke field database kode_toko. Saat menjawab, tulis kode baki/posisi dan kode gudang, lalu boleh sertakan field mentah kode_toko agar mudah dicocokkan dengan NAGAGOLD.",
+        "expectedResult": "Helpdesk tidak mengira kode_toko sebagai cabang atau toko customer."
+      },
+      {
+        "order": 3,
+        "title": "Pertahankan grain investigasi",
+        "instruction": "Untuk saldo historis dan laporan stok, bandingkan minimal tanggal, kode_barcode, kode_gudang, dan kode_toko/kode_baki. Jangan menggabungkan baris dari baki berbeda hanya karena kode_barcode sama.",
+        "expectedResult": "Selisih tidak tertutup oleh grouping yang terlalu luas."
+      }
+    ],
+    "userResponseTemplate": "Jelaskan lokasi dengan istilah kode gudang sebagai ruangan/bangunan dan kode baki/posisi sebagai kode_toko. Jangan menyebut kode_toko sebagai cabang.",
+    "internalNotes": "Schema NAGAGOLD tetap menggunakan nama field kode_toko. Makna operasionalnya adalah kode baki/nampan atau posisi perhiasan di dalam gudang. kode_gudang adalah gudang/ruangan/bangunan penyimpanan, misalnya TOKO atau BELI. Alias input kode_baki diterjemahkan backend menjadi filter kode_toko. Konteks domain toko/customer tetap berbeda dari field kode_toko.",
+    "linked_operation_ids": [
+      "stock.detail_vs_summary",
+      "stock.opening_vs_previous_closing",
+      "stock.buyback_vs_saldo",
+      "report.visibility_diagnostic"
+    ],
+    "status": "published"
+  },
+  {
+    "articleId": "INV-KB-FINANCE-SALES-CASH-NAGAGOLD",
+    "title": "Investigasi selisih laporan penjualan dan keuangan NAGAGOLD",
+    "category": "keuangan-penjualan",
+    "symptoms": [
+      "total laporan penjualan berbeda dengan laporan keuangan",
+      "uang penjualan tidak sama dengan cash harian",
+      "selisih nominal penjualan dan keuangan",
+      "faktur penjualan tidak muncul di cash"
+    ],
+    "tags": [
+      "tt_jual_detail",
+      "tt_cash_daily",
+      "tt_jual_batal",
+      "no_faktur_group",
+      "deskripsi",
+      "PENJUALAN",
+      "BATAL PENJUALAN",
+      "finance.sales_vs_cash"
+    ],
+    "troubleshootingSteps": [
+      {
+        "order": 1,
+        "title": "Tentukan scope laporan",
+        "instruction": "Gunakan domain target, tanggal awal, dan tanggal akhir. Operation mengikuti scope report EOD NAGAGOLD: tt_jual_detail.tgl_system, status_valid=DONE, status_kembali=OPEN serta tt_cash_daily.tanggal dan status=OPEN.",
+        "expectedResult": "Scope periode dan status yang dibandingkan jelas."
+      },
+      {
+        "order": 2,
+        "title": "Hubungkan penjualan dan cash",
+        "instruction": "Hubungkan tt_jual_detail.no_faktur_group dengan tt_cash_daily.deskripsi. Jika perlu turun ke detail faktur, gunakan tt_cash_daily.no_faktur_list atau detail_transaction.no_faktur dengan tt_jual_detail.no_faktur_jual.",
+        "expectedResult": "Setiap faktur group dapat ditelusuri ke cash terkait atau dinyatakan tidak memiliki pasangan."
+      },
+      {
+        "order": 3,
+        "title": "Bandingkan komponen nominal",
+        "instruction": "Jangan membandingkan harga_total langsung dengan jumlah_in. Bandingkan pembayaran.jumlah_rp sebagai expected payment dengan cash kategori PENJUALAN jumlah_in, lalu pisahkan fee, BATAL PENJUALAN jumlah_out, cashback, lebih bayar, dan adjustment lain.",
+        "expectedResult": "Selisih dapat dibedakan antara nominal, fee, pembatalan, dan adjustment."
+      },
+      {
+        "order": 4,
+        "title": "Baca hasil investigasi",
+        "instruction": "MISSING_CASH berarti penjualan/pembayaran ada tetapi cash PENJUALAN tidak ditemukan. MISSING_SALE berarti cash ada tetapi penjualan dalam scope tidak ditemukan. AMOUNT_DIFFERENCE berarti nominal net cash tidak sama dengan expected payment. CANCELLATION_NOT_OFFSET berarti pembatalan belum mengimbangi pembayaran. DATE_SHIFT perlu ditelusuri karena penjualan memakai tgl_system sedangkan cash memakai tanggal.",
+        "expectedResult": "Helpdesk mendapat kandidat penyebab berbasis evidence, bukan dugaan umum."
+      }
+    ],
+    "userResponseTemplate": "Gunakan hasil operation finance.sales_vs_cash dan tampilkan TEMUAN, EVIDENCE, KEMUNGKINAN PENYEBAB, serta SARAN PERBAIKAN secara singkat. Tampilkan nomor faktur group, nominal yang dibandingkan, kategori cash, status, dan selisihnya.",
+    "internalNotes": "Sumber logic NAGAGOLD: Penjualan report memakai tt_jual_detail.tgl_system dengan status_valid=DONE dan status_kembali=OPEN. Cash report memakai tt_cash_daily.tanggal dengan status=OPEN. Relasi utama tt_jual_detail.no_faktur_group = tt_cash_daily.deskripsi. Nilai penjualan terdiri dari harga_total, pembayaran.jumlah_rp, dan bayar_dp. Cash penjualan dibuat berdasarkan pembayaran dan dapat sudah memperhitungkan fee. Kategori BATAL PENJUALAN, CASHBACK, KEMBALI LEBIH BAYAR, TUKAR KURANG, KELEBIHAN BAYAR DP PENJUALAN, LEBIH BAYAR PENJUALAN, dan KELEBIHAN PO harus dipisahkan dari PENJUALAN. Hasil operation bersifat read-only; NAVA tidak boleh mengklaim sudah memperbaiki database.",
+    "linked_operation_ids": ["finance.sales_vs_cash"],
+    "status": "published"
+  },
+  {
+    "articleId": "INV-KB-FINANCE-BUYBACK-CASH-NAGAGOLD",
+    "title": "Investigasi selisih buyback customer dan keuangan NAGAGOLD",
+    "category": "keuangan-buyback",
+    "symptoms": [
+      "uang pembelian dari customer berbeda dengan laporan buyback",
+      "pembelian customer tidak muncul di keuangan",
+      "buyback emas atau barang selisih nominal",
+      "cash keluar pembelian tidak sama dengan tt_beli_detail"
+    ],
+    "tags": [
+      "tt_beli_detail",
+      "tt_beli_batal",
+      "tt_cash_daily",
+      "buyback",
+      "pembelian customer",
+      "PEMBELIAN",
+      "BATAL BELI",
+      "BATAL PEMBELIAN",
+      "finance.buyback_vs_cash"
+    ],
+    "troubleshootingSteps": [
+      {
+        "order": 1,
+        "title": "Pastikan konteksnya buyback customer",
+        "instruction": "Gunakan tt_beli_detail sebagai sumber transaksi pembelian kembali dari customer. Jangan memakai asumsi pembelian supplier. Scope utama memakai tgl_system dan status_valid=DONE.",
+        "expectedResult": "Transaksi buyback yang sah pada periode tersebut dapat dihitung."
+      },
+      {
+        "order": 2,
+        "title": "Hubungkan buyback dan cash",
+        "instruction": "Hubungkan tt_beli_detail.no_faktur_group dengan tt_cash_daily.deskripsi. Cash buyback normalnya berupa arus keluar pada kategori PEMBELIAN dan status OPEN.",
+        "expectedResult": "Setiap group buyback memiliki pasangan cash atau terbukti tidak memiliki pasangan."
+      },
+      {
+        "order": 3,
+        "title": "Bandingkan nominal sesuai profile report",
+        "instruction": "Tampilkan buyback_total dari tt_beli_detail.harga dan expected payment dari pembayaran.jumlah_rp. Bandingkan dengan cash_out bersih, bukan langsung menganggap harga dan cash selalu sama karena report EOD, cash, dan non-cash NAGAGOLD memakai field yang berbeda.",
+        "expectedResult": "Selisih dapat dibedakan antara nominal, metode pembayaran, fee, dan status transaksi."
+      },
+      {
+        "order": 4,
+        "title": "Telusuri pembatalan",
+        "instruction": "Jika ditemukan tt_beli_batal, cocokkan no_faktur_beli dan no_faktur_group. Bedakan kategori BATAL BELI dan BATAL PEMBELIAN karena beberapa report NAGAGOLD menggunakan nama kategori berbeda.",
+        "expectedResult": "Pembatalan tidak keliru dianggap sebagai buyback baru atau cash yang hilang."
+      }
+    ],
+    "userResponseTemplate": "Gunakan hasil operation finance.buyback_vs_cash. Jawab dengan TEMUAN, EVIDENCE, KEMUNGKINAN PENYEBAB, dan SARAN PERBAIKAN. Sebutkan bahwa ini buyback customer, bukan pembelian supplier.",
+    "internalNotes": "Sumber NAGAGOLD: tt_beli_detail menyimpan no_faktur_group, no_faktur_beli, no_faktur_jual, kode_barcode, kode_gudang, berat, harga, pembayaran, status_valid, dan status proses sortir/kirim/terima/hancur. Saat buyback dibuat, cash memakai kategori PEMBELIAN, deskripsi nomor group, dan jumlah_out dari pembayaran. Pembatalan memakai tt_beli_batal serta dapat menghasilkan kategori BATAL BELI atau BATAL PEMBELIAN tergantung report. Sebagian field kategori/jenis tt_cash_daily dapat terenkripsi; jika kategori tidak terbaca, jangan menebak. Hasil operation read-only.",
+    "linked_operation_ids": ["finance.buyback_vs_cash"],
+    "status": "published"
+  },
+  {
+    "articleId": "INV-KB-STOCK-BUYBACK-SALDO-NAGAGOLD",
+    "title": "Investigasi buyback customer yang tidak masuk saldo barang",
+    "category": "stok-buyback",
+    "symptoms": [
+      "buyback sudah ada tetapi stok tidak bertambah",
+      "barang pembelian customer tidak muncul di laporan stok",
+      "stock_beli tidak sesuai dengan transaksi pembelian",
+      "saldo barang berbeda setelah buyback"
+    ],
+    "tags": [
+      "tt_beli_detail",
+      "tt_barang_saldo",
+      "th_barang_saldo",
+      "tt_barang_summary",
+      "kode_barcode",
+      "stock_beli",
+      "stock.buyback_vs_saldo"
+    ],
+    "troubleshootingSteps": [
+      {
+        "order": 1,
+        "title": "Cari buyback yang sudah DONE",
+        "instruction": "Cari tt_beli_detail berdasarkan tgl_system, status_valid=DONE, kode_barcode, dan kode_gudang. Satu baris detail buyback dihitung sebagai satu item dan beratnya dijumlahkan.",
+        "expectedResult": "Diketahui jumlah dan berat buyback yang seharusnya masuk saldo."
+      },
+      {
+        "order": 2,
+        "title": "Cocokkan saldo pada tanggal yang sama",
+        "instruction": "Cocokkan tanggal, kode_barcode, dan kode_gudang ke tt_barang_saldo. Bandingkan expected stock_beli dan berat_beli dari buyback dengan saldo barang.",
+        "expectedResult": "Ditemukan apakah saldo tidak ada, nol, atau hanya masuk sebagian."
+      },
+      {
+        "order": 3,
+        "title": "Periksa alur stok lanjutan",
+        "instruction": "Jika saldo sudah bertambah tetapi laporan tetap berbeda, lanjutkan pemeriksaan ke th_barang_saldo, tt_barang_summary, transfer, opname, hancur, sortir, kirim, dan terima. Jangan langsung menyimpulkan data harus dipatch.",
+        "expectedResult": "Perbedaan dapat dipisahkan antara saldo buyback dan mutasi lanjutan."
+      }
+    ],
+    "userResponseTemplate": "Gunakan hasil operation stock.buyback_vs_saldo. Tampilkan barcode, tanggal, gudang, expected stock_beli/berat_beli, current saldo, dan selisih secara ringkas.",
+    "internalNotes": "Logic ini mengikuti field saldo NAGAGOLD: tt_beli_detail.kode_barcode/kode_gudang/berat dan tt_barang_saldo.stock_beli/berat_beli/stock_in/berat_in/stock_akhir/berat_akhir. Query hanya read-only. Transfer, opname, hancur, sortir, kirim, dan terima dapat mengubah saldo setelah buyback, sehingga operation hanya memberi kandidat penyebab dan bukan patch otomatis.",
+    "linked_operation_ids": ["stock.buyback_vs_saldo"],
+    "status": "published"
+  },
+  {
+    "articleId": "INV-KB-SERVICE-CASH-STATUS-NAGAGOLD",
+    "title": "Investigasi status service dan cash NAGAGOLD",
+    "category": "service-keuangan",
+    "symptoms": [
+      "service tidak muncul di cash",
+      "pembayaran service tidak masuk ke keuangan",
+      "service batal tetapi uang belum kembali",
+      "status service tidak sesuai dengan cash",
+      "service sudah diambil tetapi cash berbeda"
+    ],
+    "tags": [
+      "tt_service_detail",
+      "tt_cash_daily",
+      "SERVICE",
+      "SERVICE AMBIL",
+      "BATAL SERVICE",
+      "status_proses",
+      "service.status_vs_cash"
+    ],
+    "troubleshootingSteps": [
+      {
+        "order": 1,
+        "title": "Cari nomor service",
+        "instruction": "Gunakan tt_service_detail.no_faktur_service sebagai identifier. Cocokkan tgl_system, status_proses, status_valid, dp_rp, total_bayar, dan pembayaran.",
+        "expectedResult": "Diketahui status transaksi dan nominal pembayaran service yang seharusnya."
+      },
+      {
+        "order": 2,
+        "title": "Cocokkan cash service",
+        "instruction": "Cari tt_cash_daily dengan deskripsi yang sama dengan no_faktur_service, status OPEN, dan kategori SERVICE atau SERVICE AMBIL. Untuk pembatalan, cari kategori BATAL SERVICE dengan jumlah_out.",
+        "expectedResult": "Pembayaran masuk, pembayaran saat pengambilan, dan refund pembatalan dapat dibedakan."
+      },
+      {
+        "order": 3,
+        "title": "Baca status mismatch",
+        "instruction": "Service CANC tanpa BATAL SERVICE adalah kandidat refund yang belum tercatat. Cash BATAL SERVICE saat status service belum CANC adalah kandidat status tidak sinkron. Selisih nominal harus dibandingkan setelah fee dan seluruh tahap pembayaran diperhitungkan.",
+        "expectedResult": "Penyebab diarahkan berdasarkan status dan evidence cash, bukan asumsi bahwa semua service hanya satu pembayaran."
+      }
+    ],
+    "userResponseTemplate": "Gunakan operation service.status_vs_cash. Tampilkan nomor service, status, kategori cash, expected cash, cash aktual, selisih, dan pemeriksaan sebelum koreksi.",
+    "internalNotes": "Flow NAGAGOLD membuat tt_service_detail saat service masuk. Pembayaran awal membuat tt_cash_daily kategori SERVICE dan deskripsi no_faktur_service. Saat service diambil, pembayaran tambahan membuat kategori SERVICE AMBIL. Saat service dibatalkan, sistem membuat kategori BATAL SERVICE dengan jumlah_out berdasarkan cash yang sudah masuk. Service status_proses memakai OPEN, DONE, CLOS, atau CANC. Tanggal service memakai tgl_system, cash memakai tanggal. Hasil investigasi read-only dan tidak boleh dianggap sebagai patch otomatis.",
+    "linked_operation_ids": ["service.status_vs_cash", "report.visibility_diagnostic"],
+    "status": "published"
+  },
+  {
+    "articleId": "INV-KB-STOCK-INTERNAL-TRANSFER-NAGAGOLD",
+    "title": "Investigasi pindah barang internal antar baki dan gudang NAGAGOLD",
+    "category": "stok-pindah-internal",
+    "symptoms": [
+      "pindah barang antar baki tidak masuk",
+      "pindah barang antar gudang saldo tidak sesuai",
+      "stok asal belum berkurang setelah pindah baki",
+      "stok tujuan belum bertambah setelah pindah barang",
+      "pindah barang berbeda dengan saldo"
+    ],
+    "tags": [
+      "tt_pindah_barang_manual",
+      "tt_barang_saldo_manual",
+      "kode_gudang_asal",
+      "kode_gudang_tujuan",
+      "kode_toko_asal",
+      "kode_toko_tujuan",
+      "kode_baki",
+      "stock.internal_transfer_vs_saldo"
+    ],
+    "troubleshootingSteps": [
+      {
+        "order": 1,
+        "title": "Baca report pindah internal",
+        "instruction": "Gunakan tt_pindah_barang_manual. Group berdasarkan no_pindah, tgl_system, kode_dept, kode_gudang_asal, kode_toko_asal, kode_gudang_tujuan, dan kode_toko_tujuan. Nilai stock dan berat adalah movement yang diharapkan.",
+        "expectedResult": "Diketahui barang, baki/gudang asal, baki/gudang tujuan, serta jumlah yang dipindahkan."
+      },
+      {
+        "order": 2,
+        "title": "Cek saldo lokasi asal dan tujuan",
+        "instruction": "Cocokkan tt_barang_saldo_manual dengan kode_barcode yang mengikuti kode_dept pada report pindah. Di lokasi asal, movement pindah tercermin sebagai stock_out dan berat_out. Di lokasi tujuan, movement tercermin sebagai stock_tambah dan berat_tambah.",
+        "expectedResult": "Saldo asal berkurang dan saldo tujuan bertambah sesuai movement report."
+      },
+      {
+        "order": 3,
+        "title": "Bedakan pindah dan kirim",
+        "instruction": "Operation ini hanya untuk perpindahan internal antar-baki atau antar-gudang dalam cabang yang sama. Jangan memakai tt_kirim_barang atau menyimpulkan kirim antar-cabang dari hasil operation ini.",
+        "expectedResult": "Investigasi tidak mencampur alur pindah internal dengan pengiriman ke cabang lain."
+      }
+    ],
+    "userResponseTemplate": "Gunakan operation stock.internal_transfer_vs_saldo. Tampilkan nomor pindah, kode barang/dept, lokasi baki/gudang asal dan tujuan, expected movement, movement saldo aktual, serta alasan mismatch.",
+    "internalNotes": "Pindah barang manual NAGAGOLD memakai tt_pindah_barang_manual dengan kode_gudang_asal, kode_toko_asal, kode_gudang_tujuan, kode_toko_tujuan, kode_dept, stock, dan berat. Controller memeriksa saldo manual asal, membuat atau menambah saldo manual tujuan melalui stock_tambah/berat_tambah, lalu mengurangi saldo asal melalui stock_out/berat_out. Pada saldo manual, kode_barcode dapat mengikuti kode_dept untuk flow ini. Ini berbeda dari tt_kirim_barang yang digunakan untuk pengiriman antar-cabang dan sengaja tidak diperiksa oleh operation ini.",
+    "linked_operation_ids": ["stock.internal_transfer_vs_saldo"],
+    "status": "published"
+  },
+  {
+    "articleId": "INV-KB-REPORT-VISIBILITY-NAGAGOLD",
+    "title": "Diagnosis data tidak muncul pada report NAGAGOLD",
+    "category": "report-visibility",
+    "symptoms": [
+      "transaksi tidak muncul di report",
+      "data ada tetapi tidak terlihat di laporan",
+      "faktur tidak muncul di keuangan",
+      "service atau hutang tidak muncul di report"
+    ],
+    "tags": [
+      "report.visibility_diagnostic",
+      "status_valid",
+      "status_proses",
+      "status_hutang",
+      "filter tanggal",
+      "relasi cash",
+      "tt_beli_detail",
+      "tt_jual_detail",
+      "tt_cash_daily",
+      "tt_service_detail",
+      "tt_hutang_detail",
+      "th_barang_saldo"
+    ],
+    "troubleshootingSteps": [
+      {
+        "order": 1,
+        "title": "Tentukan report yang dimaksud",
+        "instruction": "Minta nama menu/report dan periode. Konteks yang tersedia adalah buyback, sales, cash, service, debt, dan stock. Jangan memilih collection hanya dari kata 'tidak muncul'.",
+        "expectedResult": "Collection sumber dan field tanggal report dapat ditentukan."
+      },
+      {
+        "order": 2,
+        "title": "Periksa sumber dan status",
+        "instruction": "Periksa keberadaan data pada collection sumber, filter tanggal, identifier, gudang, serta status yang dipakai report. Buyback/sales umumnya memakai tgl_system; cash memakai tanggal; service dapat memakai tgl_system, tgl_selesai, tgl_ambil, atau tgl_batal. Untuk laporan Barang/Summary, baca tp_system.tgl_system terlebih dahulu: tanggal yang sama memakai tt_barang_saldo realtime, sedangkan tanggal yang berbeda memakai th_barang_saldo historis.",
+        "expectedResult": "Diketahui apakah data memang tidak ada atau tersaring karena status/tanggal."
+      },
+      {
+        "order": 3,
+        "title": "Periksa relasi report",
+        "instruction": "Jika sumber ada tetapi report keuangan tidak menampilkan data, periksa relasi no_faktur_group atau nomor faktur ke tt_cash_daily.deskripsi. Jika lookup master atau detail tidak ditemukan, tampilkan sebagai evidence dan jangan mengarang data.",
+        "expectedResult": "Dapat dibedakan source missing, status excluded, atau relation missing."
+      }
+    ],
+    "userResponseTemplate": "Gunakan hasil operation report.visibility_diagnostic. Jawab singkat dengan report context, collection sumber, filter, jumlah data, status, dan relasi yang ditemukan atau tidak ditemukan.",
+    "internalNotes": "Report NAGAGOLD memiliki profile berbeda. Route pembelian memakai report, report-selisih, report transfer, saldo beli, dan laporan global; penjualan memiliki report detail, stock terjual, report bayar, report selisih, dan report per jenis; service membedakan masuk, selesai, ambil, dan batal; hutang membedakan open, lunas, batal, pinjaman, penebusan, dan stock hutang; cash membedakan rekap cash, non-cash, detail, transaksi global, dan EOD. Untuk laporan Barang/Summary, BarangController membaca tp_system.tgl_system: jika tanggal report sama dengan tanggal system aktif, sumbernya tt_barang_saldo; jika tanggal historis, sumbernya th_barang_saldo. Data tidak muncul harus dianalisis berdasarkan report yang disebut Helpdesk. Hasil operation read-only.",
+    "linked_operation_ids": ["report.visibility_diagnostic"],
+    "status": "published"
+  },
+  {
+    "articleId": "INV-KB-STOCK-OPNAME-SALDO-NAGAGOLD",
+    "title": "Investigasi stock opname terhadap saldo NAGAGOLD",
+    "category": "stok-opname",
+    "symptoms": [
+      "hasil stock opname berbeda dengan saldo",
+      "barang tidak ditemukan saat opname",
+      "stock opname tidak sama dengan stock akhir",
+      "barcode opname status open"
+    ],
+    "tags": ["tt_opname", "tt_barang_saldo", "stock_on_hand", "stock_akhir", "status_barang", "stock.opname_vs_saldo"],
+    "troubleshootingSteps": [
+      { "order": 1, "title": "Cek hasil opname", "instruction": "Gunakan tt_opname dan group berdasarkan tgl_opname, kode_barcode, kode_gudang, dan kode_toko sebagai kode baki/posisi. Status_barang OPEN berarti barcode belum terkonfirmasi; DONE berarti barcode sudah ditemukan pada proses opname.", "expectedResult": "Diketahui barcode, lokasi, status opname, serta nilai stock_on_hand dan berat dari data opname." },
+      { "order": 2, "title": "Bandingkan saldo pada grain yang sama", "instruction": "Cocokkan tt_opname ke tt_barang_saldo dengan tanggal, kode_barcode, kode_gudang, dan kode_toko yang sama. Bandingkan stock_on_hand dengan stock_akhir serta berat dengan berat_akhir.", "expectedResult": "Selisih tidak tercampur antar baki atau antar gudang." },
+      { "order": 3, "title": "Tentukan tindak lanjut", "instruction": "Jika status opname OPEN, pastikan proses scan/selesai opname memang sudah dilakukan. Jika status DONE tetapi angka berbeda, telusuri transaksi atau saldo pada tanggal tersebut. Jangan langsung mengubah saldo tanpa verifikasi prosedur NAGAGOLD.", "expectedResult": "Helpdesk memiliki evidence dan kandidat penyebab tanpa patch otomatis." }
+    ],
+    "userResponseTemplate": "Gunakan format TEMUAN, EVIDENCE, KEMUNGKINAN PENYEBAB, dan SARAN PERBAIKAN. Tampilkan barcode, tanggal, kode gudang, kode baki, status opname, nilai opname, nilai saldo, dan selisih.",
+    "internalNotes": "NAGAGOLD membuat tt_opname dari data barang saat opname dimulai. Scan barcode mengubah status_barang dari OPEN menjadi DONE, sedangkan status_opname menandai sesi opname. Operation ini read-only dan tidak menyimpulkan bahwa angka opname adalah patch yang harus langsung ditulis ke saldo.",
+    "linked_operation_ids": ["stock.opname_vs_saldo"],
+    "status": "published"
+  },
+  {
+    "articleId": "INV-KB-STOCK-HANCUR-SALDO-NAGAGOLD",
+    "title": "Investigasi hancur barang manual terhadap saldo NAGAGOLD",
+    "category": "stok-hancur",
+    "symptoms": ["transaksi hancur tidak mengurangi saldo", "stock hancur tidak tercatat", "saldo akhir masih ada setelah barang dihancurkan", "hancur barang manual selisih"],
+    "tags": ["tt_hancur_barang_manual", "tt_barang_saldo_manual", "stock_hancur", "berat_hancur", "stock.hancur_vs_saldo"],
+    "troubleshootingSteps": [
+      { "order": 1, "title": "Cek transaksi hancur", "instruction": "Gunakan tt_hancur_barang_manual. Group berdasarkan tgl_system, kode_dept, kode_gudang, dan kode_toko. Pada flow manual NAGAGOLD, kode_dept yang dikirim ke update saldo dipakai sebagai kode barcode.", "expectedResult": "Diketahui nomor hancur, barcode, lokasi, jumlah stock, dan berat yang dihancurkan." },
+      { "order": 2, "title": "Cek saldo manual", "instruction": "Cocokkan ke tt_barang_saldo_manual dengan tanggal, kode_barcode, kode_gudang, dan kode_toko yang sama. Bandingkan transaksi stock/berat dengan stock_hancur/berat_hancur. Setelah hancur, stock_akhir dan berat_akhir diharapkan nol sesuai controller NAGAGOLD.", "expectedResult": "Diketahui apakah movement hancur masuk dan apakah saldo tersisa." },
+      { "order": 3, "title": "Pisahkan penyebab", "instruction": "Jika transaksi ada tetapi saldo tidak berubah, kandidatnya adalah update saldo gagal atau key kode barcode/lokasi tidak cocok. Jika saldo hancur cocok tetapi report tidak tampil, lanjutkan diagnosis filter tanggal/status report.", "expectedResult": "Helpdesk dapat menentukan apakah masalah ada di transaksi, relasi key, saldo, atau report." }
+    ],
+    "userResponseTemplate": "Jawab singkat dengan TEMUAN, EVIDENCE transaksi hancur vs saldo, KEMUNGKINAN PENYEBAB, dan SARAN PERBAIKAN. Jangan mengklaim database sudah diperbaiki.",
+    "internalNotes": "Controller HancurBarangManual memvalidasi saldo asal lalu menyimpan tt_hancur_barang_manual. Setelah itu saldoBarangManual.hancurBy mengisi stock_hancur dan berat_hancur serta mengatur stock_akhir dan berat_akhir menjadi nol pada tt_barang_saldo_manual. Tidak ada write dari tool investigasi.",
+    "linked_operation_ids": ["stock.hancur_vs_saldo"],
+    "status": "published"
+  },
+  {
+    "articleId": "INV-KB-FINANCE-DEBT-CASH-NAGAGOLD",
+    "title": "Investigasi hutang dan cicilan terhadap cash NAGAGOLD",
+    "category": "keuangan-hutang-cicilan",
+    "symptoms": ["hutang tidak sama dengan cash", "pelunasan hutang tidak muncul di keuangan", "cicilan berbeda dengan cash", "DP cicilan tidak masuk cash", "pembayaran hutang selisih"],
+    "tags": ["tt_hutang_detail", "tt_cicilan", "tt_cash_daily", "HUTANG", "HUTANG LUNAS", "BAYAR BUNGA", "DP CICILAN", "BAYAR CICILAN", "finance.debt_vs_cash"],
+    "troubleshootingSteps": [
+      { "order": 1, "title": "Tentukan jenis transaksi", "instruction": "Pisahkan hutang dari cicilan. Hutang memakai tt_hutang_detail.no_faktur_hutang; cicilan memakai tt_cicilan.no_faktur_cicil. Filter tanggal sumber menggunakan tgl_system.", "expectedResult": "Nomor faktur dan jenis transaksi yang diperiksa jelas." },
+      { "order": 2, "title": "Hubungkan ke cash", "instruction": "Cari tt_cash_daily dengan deskripsi sama dengan nomor faktur. Untuk hutang, perhatikan kategori HUTANG, HUTANG LUNAS, HUTANG BATAL, BATAL HUTANG LUNAS, dan BAYAR BUNGA. Untuk cicilan, perhatikan DP CICILAN, BAYAR CICILAN, PELUNASAN CEPAT CICILAN, dan BATAL CICILAN.", "expectedResult": "Diketahui cash masuk/keluar, kategori, status, dan tanggal cash." },
+      { "order": 3, "title": "Bandingkan nominal dan status", "instruction": "Hutang awal dibandingkan dengan jumlah_hutang dan cash HUTANG setelah pembatalan. Pelunasan dibandingkan dengan total_bayar dan cash HUTANG LUNAS/BAYAR BUNGA. Cicilan dibandingkan dengan harga_jual_cicil dikurangi sisa_bayar dan cash DP/BAYAR/PELUNASAN CEPAT setelah pembatalan.", "expectedResult": "Selisih nominal, cash hilang, pembatalan yang belum berpasangan, atau date shift dapat dibedakan." },
+      { "order": 4, "title": "Periksa pergeseran tanggal", "instruction": "Tanggal hutang/cicilan memakai tgl_system sedangkan cash memakai tanggal. Jika nomor faktur ada tetapi cash berada di tanggal lain, jangan langsung menyebut cash hilang; telusuri date shift dan status OPEN/CLOS.", "expectedResult": "Hasil tidak keliru akibat perbedaan field tanggal atau status report." }
+    ],
+    "userResponseTemplate": "Gunakan TEMUAN, EVIDENCE, KEMUNGKINAN PENYEBAB, dan SARAN PERBAIKAN. Bedakan hutang dan cicilan, tampilkan nomor faktur, status, expected, actual cash, kategori cash, dan selisih.",
+    "internalNotes": "Hutang NAGAGOLD menyimpan data pada tt_hutang_detail dan membuat cash dengan deskripsi no_faktur_hutang. Cicilan menyimpan data pada tt_cicilan dan membuat cash dengan deskripsi no_faktur_cicil. Tool hanya membaca data dan memberi kandidat penyebab; koreksi tetap dilakukan lewat prosedur/UI NAGAGOLD.",
+    "linked_operation_ids": ["finance.debt_vs_cash"],
+    "status": "published"
+  }
+]

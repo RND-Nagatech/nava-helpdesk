@@ -215,6 +215,138 @@ export type TrainingSession = {
   messages: TrainingMessage[];
 };
 
+export type InvestigationMessage = {
+  _id?: string;
+  training_id: string;
+  role: "helpdesk" | "assistant";
+  content: string;
+  metadata?: {
+    domain?: string | null;
+    database_checks?: Array<Record<string, unknown>>;
+    [key: string]: unknown;
+  };
+  created_at: string;
+};
+
+export type InvestigationSession = {
+  training_id: string;
+  helpdesk_id: string;
+  helpdesk_name: string;
+  title: string;
+  room_type: "investigation";
+  status: "active" | "closed";
+  customer_domain?: string;
+  created_at: string;
+  updated_at: string;
+  messages: InvestigationMessage[];
+};
+
+export type InvestigationTarget = {
+  domain: string;
+  tenant_id: string;
+  connection_profile: string;
+  database_name: string;
+  display_name: string;
+  status: "active" | "disabled";
+  allowed_collection_profile: string;
+  created_at?: string | null;
+  updated_at?: string | null;
+};
+
+export type InvestigationDefinition = {
+  operation_id: string;
+  name: string;
+  description: string;
+  status: "draft" | "published" | "archived";
+  allowed_collections: string[];
+  filters: string[];
+  group_by: string[];
+  metrics: Array<{
+    source: string;
+    field: string;
+    operation: "sum" | "count" | "avg" | "min" | "max";
+    alias?: string;
+  }>;
+  relation?: {
+    left_collection: string;
+    left_field: string;
+    right_collection: string;
+    right_field: string;
+  } | null;
+  result_type: "unmatched_and_amount_difference" | "summary_difference" | "relation_lookup" | "custom";
+  execution?: {
+    source_collection: string;
+    pipeline: Array<Record<string, unknown>>;
+    max_rows?: number;
+  } | null;
+  linked_knowledge_ids: string[];
+  executor?: string;
+  created_at?: string;
+  updated_at?: string;
+};
+
+export type InvestigationPlaybook = {
+  playbook_id: string;
+  name: string;
+  description: string;
+  status: "draft" | "published" | "archived";
+  trigger_examples: string[];
+  aggregation_source?: string;
+  parameters: Array<{
+    key: string;
+    label: string;
+    type: "text" | "date" | "number" | "boolean";
+    required: boolean;
+    description: string;
+  }>;
+  executor_id: string;
+  executor_operation_id: string;
+  collections: Array<{
+    name: string;
+    purpose: string;
+    fields: string[];
+  }>;
+  relations: Array<{
+    from_collection: string;
+    from_field: string;
+    to_collection: string;
+    to_field: string;
+    explanation: string;
+  }>;
+  steps: Array<{
+    order: number;
+    title: string;
+    instruction: string;
+    expected_result: string;
+  }>;
+  response_template: string;
+  safety_notes: string;
+  finding_rules: string;
+  correction_guidance: string;
+  execution: {
+    source_collection: string;
+    pipeline: Array<Record<string, unknown>>;
+    max_rows?: number;
+  } | null;
+  created_at?: string;
+  updated_at?: string;
+};
+
+export type InvestigationKnowledge = {
+  articleId: string;
+  title: string;
+  category: string;
+  symptoms: string[];
+  tags: string[];
+  troubleshootingSteps: KnowledgeStep[];
+  userResponseTemplate: string;
+  internalNotes: string;
+  linked_operation_ids: string[];
+  status: "draft" | "published" | "archived";
+  created_at?: string;
+  updated_at?: string;
+};
+
 export type TrainingSummary = {
   context: string;
   customer_question: string;

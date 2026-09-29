@@ -42,9 +42,9 @@ test("importer membuang field clarification lama dan meng-unset MongoDB", () => 
   assert.match(importerSource, /clarificationQuestions: ""/);
 });
 
-test("bundled knowledge 575 artikel tidak memiliki clarificationQuestions", () => {
+test("bundled knowledge 584 artikel tidak memiliki clarificationQuestions", () => {
   const articles = Array.isArray(bundledKnowledge) ? bundledKnowledge : bundledKnowledge.articles;
-  assert.equal(articles.length, 575);
+  assert.equal(articles.length, 584);
   assert.equal(articles.filter((article) => Object.hasOwn(article, "clarificationQuestions")).length, 0);
 });
 

@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Bot, CheckCircle2, Search, SlidersHorizontal, X } from "lucide-react";
+import { ArrowUpRight, Bot, CheckCircle2, Search, SlidersHorizontal, X } from "lucide-react";
 import { ChatWindow } from "../../components/chat/ChatWindow";
 import { StatusBadge } from "../../components/common/StatusBadge";
 import { getStoredHelpdeskUser } from "../../lib/helpdeskAuth";
@@ -176,6 +176,9 @@ export function ChatRoomPage({ sessionId }: { sessionId?: string }) {
               </div>
               <h1>Belum ada chat terbuka</h1>
               <p>Pilih chat aktif di kiri untuk melihat riwayat NAVA, customer, attachment, dan balasan helpdesk di session yang sama.</p>
+              <a className="button primary" href="/helpdesk/investigation" onClick={handleHelpdeskNavigation}>
+                Buka Investigasi <ArrowUpRight size={16} />
+              </a>
               <button className="button secondary" type="button" onClick={() => loadQueue()} disabled={queueLoading}>
                 {queueLoading ? "Memuat..." : "Refresh Chat Aktif"}
               </button>

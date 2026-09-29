@@ -9,6 +9,8 @@ import { warmupEmbeddingModel } from "./services/embedding-service.js";
 import { initializeHelpdeskAgent } from "./agents/helpdesk-agent.js";
 import { initializeAgentMemory } from "./services/agent-memory.js";
 import { UPLOAD_ROOT_DIR } from "./middleware/upload.js";
+import { closeInvestigationMongo } from "./services/investigation-service.js";
+import { ensureBuiltInInvestigationDefinitions } from "./services/investigation-definition-service.js";
 
 const app = express();
 const configuredCorsOrigins = env.corsOrigin
@@ -100,6 +102,7 @@ async function start() {
   validateRuntimeEnv();
   await connectMongo();
   await ensureIndexes();
+  await ensureBuiltInInvestigationDefinitions();
   await initializeAgentMemory();
   initializeHelpdeskAgent();
 
@@ -128,6 +131,7 @@ async function start() {
 
 async function shutdown(signal) {
   console.log(`\n${signal} diterima. Menutup koneksi...`);
+  await closeInvestigationMongo();
   await closeMongo();
   process.exit(0);
 }
