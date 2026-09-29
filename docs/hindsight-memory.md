@@ -1,79 +1,193 @@
-# Hindsight Memory untuk NAVA
+# NAVA + Hindsight Memory
 
-## Tujuan
+Panduan singkat untuk menjalankan NAVA dengan Hindsight sebagai satu-satunya memory jangka panjang customer.
 
-Integrasi ini menambahkan memori historis customer tanpa mengganti knowledge resmi NAVA.
+## 1. Arsitektur
 
-## Mode memory
+- Knowledge resmi, prosedur, dan troubleshooting tetap berasal dari RAG/NAVA.
+- Hindsight menyimpan riwayat masalah customer, langkah yang sudah dicoba, dan hasil troubleshooting.
+- MongoDB tetap dipakai untuk chat, ticket, checkpointer, dan data operasional.
+- Hindsight berjalan sebagai service Docker, bukan sebagai package di `api/`.
 
-`CUSTOMER_MEMORY_BACKEND=hybrid` adalah mode default. Mode ini menggabungkan memory customer MongoDB dengan recall Hindsight dan tetap menyediakan fallback dari chat lama.
+## 2. Prasyarat
 
-Untuk membuat Hindsight menjadi satu-satunya long-term memory customer, gunakan:
+- Docker Desktop sudah berjalan.
+- API key DeepSeek yang valid.
+- Repository berada di:
 
-```env
+```text
+/Users/aandiyanti/Documents/RnD/PROJECT/nava-langchain-fix
+```
+
+## 3. Konfigurasi NAVA
+
+Edit `api/.env` dan pastikan nilainya seperti ini. Sesuaikan `PORT` jika berbeda.
+
+```ini
+PORT=4000
+HINDSIGHT_ENABLED=true
+HINDSIGHT_URL=http://localhost:8888
 CUSTOMER_MEMORY_BACKEND=hindsight
 LONG_TERM_MEMORY_ENABLED=false
 CROSS_SESSION_CONTEXT_ENABLED=false
+HINDSIGHT_TIMEOUT_MS=1500
+HINDSIGHT_RECALL_BUDGET=low
+HINDSIGHT_RECALL_MAX_TOKENS=1200
+HINDSIGHT_RETAIN_ASYNC=true
 ```
 
-Mode penuh ini tidak menghapus MongoDB dari NAVA. MongoDB tetap menyimpan chat, ticket, audit, dan data operasional. Yang diganti hanya backend memory jangka panjang customer.
+`HINDSIGHT_LLM_API_KEY` dipakai Docker Compose untuk Hindsight. Pada project ini, key disimpan di `api/.env` bersama konfigurasi NAVA:
 
-| Jenis informasi | Sumber utama |
-| --- | --- |
-| Prosedur, menu, langkah troubleshooting | NAVA RAG + knowledge published |
-| Status database realtime | Investigation tools |
-| Riwayat masalah customer | Hindsight memory |
-| Langkah yang sudah dicoba customer | Hindsight memory |
-| Ticket, eskalasi, dan pengalaman helpdesk | Hindsight memory setelah grounded/eskalasi |
+```ini
+HINDSIGHT_LLM_API_KEY=API_KEY_DEEPSEEK_ASLI
+```
 
-## Alur runtime
+Saat menjalankan Docker Compose, gunakan `--env-file api/.env` agar Compose membaca key tersebut. Jangan menulis API key sungguhan di `api/.env.example`, `docker-compose.yml`, atau dokumentasi.
 
-1. Request masuk dengan `customer_id`.
-2. NAVA membaca MongoDB memory lama dan, bila aktif, melakukan Hindsight `recall`.
-3. Agent menerima knowledge resmi dan konteks memory secara terpisah.
-4. Jawaban tetap mengikuti knowledge resmi NAVA.
-5. Setelah jawaban selesai, kasus grounded atau eskalasi dikirim ke Hindsight melalui `retain` asynchronous.
+## 4. Jalankan Hindsight
 
-Jika Hindsight tidak aktif, tidak tersedia, timeout, atau gagal, NAVA tetap memakai MongoDB memory dan RAG seperti sebelumnya.
-
-Dalam mode `hindsight`, NAVA tidak melakukan fallback ke MongoDB memory atau chat-history memory; kegagalan Hindsight berarti tidak ada konteks memory customer pada request tersebut.
-
-## Isolasi dan keamanan
-
-- Setiap customer memakai bank Hindsight yang ID-nya berasal dari hash `customer_id`; ID asli tidak dikirim sebagai nama bank.
-- Memory Hindsight hanya dipakai sebagai konteks historis, bukan sumber fakta program realtime.
-- Retain tidak dilakukan untuk chat biasa yang belum grounded atau belum dieskalasikan.
-- Jangan masukkan password, API key, credential, data pembayaran, atau isi database customer mentah ke memory.
-- `HINDSIGHT_ENABLED` default `false` agar deployment lama tidak berubah behavior sebelum service siap.
-
-## Contoh perbedaan
-
-Pertanyaan:
-
-> Error timbangan muncul lagi, kemarin saya sudah coba apa?
-
-Sebelum Hindsight, NAVA hanya memiliki pertanyaan saat ini dan knowledge resmi. NAVA kemungkinan meminta customer mengulangi langkah yang sudah dicoba.
-
-Sesudah Hindsight, recall dapat mengembalikan:
-
-> Customer sudah mencoba menjalankan ulang aplikasi Timbangan, tetapi masalah masih terjadi.
-
-Dengan konteks itu, NAVA dapat mengakui langkah sebelumnya dan melanjutkan ke langkah berikutnya atau menyarankan eskalasi.
-
-Jalankan demo deterministik:
+Buka Terminal baru dan jalankan dari root repository:
 
 ```bash
-cd api
-node scripts/demo-hindsight-memory.js
+cd /Users/aandiyanti/Documents/RnD/PROJECT/nava-langchain-fix
+docker compose up -d qdrant
 ```
 
-## Pengujian
+Pastikan `api/.env` berisi API key DeepSeek yang valid:
 
-Test unit integrasi:
+```ini
+HINDSIGHT_LLM_API_KEY=API_KEY_DEEPSEEK_ASLI
+```
+
+Jangan menulis teks placeholder tersebut secara literal.
+
+Jalankan Hindsight:
 
 ```bash
-cd api
-node --test tests/hindsight-memory.test.js
+docker compose --env-file api/.env --profile hindsight up -d --force-recreate hindsight
 ```
 
-Demo tersebut tidak membutuhkan service Hindsight karena memakai hasil recall contoh. Pengujian end-to-end membutuhkan Hindsight yang aktif dan `HINDSIGHT_ENABLED=true`.
+Verifikasi container:
+
+```bash
+docker compose ps
+```
+
+Verifikasi API Hindsight:
+
+```bash
+curl -sS http://localhost:8888/health
+```
+
+Hasil yang benar memiliki status seperti:
+
+```json
+{"status":"healthy","database":"connected"}
+```
+
+Jika ingin melihat proses startup:
+
+```bash
+docker logs -f nava-hindsight
+```
+
+Tunggu sampai log menunjukkan:
+
+```text
+✅ Hindsight is running!
+```
+
+## 5. Jalankan backend NAVA
+
+Buka Terminal kedua:
+
+```bash
+cd /Users/aandiyanti/Documents/RnD/PROJECT/nava-langchain-fix/api
+npm install
+npm run dev
+```
+
+Backend membaca `api/.env`. Jika `PORT=4000`, endpoint chat adalah:
+
+```text
+http://localhost:4000/api/chat
+```
+
+## 6. Uji memory Hindsight
+
+### Request pertama
+
+Gunakan `customer_id` yang stabil dan `session_id` baru:
+
+```bash
+curl -sS -X POST http://localhost:4000/api/chat \
+  -H 'Content-Type: application/json' \
+  -d '{"session_id":"hindsight-demo-1","customer_id":"customer-demo-001","question":"berat barang gak muncul pas tambah barang"}'
+```
+
+Pada request pertama, hasil berikut masih normal:
+
+```json
+"hindsight_memory_source":"none"
+```
+
+Jawaban yang grounded akan dikirim ke Hindsight secara asynchronous. Tunggu sekitar 10–30 detik.
+
+### Request kedua
+
+Gunakan `customer_id` yang sama, tetapi `session_id` berbeda:
+
+```bash
+curl -sS -X POST http://localhost:4000/api/chat \
+  -H 'Content-Type: application/json' \
+  -d '{"session_id":"hindsight-demo-2","customer_id":"customer-demo-001","question":"masalahnya muncul lagi, tadi saya harus apa?"}'
+```
+
+Memory berhasil dipakai jika response memuat:
+
+```json
+"customer_memory_backend":"hindsight",
+"hindsight_memory_used":true,
+"hindsight_memory_source":"hindsight",
+"hindsight_memory_items":1
+```
+
+`hindsight_memory_items` dapat lebih dari satu jika `customer_id` tersebut sudah dipakai untuk pengujian sebelumnya.
+
+## 7. Troubleshooting singkat
+
+### Container `Up`, tetapi memory `hindsight_unavailable`
+
+Cek log:
+
+```bash
+docker logs --tail 80 nava-hindsight
+```
+
+Jika ada `AuthenticationError: 401`, API key DeepSeek yang diberikan ke Docker salah atau placeholder. Jalankan ulang langkah konfigurasi key dan recreate container.
+
+Jika ada `Bank ... not found` pada percobaan pertama, restart backend NAVA ke versi terbaru. NAVA akan membuat bank customer sebelum melakukan recall.
+
+### Hindsight restart berulang
+
+Jalankan:
+
+```bash
+docker compose stop hindsight
+docker compose --env-file api/.env --profile hindsight up -d --force-recreate hindsight
+```
+
+Jangan gunakan `docker compose down -v` karena perintah tersebut menghapus volume memory `hindsight_storage`.
+
+### Key tidak boleh masuk Git
+
+- Jangan commit API key ke `api/.env` atau `docker-compose.yml`.
+- Jangan menulis API key di dokumentasi atau screenshot.
+- Jika key terlanjur terekspos, revoke/rotate key tersebut di DeepSeek.
+
+## 8. Menghentikan service
+
+```bash
+cd /Users/aandiyanti/Documents/RnD/PROJECT/nava-langchain-fix
+docker compose stop hindsight qdrant
+```

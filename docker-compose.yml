@@ -10,7 +10,7 @@ services:
       - qdrant_storage:/qdrant/storage
 
   # Optional memory service. Start explicitly with:
-  # HINDSIGHT_LLM_API_KEY=... docker compose --profile hindsight up -d hindsight
+  # docker compose --env-file api/.env --profile hindsight up -d hindsight
   hindsight:
     image: ghcr.io/vectorize-io/hindsight:latest
     container_name: nava-hindsight
