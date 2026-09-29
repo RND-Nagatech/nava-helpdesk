@@ -18,6 +18,7 @@ import {
   rememberGroundedCase,
 } from "../services/customer-memory.js";
 import { retainCustomerCase } from "../services/hindsight-memory.js";
+import { decideLaya } from "../services/laya-decision.js";
 import { deleteAgentThread } from "../services/agent-memory.js";
 import { createTicket, findActiveTicketBySession, markCustomerMessageOnTicket } from "../services/ticket-service.js";
 import { publishEvent } from "../services/event-bus.js";
@@ -221,11 +222,13 @@ export async function chat(req, res, next) {
     const sessionId = input.session_id || crypto.randomUUID();
     const customerId = input.customer_id || null;
 
-    // Dua read ringan dilakukan paralel: cek first-turn + long-term memory.
-    // Active conversation history TIDAK dibaca manual lagi karena ditangani Checkpointer.
-    const [hasHistory, memoryContext] = await Promise.all([
+    // Read ringan dilakukan paralel: cek first-turn, long-term memory, dan
+    // optional Laya triage. Active conversation history TIDAK dibaca manual
+    // lagi karena ditangani Checkpointer.
+    const [hasHistory, memoryContext, layaDecision] = await Promise.all([
       hasSessionMessages(sessionId),
       loadCustomerMemoryContext({ customerId, currentSessionId: sessionId, currentQuestion: input.question }),
+      decideLaya({ question: input.question, customerDomain: input.customer_domain || "" }),
     ]);
     const isFirstTurn = !hasHistory;
 
@@ -376,6 +379,7 @@ export async function chat(req, res, next) {
       isFirstTurn,
       memoryContext,
       customerDomain: input.customer_domain || "",
+      layaDecision,
     });
 
     const searches = publicSearches(result.searches);

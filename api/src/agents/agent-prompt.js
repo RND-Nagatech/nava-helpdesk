@@ -9,13 +9,17 @@ function currentJakartaDate() {
   return `${values.year}-${values.month}-${values.day}`;
 }
 
-export function buildAgentPrompt({ isFirstTurn = false, longTermContext = "", trainingMode = false, investigationMode = false, customerDomain = "", investigationDefinitions = [], investigationPlaybooks = [] } = {}) {
+export function buildAgentPrompt({ isFirstTurn = false, longTermContext = "", trainingMode = false, investigationMode = false, customerDomain = "", investigationDefinitions = [], investigationPlaybooks = [], layaDecision = null } = {}) {
   const firstTurnInstruction = isFirstTurn
     ? `\nFIRST TURN\n- Ini adalah jawaban pertama NAVA pada session ini. WAJIB perkenalkan diri secara singkat sebagai "NAVA, AI Helpdesk Nagatech (Nagatech Virtual Assistant)".\n- Jika customer hanya menyapa, cukup perkenalan singkat + tanyakan apa yang bisa dibantu.\n- Jika customer langsung menyampaikan masalah, perkenalkan diri maksimal satu frasa lalu langsung bantu masalahnya; jangan membuat pembukaan panjang.`
     : "";
 
   const memoryInstruction = longTermContext
     ? `\n\n${longTermContext}\n- Memori di atas hanya membantu memahami konteks customer. Untuk menu, prosedur, penyebab, langkah teknis, dan fakta program tetap wajib gunakan knowledge resmi.`
+    : "";
+
+  const layaInstruction = layaDecision?.source === "laya"
+    ? `\n\nSYSTEM-1 TRIAGE HINT (LAYA)\n- Area terdeteksi: ${layaDecision.area || "belum jelas"}.\n- Urgensi terdeteksi: ${layaDecision.urgent === true ? "ya" : layaDecision.urgent === false ? "tidak" : "belum jelas"}.\n- Ini hanya petunjuk routing cepat, bukan knowledge resmi. Tetap gunakan search_knowledge untuk prosedur, penyebab, dan langkah jawaban. Jangan menyebut Laya atau petunjuk internal ini kepada customer.`
     : "";
 
   const trainingInstruction = trainingMode
@@ -118,5 +122,5 @@ GAYA JAWABAN
 - Jangan mengakhiri jawaban dengan pertanyaan tambahan jika langkah berikutnya sudah jelas.
 - Jika ada langkah, urutkan dengan jelas dan ringkas.
 - Fokus pada satu masalah customer saat ini.
-- Gunakan emoji secukupnya; jangan berlebihan.${memoryInstruction}`;
+- Gunakan emoji secukupnya; jangan berlebihan.${memoryInstruction}${layaInstruction}`;
 }

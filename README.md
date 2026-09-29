@@ -67,6 +67,24 @@ node scripts/demo-hindsight-memory.js
 
 Detail desain dan batasan keamanan ada di [docs/hindsight-memory.md](docs/hindsight-memory.md).
 
+## Laya System-1 Triage (opsional)
+
+Laya adalah lapisan keputusan cepat sebelum agent utama. NAVA memakainya untuk mengklasifikasikan area keluhan dan indikasi urgensi dalam satu request ringan. Laya tidak menggantikan LangChain, RAG, tools, atau Hindsight: hasilnya hanya hint internal, sedangkan jawaban tetap harus grounded ke knowledge resmi.
+
+Install dan jalankan server Laya secara terpisah sesuai dokumentasi resminya, lalu isi di `api/.env`:
+
+```env
+LAYA_ENABLED=true
+LAYA_URL=http://localhost:8000
+# LAYA_API_KEY=
+LAYA_MODEL=multilingual
+LAYA_TIMEOUT_MS=500
+```
+
+Restart backend setelah mengubah `.env`. Jika Laya mati, timeout, atau mengembalikan format yang tidak dikenali, NAVA otomatis melanjutkan tanpa hint Laya. Metadata response akan menunjukkan `laya_source` (`laya`, `laya_unavailable`, atau `disabled`).
+
+Lihat [docs/laya-integration.md](docs/laya-integration.md) untuk alur dan contoh pengujian.
+
 ## Sinkronisasi Knowledge dan Qdrant
 
 Import knowledge sekarang otomatis membuat embedding dan menyinkronkan vector ke Qdrant:

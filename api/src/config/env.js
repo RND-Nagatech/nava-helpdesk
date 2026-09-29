@@ -113,6 +113,14 @@ export const env = {
   hindsightRecallMaxTokens: numberFromEnv("HINDSIGHT_RECALL_MAX_TOKENS", 1200),
   hindsightRetainAsync: boolFromEnv("HINDSIGHT_RETAIN_ASYNC", true),
 
+  // Optional Laya System-1 triage. Laya is only a fast routing hint; the
+  // LangChain agent remains responsible for grounded answers and tools.
+  layaEnabled: boolFromEnv("LAYA_ENABLED", false),
+  layaUrl: process.env.LAYA_URL || "http://localhost:8000",
+  layaApiKey: process.env.LAYA_API_KEY || "",
+  layaModel: process.env.LAYA_MODEL || "multilingual",
+  layaTimeoutMs: numberFromEnv("LAYA_TIMEOUT_MS", 500),
+
   // Legacy lightweight cross-session fallback/migration only.
   crossSessionContextEnabled: boolFromEnv("CROSS_SESSION_CONTEXT_ENABLED", true),
   crossSessionHistoryLimit: numberFromEnv("CROSS_SESSION_HISTORY_LIMIT", 6),

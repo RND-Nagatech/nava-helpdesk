@@ -128,6 +128,10 @@ export async function recallCustomerMemory({ customerId, query }) {
   const hindsight = getClient();
   const bankId = hindsightBankId(customerId);
   try {
+    // Recall pertama untuk customer baru harus membuat bank terlebih dahulu.
+    // Tanpa ini Hindsight mengembalikan "Bank ... not found" dan memory
+    // terlihat unavailable padahal service-nya sehat.
+    await ensureBank(bankId);
     const response = await withTimeout((signal) => hindsight.recall(bankId, cleanText(query, 1200), {
       signal,
       budget: env.hindsightRecallBudget,

@@ -46,6 +46,13 @@ const runtimeContextSchema = z.object({
   customerDomain: z.string().nullable().optional(),
   helpdeskId: z.string().nullable().optional(),
   helpdeskName: z.string().nullable().optional(),
+  layaDecision: z.object({
+    enabled: z.boolean().optional(),
+    source: z.string().optional(),
+    area: z.string().nullable().optional(),
+    urgent: z.boolean().nullable().optional(),
+    model: z.string().optional(),
+  }).nullable().optional(),
 });
 
 function getModel() {
@@ -90,6 +97,7 @@ function buildMiddleware() {
         customerDomain: runtime.context?.customerDomain || "",
         investigationDefinitions: runtime.context?.investigationDefinitions || [],
         investigationPlaybooks: runtime.context?.investigationPlaybooks || [],
+        layaDecision: runtime.context?.layaDecision || null,
       })
     ),
     modelCallLimitMiddleware({
@@ -279,7 +287,7 @@ async function imageAttachmentParts(attachments = []) {
   return parts;
 }
 
-function buildRuntimeMeta({ toolTrace, searches, escalation, memoryContext, modelCallCount, siteCheck }) {
+function buildRuntimeMeta({ toolTrace, searches, escalation, memoryContext, modelCallCount, siteCheck, layaDecision }) {
   const primary = searches.find((item) => item.primary_article)?.primary_article || null;
   const primarySearch = searches.find((item) => item.primary_article) || null;
 
@@ -298,6 +306,9 @@ function buildRuntimeMeta({ toolTrace, searches, escalation, memoryContext, mode
     hindsight_memory_used: memoryContext?.hindsight?.source === "hindsight",
     hindsight_memory_items: memoryContext?.hindsight?.items || 0,
     hindsight_memory_fact_ids: memoryContext?.hindsight?.factIds || [],
+    laya_source: layaDecision?.source || "disabled",
+    laya_area: layaDecision?.area || null,
+    laya_urgent: typeof layaDecision?.urgent === "boolean" ? layaDecision.urgent : null,
     site_check: siteCheck || null,
     database_checks: toolTrace.filter((item) => item.name === "inspect_customer_database").map((item) => ({
       status: item.result?.status || null,
@@ -326,6 +337,7 @@ export async function runHelpdeskAgent({
   customerDomain = "",
   helpdeskId = "",
   helpdeskName = "",
+  layaDecision = null,
 }) {
   const startedAt = Date.now();
   const runId = crypto.randomUUID();
@@ -394,6 +406,7 @@ export async function runHelpdeskAgent({
       investigationPlaybooks,
       helpdeskId,
       helpdeskName,
+      layaDecision,
     },
   };
 
@@ -426,6 +439,7 @@ export async function runHelpdeskAgent({
     memoryContext,
     modelCallCount,
     siteCheck: runState.siteCheck,
+    layaDecision,
   });
   runtimeMeta.recursion_fallback = Boolean(recursionFallback);
   runtimeMeta.recursion_fallback_mode = recursionFallback?.mode || null;
