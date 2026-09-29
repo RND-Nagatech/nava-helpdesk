@@ -9,5 +9,23 @@ services:
     volumes:
       - qdrant_storage:/qdrant/storage
 
+  # Optional memory service. Start explicitly with:
+  # HINDSIGHT_LLM_API_KEY=... docker compose --profile hindsight up -d hindsight
+  hindsight:
+    image: ghcr.io/vectorize-io/hindsight:latest
+    container_name: nava-hindsight
+    profiles: ["hindsight"]
+    restart: unless-stopped
+    shm_size: 1g
+    ports:
+      - "8888:8888"
+      - "9999:9999"
+    environment:
+      HINDSIGHT_API_WORKER_ID: nava-hindsight
+      HINDSIGHT_API_LLM_API_KEY: ${HINDSIGHT_LLM_API_KEY:-}
+    volumes:
+      - hindsight_storage:/home/hindsight/.pg0
+
 volumes:
   qdrant_storage:
+  hindsight_storage:

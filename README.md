@@ -27,6 +27,36 @@ ENV existing untuk MongoDB, DeepSeek, embedding, LangGraph Checkpointer, long-te
 
 Qdrant berjalan melalui Docker pada `http://localhost:6333`. Backend akan memastikan collection `knowledge_vector_index` tersedia dan melakukan rekonsiliasi vector saat startup.
 
+## Hindsight Memory (opsional)
+
+NAVA memakai arsitektur hybrid: RAG/Qdrant tetap menjadi sumber fakta resmi produk, sedangkan Hindsight dipakai untuk memori historis customer seperti kasus sebelumnya, langkah yang sudah dicoba, hasil troubleshooting, dan kejadian berbasis waktu.
+
+Hindsight tidak aktif secara default. Setelah service Hindsight siap, isi konfigurasi berikut di `api/.env`:
+
+```env
+HINDSIGHT_ENABLED=true
+HINDSIGHT_URL=http://localhost:8888
+HINDSIGHT_API_KEY=
+HINDSIGHT_RECALL_BUDGET=low
+HINDSIGHT_RECALL_MAX_TOKENS=1200
+HINDSIGHT_RETAIN_ASYNC=true
+```
+
+Service opsional dapat dijalankan dengan:
+
+```bash
+HINDSIGHT_LLM_API_KEY=... docker compose --profile hindsight up -d hindsight
+```
+
+Retain dilakukan asynchronous setelah jawaban yang grounded atau eskalasi. Recall dijalankan sebelum agent menjawab dan diberi label sebagai konteks historis, sehingga tidak menggantikan knowledge resmi NAVA. Demo perbandingan sebelum/sesudah tersedia melalui:
+
+```bash
+cd api
+node scripts/demo-hindsight-memory.js
+```
+
+Detail desain dan batasan keamanan ada di [docs/hindsight-memory.md](docs/hindsight-memory.md).
+
 ## Sinkronisasi Knowledge dan Qdrant
 
 Import knowledge sekarang otomatis membuat embedding dan menyinkronkan vector ke Qdrant:

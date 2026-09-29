@@ -294,6 +294,9 @@ function buildRuntimeMeta({ toolTrace, searches, escalation, memoryContext, mode
     long_term_memory_used: Boolean(memoryContext?.text),
     long_term_memory_source: memoryContext?.source || "none",
     long_term_memory_items: memoryContext?.items || 0,
+    hindsight_memory_used: memoryContext?.hindsight?.source === "hindsight",
+    hindsight_memory_items: memoryContext?.hindsight?.items || 0,
+    hindsight_memory_fact_ids: memoryContext?.hindsight?.factIds || [],
     site_check: siteCheck || null,
     database_checks: toolTrace.filter((item) => item.name === "inspect_customer_database").map((item) => ({
       status: item.result?.status || null,

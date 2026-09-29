@@ -17,6 +17,7 @@ import {
   loadCustomerMemoryContext,
   rememberGroundedCase,
 } from "../services/customer-memory.js";
+import { retainCustomerCase } from "../services/hindsight-memory.js";
 import { deleteAgentThread } from "../services/agent-memory.js";
 import { createTicket, findActiveTicketBySession, markCustomerMessageOnTicket } from "../services/ticket-service.js";
 import { publishEvent } from "../services/event-bus.js";
@@ -450,6 +451,16 @@ export async function chat(req, res, next) {
         escalation: null,
       }),
     ]);
+    // Hindsight retain is intentionally fire-and-forget. It is an enrichment
+    // layer and must never add latency or failure to the customer response.
+    void retainCustomerCase({
+      customerId,
+      runId: result.runId,
+      question: input.question,
+      answer: effectiveAnswer,
+      runtimeMeta: effectiveRuntimeMeta,
+      escalation: effectiveEscalation,
+    });
     publishEvent("new_message", { session_id: sessionId, message: assistantMessage });
 
     const data = {
@@ -470,6 +481,9 @@ export async function chat(req, res, next) {
         memory: {
           source: memoryContext.source,
           items: memoryContext.items,
+          hindsight_source: memoryContext.hindsight?.source || "none",
+          hindsight_items: memoryContext.hindsight?.items || 0,
+          hindsight_fact_ids: memoryContext.hindsight?.factIds || [],
         },
         agent_latency_ms: result.latencyMs,
         tools: result.toolTrace.map((item) => ({

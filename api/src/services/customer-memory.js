@@ -2,6 +2,7 @@ import { env } from "../config/env.js";
 import { getLongTermStore } from "./agent-memory.js";
 import { getCrossSessionContext } from "./chat-history.js";
 import { formatCrossSessionContext } from "./cross-session-context.js";
+import { recallCustomerMemory } from "./hindsight-memory.js";
 import { problemMatchScore } from "../utils/text.js";
 
 function cleanText(value = "", maxChars = 600) {
@@ -130,18 +131,25 @@ export function formatCustomerLongTermMemory(memory, casesOverride = null) {
 
 export async function loadCustomerMemoryContext({ customerId, currentSessionId, currentQuestion = "" }) {
   if (!customerId) {
-    return { text: "", source: "none", items: 0, memory: emptyMemory() };
+    return { text: "", source: "none", items: 0, memory: emptyMemory(), hindsight: null };
   }
 
-  const memory = await getCustomerLongTermMemory(customerId);
+  const [memory, hindsight] = await Promise.all([
+    getCustomerLongTermMemory(customerId),
+    recallCustomerMemory({ customerId, query: currentQuestion }),
+  ]);
   const relevantCases = selectRelevantLongTermCases(memory, currentQuestion);
   const longTermText = formatCustomerLongTermMemory(memory, relevantCases);
-  if (longTermText) {
+  const memoryParts = [longTermText, hindsight.text].filter(Boolean);
+  if (memoryParts.length) {
     return {
-      text: longTermText,
-      source: "mongodb_store",
-      items: relevantCases.length,
+      text: memoryParts.join("\n\n"),
+      source: [longTermText ? "mongodb_store" : "", hindsight.source === "hindsight" ? "hindsight" : ""]
+        .filter(Boolean)
+        .join("+") || "none",
+      items: relevantCases.length + (hindsight.items || 0),
       memory,
+      hindsight,
     };
   }
 
@@ -149,7 +157,7 @@ export async function loadCustomerMemoryContext({ customerId, currentSessionId, 
   // menggantinya dengan dump chat lama karena itu justru dapat mengotori konteks aktif.
   const hasStoredCases = Array.isArray(memory?.recent_cases) && memory.recent_cases.length > 0;
   if (hasStoredCases) {
-    return { text: "", source: "none", items: 0, memory };
+    return { text: "", source: "none", items: 0, memory, hindsight };
   }
 
   // Migration/fallback ringan untuk customer yang belum punya memory v2.4.
@@ -163,11 +171,12 @@ export async function loadCustomerMemoryContext({ customerId, currentSessionId, 
         source: "chat_history_fallback",
         items: relevantLegacy.length,
         memory,
+        hindsight,
       };
     }
   }
 
-  return { text: "", source: "none", items: 0, memory };
+  return { text: "", source: "none", items: 0, memory, hindsight };
 }
 
 export async function rememberGroundedCase({

@@ -97,6 +97,16 @@ export const env = {
   longTermMemoryCaseLimit: numberFromEnv("LONG_TERM_MEMORY_CASE_LIMIT", 8),
   longTermMemoryAnswerMaxChars: numberFromEnv("LONG_TERM_MEMORY_ANSWER_MAX_CHARS", 500),
 
+  // Optional Hindsight memory layer. RAG and MongoDB memory remain the source of
+  // truth unless this explicitly enabled integration is available.
+  hindsightEnabled: boolFromEnv("HINDSIGHT_ENABLED", false),
+  hindsightUrl: process.env.HINDSIGHT_URL || "http://localhost:8888",
+  hindsightApiKey: process.env.HINDSIGHT_API_KEY || "",
+  hindsightTimeoutMs: numberFromEnv("HINDSIGHT_TIMEOUT_MS", 1500),
+  hindsightRecallBudget: process.env.HINDSIGHT_RECALL_BUDGET || "low",
+  hindsightRecallMaxTokens: numberFromEnv("HINDSIGHT_RECALL_MAX_TOKENS", 1200),
+  hindsightRetainAsync: boolFromEnv("HINDSIGHT_RETAIN_ASYNC", true),
+
   // Legacy lightweight cross-session fallback/migration only.
   crossSessionContextEnabled: boolFromEnv("CROSS_SESSION_CONTEXT_ENABLED", true),
   crossSessionHistoryLimit: numberFromEnv("CROSS_SESSION_HISTORY_LIMIT", 6),
