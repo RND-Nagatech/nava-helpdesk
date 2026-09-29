@@ -2,7 +2,7 @@ import { getHelpdeskToken } from "../lib/helpdeskAuth";
 import type { Attachment, ChatMessage, DashboardSummary, HelpdeskUser, InvestigationDefinition, InvestigationKnowledge, InvestigationPlaybook, InvestigationSession, InvestigationTarget, KnowledgeArticle, SiteCheckResult, Ticket, TrainingDraft, TrainingGenerateResult, TrainingSession } from "../types";
 
 const API_URL = import.meta.env.VITE_API_URL as string;
-const REQUEST_TIMEOUT_MS = 15000;
+const REQUEST_TIMEOUT_MS = 60000;
 const TRAINING_GENERATE_TIMEOUT_MS = 200000;
 const inFlightGetRequests = new Map<string, Promise<ApiResponse<unknown>>>();
 

@@ -1,0 +1,22 @@
+- main [ref=f1e3]:
+  - generic [ref=f1e4]: Sistem terhubung ke NAVA & Tim Support Manusia
+  - generic [ref=f1e6]:
+    - generic [ref=f1e7]: NAVA Helpdesk
+    - heading "Masuk portal petugas" [level=1] [ref=f1e11]
+    - paragraph [ref=f1e12]: Kelola handover, chat, dan ticket customer memakai akun Helpdesk yang terdaftar.
+  - generic [ref=f1e13]:
+    - heading "Login Helpdesk" [level=2] [ref=f1e14]
+    - generic [ref=f1e15]:
+      - text: Helpdesk ID
+      - textbox "Helpdesk ID" [ref=f1e20]:
+        - /placeholder: Masukkan Helpdesk ID
+    - generic [ref=f1e21]:
+      - text: Password
+      - generic [ref=f1e22]:
+        - textbox "Password" [active] [ref=f1e27]:
+          - /placeholder: Masukkan Password
+        - button "Lihat password" [ref=f1e28] [cursor=pointer]
+    - generic [ref=f1e32]:
+      - checkbox "Ingat Saya" [ref=f1e33]
+      - text: Ingat Saya
+    - button "Masuk Portal" [disabled] [ref=f1e34]
