@@ -50,6 +50,7 @@ const runtimeContextSchema = z.object({
     enabled: z.boolean().optional(),
     source: z.string().optional(),
     area: z.string().nullable().optional(),
+    reportType: z.string().nullable().optional(),
     urgent: z.boolean().nullable().optional(),
     model: z.string().optional(),
   }).nullable().optional(),
@@ -308,6 +309,7 @@ function buildRuntimeMeta({ toolTrace, searches, escalation, memoryContext, mode
     hindsight_memory_fact_ids: memoryContext?.hindsight?.factIds || [],
     laya_source: layaDecision?.source || "disabled",
     laya_area: layaDecision?.area || null,
+    laya_report_type: layaDecision?.reportType || null,
     laya_urgent: typeof layaDecision?.urgent === "boolean" ? layaDecision.urgent : null,
     site_check: siteCheck || null,
     database_checks: toolTrace.filter((item) => item.name === "inspect_customer_database").map((item) => ({

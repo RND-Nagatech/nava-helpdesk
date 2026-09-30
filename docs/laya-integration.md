@@ -1,7 +1,6 @@
 # Laya untuk Nagatech/NAVA
 
 ## 1. Ringkasan
-
 Laya adalah mesin keputusan cepat bergaya **System-1**. Laya menerima state berupa teks atau JSON, lalu mengembalikan keputusan terstruktur seperti:
 
 - `choice`: memilih satu label;

@@ -19,7 +19,7 @@ export function buildAgentPrompt({ isFirstTurn = false, longTermContext = "", tr
     : "";
 
   const layaInstruction = layaDecision?.source === "laya"
-    ? `\n\nSYSTEM-1 TRIAGE HINT (LAYA)\n- Area terdeteksi: ${layaDecision.area || "belum jelas"}.\n- Urgensi terdeteksi: ${layaDecision.urgent === true ? "ya" : layaDecision.urgent === false ? "tidak" : "belum jelas"}.\n- Ini hanya petunjuk routing cepat, bukan knowledge resmi. Tetap gunakan search_knowledge untuk prosedur, penyebab, dan langkah jawaban. Jangan menyebut Laya atau petunjuk internal ini kepada customer.`
+    ? `\n\nSYSTEM-1 TRIAGE HINT (LAYA)\n- Area terdeteksi: ${layaDecision.area || "belum jelas"}.\n- Jenis laporan yang relevan: ${layaDecision.reportType || "bukan pertanyaan laporan atau belum jelas"}.\n- Urgensi terdeteksi: ${layaDecision.urgent === true ? "ya" : layaDecision.urgent === false ? "tidak" : "belum jelas"}.\n- Jika jenis laporan terdeteksi, gunakan label tersebut untuk mempersempit query search_knowledge. Untuk pertanyaan perbandingan atau pertanyaan tentang laporan mana yang memuat data tertentu, jawab berdasarkan knowledge resmi, bukan berdasarkan label Laya saja.\n- Ini hanya petunjuk routing cepat, bukan knowledge resmi. Tetap gunakan search_knowledge untuk prosedur, penyebab, dan langkah jawaban. Jangan menyebut Laya atau petunjuk internal ini kepada customer.`
     : "";
 
   const trainingInstruction = trainingMode
