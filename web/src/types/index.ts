@@ -178,6 +178,37 @@ export type KnowledgeArticle = {
   };
 };
 
+export type KnowledgeSearchResult = {
+  article_id: string;
+  title: string;
+  category?: string;
+  product?: string;
+  symptoms?: string[];
+  user_response_template?: string;
+  troubleshooting_steps?: KnowledgeStep[];
+  retrieval?: Record<string, unknown>;
+};
+
+export type KnowledgeSearchResponse = {
+  found: boolean;
+  mode: string;
+  query: string;
+  confidence: number;
+  results: KnowledgeSearchResult[];
+  vector?: {
+    enabled?: boolean;
+    ok?: boolean;
+    error?: string | null;
+    index?: string;
+    model?: string;
+  };
+  timing?: {
+    lexical_ms?: number;
+    vector_ms?: number;
+    total_ms?: number;
+  };
+};
+
 export type TrainingKnowledgeReference = {
   query?: string;
   evidence_strength?: string;

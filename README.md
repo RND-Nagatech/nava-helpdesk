@@ -99,6 +99,11 @@ HINDSIGHT_RECALL_BUDGET=low
 HINDSIGHT_RECALL_MAX_TOKENS=1200
 HINDSIGHT_RETAIN_ASYNC=true
 
+# Memory khusus Chat Training Helpdesk.
+# tenant berarti dipisah berdasarkan customer_domain.
+HINDSIGHT_TRAINING_MEMORY_ENABLED=true
+HINDSIGHT_TRAINING_MEMORY_SCOPE=tenant
+
 # Pilih salah satu pola memory:
 CUSTOMER_MEMORY_BACKEND=hindsight
 # CUSTOMER_MEMORY_BACKEND=hybrid
@@ -282,6 +287,19 @@ Jika Laya aktif, metadata response dapat berisi:
 Jika Hindsight aktif dan memory relevan, metadata dapat berisi
 `hindsight_memory_used: true`. Pada customer atau pertanyaan baru, memory
 kosong juga merupakan kondisi normal.
+
+Chat Training Helpdesk memakai bank Hindsight yang berbeda dari memory customer.
+Laya membantu mengklasifikasikan area kasus training, sedangkan koreksi
+Helpdesk yang sudah dikirim melalui fitur koreksi disimpan sebagai verified
+training memory berdasarkan tenant/domain. Memory ini dipakai sebagai konteks
+tambahan pada training berikutnya, bukan sebagai pengganti knowledge resmi.
+
+Koreksi belum otomatis menjadi knowledge global. Alur resminya tetap:
+
+```text
+koreksi Helpdesk → generate knowledge → review/save draft → publish
+→ embedding knowledge dan Qdrant diperbarui
+```
 
 ## 8. Login Helpdesk dan Investigasi
 

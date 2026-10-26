@@ -15,3 +15,10 @@ test("training tidak mengambil domain eksternal", () => {
     "",
   );
 });
+
+test("training helper memakai memory dan routing terpisah dari customerId", async () => {
+  const source = await import("node:fs/promises").then((fs) => fs.readFile("src/services/chat-training-service.js", "utf8"));
+  assert.match(source, /recallTrainingMemory/);
+  assert.match(source, /decideLaya/);
+  assert.match(source, /customerId: null/);
+});

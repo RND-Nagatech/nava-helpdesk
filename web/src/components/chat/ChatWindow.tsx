@@ -1,9 +1,9 @@
 import { FormEvent, useEffect, useRef, useState } from "react";
-import { Bot, Headphones, ImagePlus, SendHorizontal, RefreshCw, Store, UserRound, Wifi } from "lucide-react";
+import { Bot, Headphones, ImagePlus, Search, SendHorizontal, RefreshCw, Store, UserRound, Wifi } from "lucide-react";
 import { getStoredHelpdeskUser } from "../../lib/helpdeskAuth";
 import { subscribeHelpdeskConnection, subscribeHelpdeskEvent } from "../../lib/helpdeskEvents";
 import { api } from "../../services/api";
-import type { Attachment, ChatMessage, SiteCheckResult, Ticket } from "../../types";
+import type { Attachment, ChatMessage, KnowledgeSearchResult, SiteCheckResult, Ticket } from "../../types";
 import { AttachmentGrid, PendingFiles } from "./AttachmentPreview";
 import { MessageContent } from "./MessageContent";
 
@@ -37,7 +37,6 @@ const customerQuickPrompts = [
   "Struk saya tidak keluar",
   "Saya tidak bisa login",
   "Data transaksi tidak muncul",
-  "Saya ingin dibantu petugas manusia",
 ];
 
 const helpdeskQuickPrompts = [
@@ -45,6 +44,32 @@ const helpdeskQuickPrompts = [
   "Bisa dibantu kirim screenshot kendalanya?",
   "Sudah saya bantu proses, silakan coba kembali.",
 ];
+
+function knowledgeAnswer(article: KnowledgeSearchResult) {
+  const template = article.user_response_template?.trim();
+  if (template) return template;
+
+  const steps = (article.troubleshooting_steps || [])
+    .filter((step) => step.instruction?.trim())
+    .map((step, index) => `${step.order || index + 1}. ${step.instruction.trim()}${step.expectedResult?.trim() ? `\n   Hasil yang diharapkan: ${step.expectedResult.trim()}` : ""}`)
+    .join("\n");
+  return steps ? `Silakan coba langkah berikut:\n\n${steps}` : "";
+}
+
+function knowledgePreview(article: KnowledgeSearchResult) {
+  const answer = knowledgeAnswer(article).replace(/\s+/g, " ").trim();
+  if (!answer) return "Belum ada template jawaban atau langkah troubleshooting.";
+  return answer.length > 240 ? `${answer.slice(0, 237)}...` : answer;
+}
+
+function knowledgeEvidence(article: KnowledgeSearchResult) {
+  const retrieval = article.retrieval || {};
+  const evidence = retrieval.evidence_strength ?? retrieval.evidenceStrength;
+  const score = retrieval.hybrid_score ?? retrieval.hybridScore ?? retrieval.vector_score ?? retrieval.vectorScore;
+  const scoreLabel = typeof score === "number" ? `skor ${score.toFixed(2)}` : "";
+  if (typeof evidence === "string" && evidence.trim()) return scoreLabel ? `${evidence} · ${scoreLabel}` : evidence;
+  return scoreLabel || "relevansi tersedia";
+}
 
 export function ChatWindow({
   mode,
@@ -69,10 +94,17 @@ export function ChatWindow({
   const [siteCheck, setSiteCheck] = useState<SiteCheckResult | null>(null);
   const [hasMore, setHasMore] = useState(false);
   const [loadingOlder, setLoadingOlder] = useState(false);
+  const [knowledgeOpen, setKnowledgeOpen] = useState(false);
+  const [knowledgeQuery, setKnowledgeQuery] = useState("");
+  const [knowledgeResults, setKnowledgeResults] = useState<KnowledgeSearchResult[]>([]);
+  const [knowledgeLoading, setKnowledgeLoading] = useState(false);
+  const [knowledgeError, setKnowledgeError] = useState("");
+  const [knowledgeNotice, setKnowledgeNotice] = useState("");
   const historyVersion = useRef(0);
   const historyCursor = useRef<string | null>(null);
   const historyRequest = useRef<{ sessionId: string; promise: Promise<void> } | null>(null);
   const bottomRef = useRef<HTMLDivElement | null>(null);
+  const composerInputRef = useRef<HTMLTextAreaElement | null>(null);
   const helpdeskClosed = mode === "helpdesk" && ticket?.status === "resolved";
   const composerDisabled = helpdeskClosed || Boolean(readOnlyReason);
   const customerLabel = ticket?.customer_name || customerName || "Customer";
@@ -123,6 +155,11 @@ export function ChatWindow({
     setLoading(true);
     setMessages([]);
     setHasMore(false);
+    setKnowledgeOpen(false);
+    setKnowledgeQuery("");
+    setKnowledgeResults([]);
+    setKnowledgeError("");
+    setKnowledgeNotice("");
     historyCursor.current = null;
     loadHistory();
   }, [sessionId]);
@@ -174,6 +211,21 @@ export function ChatWindow({
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, sending]);
+
+  useEffect(() => {
+    if (mode !== "helpdesk" || !composerInputRef.current) return;
+    const textarea = composerInputRef.current;
+    const minHeight = 30;
+    if (!textarea.value.trim()) {
+      textarea.style.height = `${minHeight}px`;
+      textarea.style.overflowY = "hidden";
+      return;
+    }
+    textarea.style.height = "auto";
+    const maxHeight = 200;
+    textarea.style.height = `${Math.min(textarea.scrollHeight, maxHeight)}px`;
+    textarea.style.overflowY = textarea.scrollHeight > maxHeight ? "auto" : "hidden";
+  }, [mode, text]);
 
   async function sendMessage(draft: string, selectedFiles = files) {
     if ((!draft.trim() && !selectedFiles.length) || sending || composerDisabled) return;
@@ -235,6 +287,57 @@ export function ChatWindow({
     } finally {
       setSending(false);
     }
+  }
+
+  function openKnowledgeSearch() {
+    const latestCustomerMessage = [...messages].reverse().find((message) => message.role === "user")?.content || "";
+    const fallbackQuery = latestCustomerMessage || ticket?.reason || ticket?.subject || "";
+    setKnowledgeOpen((current) => !current);
+    setKnowledgeError("");
+    setKnowledgeNotice("");
+    setKnowledgeQuery((current) => current.trim() || fallbackQuery);
+  }
+
+  async function searchKnowledge() {
+    const query = knowledgeQuery.trim();
+    if (query.length < 2) {
+      setKnowledgeError("Masukkan minimal 2 karakter untuk mencari knowledge.");
+      setKnowledgeResults([]);
+      return;
+    }
+
+    setKnowledgeLoading(true);
+    setKnowledgeError("");
+    setKnowledgeNotice("");
+    try {
+      const response = await api.knowledgeSearch(query, 5);
+      setKnowledgeResults(response.results || []);
+      if (!response.results?.length) setKnowledgeNotice("Knowledge yang cocok belum ditemukan. Coba gunakan kata kunci lain.");
+    } catch (err) {
+      setKnowledgeResults([]);
+      setKnowledgeError(err instanceof Error ? err.message : "Pencarian knowledge gagal. Chat tetap dapat digunakan.");
+    } finally {
+      setKnowledgeLoading(false);
+    }
+  }
+
+  function insertKnowledgeAnswer(article: KnowledgeSearchResult) {
+    const answer = knowledgeAnswer(article);
+    if (!answer) {
+      setKnowledgeError("Artikel ini belum memiliki template jawaban atau langkah troubleshooting yang bisa dimasukkan.");
+      return;
+    }
+    setText((current) => current.trim() ? `${current.trim()}\n\n${answer}` : answer);
+    setKnowledgeOpen(false);
+    setKnowledgeNotice("");
+    window.setTimeout(() => {
+      const textarea = composerInputRef.current;
+      textarea?.focus();
+      if (textarea) {
+        const end = textarea.value.length;
+        textarea.setSelectionRange(end, end);
+      }
+    }, 0);
   }
 
   async function submit(event: FormEvent) {
@@ -333,13 +436,76 @@ export function ChatWindow({
         )}
         {mode === "helpdesk" && (
           <div className="quick-actions" aria-label="Balas cepat">
-            <span>Balas Kilat:</span>
-            {helpdeskQuickPrompts.map((prompt) => (
-              <button type="button" key={prompt} onClick={() => setText(prompt)} disabled={sending || composerDisabled}>
-                {prompt}
-              </button>
-            ))}
+            {!knowledgeOpen && (
+              <>
+                <span>Balas Kilat:</span>
+                {helpdeskQuickPrompts.map((prompt) => (
+                  <button type="button" key={prompt} onClick={() => setText(prompt)} disabled={sending || composerDisabled}>
+                    {prompt}
+                  </button>
+                ))}
+              </>
+            )}
+            <button type="button" className="knowledge-search-button" onClick={openKnowledgeSearch} disabled={sending || composerDisabled}>
+              <Search size={15} />
+              {knowledgeOpen ? "Tutup Knowledge" : "Cari Knowledge"}
+            </button>
           </div>
+        )}
+        {mode === "helpdesk" && knowledgeOpen && (
+          <section className="knowledge-search-panel" aria-label="Cari knowledge resmi">
+            <div className="knowledge-search-head">
+              <div>
+                <strong>Cari Knowledge</strong>
+                <span>Query awal diambil dari pesan customer terakhir. Edit jika ingin mencari konteks lain.</span>
+              </div>
+              <span className="knowledge-search-scope">Published</span>
+            </div>
+            <div className="knowledge-search-form" role="search">
+              <input
+                value={knowledgeQuery}
+                onChange={(event) => setKnowledgeQuery(event.target.value)}
+                placeholder="Contoh: berat barang tidak muncul"
+                minLength={2}
+                maxLength={1200}
+                aria-label="Query knowledge"
+                onKeyDown={(event) => {
+                  if (event.key === "Enter") {
+                    event.preventDefault();
+                    searchKnowledge();
+                  }
+                }}
+              />
+              <button type="button" className="button primary" onClick={searchKnowledge} disabled={knowledgeLoading || knowledgeQuery.trim().length < 2}>
+                {knowledgeLoading ? "Mencari..." : "Cari"}
+              </button>
+            </div>
+            {knowledgeError && <div className="knowledge-search-error" role="alert">{knowledgeError}</div>}
+            {knowledgeNotice && <div className="knowledge-search-notice" role="status">{knowledgeNotice}</div>}
+            <div className="knowledge-search-results">
+              {knowledgeLoading && <div className="knowledge-search-empty">Mencari di knowledge resmi...</div>}
+              {!knowledgeLoading && knowledgeResults.map((article) => (
+                <article className="knowledge-search-result" key={article.article_id}>
+                  <div className="knowledge-search-result-top">
+                    <div>
+                      <strong>{article.title}</strong>
+                      <div className="knowledge-search-result-meta">
+                        <span>{article.category || "Tanpa kategori"}</span>
+                        <span>Evidence: {knowledgeEvidence(article)}</span>
+                      </div>
+                    </div>
+                    <button type="button" className="button secondary" onClick={() => insertKnowledgeAnswer(article)} disabled={composerDisabled}>
+                      Gunakan Jawaban
+                    </button>
+                  </div>
+                  <p className="knowledge-search-result-preview">{knowledgePreview(article)}</p>
+                </article>
+              ))}
+              {!knowledgeLoading && !knowledgeError && !knowledgeNotice && !knowledgeResults.length && (
+                <div className="knowledge-search-empty">Masukkan keluhan customer, lalu klik Cari.</div>
+              )}
+            </div>
+          </section>
         )}
         <PendingFiles files={files} onRemove={(index) => setFiles((current) => current.filter((_, i) => i !== index))} />
         <div className="composer-row">
@@ -357,6 +523,7 @@ export function ChatWindow({
             <span className="composer-mode">{mode === "helpdesk" ? "Balasan Publik" : "Chat NAVA"}</span>
           </div>
           <textarea
+            ref={composerInputRef}
             value={text}
             onChange={(event) => setText(event.target.value)}
             disabled={composerDisabled}

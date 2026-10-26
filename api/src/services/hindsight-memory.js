@@ -28,6 +28,11 @@ export function hindsightBankId(customerId = "") {
   return `nava-customer-${digest}`;
 }
 
+export function hindsightTrainingBankId(scope = "") {
+  const digest = crypto.createHash("sha256").update(`training:${String(scope)}`).digest("hex").slice(0, 32);
+  return `nava-training-${digest}`;
+}
+
 function withTimeout(operation, timeoutMs = env.hindsightTimeoutMs) {
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), Math.max(100, timeoutMs));
@@ -95,14 +100,14 @@ export function buildHindsightCaseContent({ question, answer, runtimeMeta = {}, 
   return lines.join("\n");
 }
 
-export function formatHindsightRecall(response) {
+export function formatHindsightRecall(response, { scopeLabel = "CUSTOMER" } = {}) {
   const results = Array.isArray(response?.results) ? response.results : [];
   if (!results.length) {
     return { text: "", items: 0, factIds: [] };
   }
 
   const lines = [
-    "MEMORI HINDSIGHT CUSTOMER YANG RELEVAN:",
+    `MEMORI HINDSIGHT ${scopeLabel} YANG RELEVAN:`,
     "Gunakan ini hanya sebagai konteks historis. Untuk prosedur, status program, dan fakta realtime tetap prioritaskan knowledge resmi NAVA atau hasil tool.",
   ];
 
@@ -120,17 +125,13 @@ export function formatHindsightRecall(response) {
   };
 }
 
-export async function recallCustomerMemory({ customerId, query }) {
-  if (!isEnabled() || !customerId || !query) {
-    return { enabled: false, source: "none", text: "", items: 0, factIds: [] };
+async function recallBankMemory({ bankId, query, scopeLabel }) {
+  if (!isEnabled() || !bankId || !query) {
+    return { enabled: false, source: "none", bankId, text: "", items: 0, factIds: [] };
   }
 
   const hindsight = getClient();
-  const bankId = hindsightBankId(customerId);
   try {
-    // Recall pertama untuk customer baru harus membuat bank terlebih dahulu.
-    // Tanpa ini Hindsight mengembalikan "Bank ... not found" dan memory
-    // terlihat unavailable padahal service-nya sehat.
     await ensureBank(bankId);
     const response = await withTimeout((signal) => hindsight.recall(bankId, cleanText(query, 1200), {
       signal,
@@ -139,7 +140,7 @@ export async function recallCustomerMemory({ customerId, query }) {
       includeEntities: true,
       preferObservations: true,
     }));
-    const formatted = formatHindsightRecall(response);
+    const formatted = formatHindsightRecall(response, { scopeLabel });
     return {
       enabled: true,
       source: formatted.items ? "hindsight" : "none",
@@ -150,6 +151,39 @@ export async function recallCustomerMemory({ customerId, query }) {
     console.warn(`Hindsight recall warning: ${error?.message || error}`);
     return { enabled: true, source: "hindsight_unavailable", bankId, text: "", items: 0, factIds: [] };
   }
+}
+
+export async function recallCustomerMemory({ customerId, query }) {
+  if (!isEnabled() || !customerId || !query) {
+    return { enabled: false, source: "none", text: "", items: 0, factIds: [] };
+  }
+
+  const bankId = hindsightBankId(customerId);
+  // Recall pertama untuk customer baru membuat bank terlebih dahulu.
+  // Tanpa ini Hindsight mengembalikan "Bank ... not found".
+  return recallBankMemory({ bankId, query, scopeLabel: "CUSTOMER" });
+}
+
+function trainingScope(customerDomain = "") {
+  const normalized = cleanText(customerDomain, 240).toLowerCase();
+  if (env.hindsightTrainingMemoryScope === "global") return "global";
+  return normalized;
+}
+
+export async function recallTrainingMemory({ customerDomain = "", query }) {
+  if (!env.hindsightTrainingMemoryEnabled) {
+    return { enabled: false, source: "disabled", bankId: null, text: "", items: 0, factIds: [] };
+  }
+  const scope = trainingScope(customerDomain);
+  // Tenant-scoped training memory must never fall back to an unscoped bank.
+  if (!scope) {
+    return { enabled: true, source: "scope_missing", bankId: null, text: "", items: 0, factIds: [] };
+  }
+  return recallBankMemory({
+    bankId: hindsightTrainingBankId(scope),
+    query,
+    scopeLabel: `TRAINING ${scope}`,
+  });
 }
 
 export async function retainCustomerCase({
@@ -198,10 +232,83 @@ export async function retainCustomerCase({
   }
 }
 
+export function buildHindsightTrainingContent({
+  customerDomain = "",
+  question,
+  correction,
+  correctedAnswer,
+  trainingId,
+  layaDecision = null,
+}) {
+  return [
+    "NAVA Helpdesk training case (verified correction).",
+    `Training ID: ${cleanText(trainingId || "unknown", 160)}`,
+    `Tenant/domain: ${cleanText(customerDomain || "unknown", 240)}`,
+    `Helpdesk question: ${redactSensitiveText(question, 900)}`,
+    `Helpdesk correction (ground truth): ${redactSensitiveText(correction, 1800)}`,
+    `Corrected NAVA answer: ${redactSensitiveText(correctedAnswer, 1400)}`,
+    `Laya area: ${cleanText(layaDecision?.area || "unknown", 100)}`,
+    `Laya report type: ${cleanText(layaDecision?.reportType || "unknown", 100)}`,
+  ].join("\n");
+}
+
+export async function retainTrainingCorrection({
+  customerDomain = "",
+  question,
+  correction,
+  correctedAnswer,
+  trainingId,
+  layaDecision = null,
+}) {
+  if (!env.hindsightTrainingMemoryEnabled || !isEnabled()) {
+    return { enabled: false, retained: false, bankId: null };
+  }
+  const scope = trainingScope(customerDomain);
+  if (!scope) {
+    return { enabled: true, retained: false, reason: "scope_missing", bankId: null };
+  }
+
+  const hindsight = getClient();
+  const bankId = hindsightTrainingBankId(scope);
+  const operationId = crypto.randomUUID();
+  try {
+    await ensureBank(bankId);
+    const response = await withTimeout((signal) => hindsight.retain(
+      bankId,
+      buildHindsightTrainingContent({ customerDomain, question, correction, correctedAnswer, trainingId, layaDecision }),
+      {
+        signal,
+        async: env.hindsightRetainAsync,
+        ...(env.hindsightRetainAsync ? { operationId } : {}),
+        timestamp: new Date().toISOString(),
+        context: "NAVA Helpdesk training correction",
+        documentId: `nava-training-${operationId}`,
+        tags: ["source:training", "status:verified-correction"],
+        metadata: {
+          source: "training",
+          training_id: String(trainingId || ""),
+          domain: String(customerDomain || ""),
+          laya_area: String(layaDecision?.area || ""),
+        },
+      },
+    ));
+    return {
+      enabled: true,
+      retained: Boolean(response?.success),
+      bankId,
+      operationId: response?.operation_id || operationId,
+    };
+  } catch (error) {
+    console.warn(`Hindsight training retain warning: ${error?.message || error}`);
+    return { enabled: true, retained: false, bankId, operationId };
+  }
+}
+
 export const __hindsightInternals = {
   cleanText,
   redactSensitiveText,
   isEnabled,
   formatHindsightRecall,
   buildHindsightCaseContent,
+  buildHindsightTrainingContent,
 };

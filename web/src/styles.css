@@ -3761,6 +3761,153 @@ textarea:focus {
   color: #244b6b;
 }
 
+.knowledge-search-button {
+  border-color: #9bbad1 !important;
+  background: #eef7fb !important;
+  color: #244b6b !important;
+}
+
+.knowledge-search-panel {
+  display: grid;
+  gap: 10px;
+  margin: 0 0 10px;
+  border: 1px solid #c9dbe9;
+  border-radius: 12px;
+  background: #f8fbfd;
+  padding: 12px;
+  box-shadow: 0 8px 20px rgba(36, 75, 107, 0.08);
+}
+
+.knowledge-search-head,
+.knowledge-search-result-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.knowledge-search-head > div {
+  display: grid;
+  gap: 3px;
+}
+
+.knowledge-search-head strong {
+  color: #244b6b;
+  font-size: 13px;
+}
+
+.knowledge-search-head span {
+  color: #667085;
+  font-size: 11px;
+}
+
+.knowledge-search-scope {
+  flex: 0 0 auto;
+  border-radius: 999px;
+  background: #dff3e7;
+  color: #17653b !important;
+  padding: 4px 8px;
+  font-weight: 800;
+}
+
+.knowledge-search-form {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 8px;
+}
+
+.knowledge-search-form input {
+  min-height: 34px;
+  border: 1px solid #d7dee7;
+  border-radius: 9px;
+  background: #ffffff;
+  padding: 0 10px;
+  font-size: 12px;
+}
+
+.knowledge-search-form .button {
+  min-height: 34px;
+  padding: 0 14px;
+}
+
+.knowledge-search-results {
+  display: grid;
+  gap: 10px;
+  max-height: min(30dvh, 230px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding-right: 3px;
+}
+
+.knowledge-search-result {
+  display: grid;
+  gap: 7px;
+  border-top: 1px solid #dce7ef;
+  padding-top: 10px;
+}
+
+.knowledge-search-result-top > div {
+  min-width: 0;
+}
+
+.knowledge-search-result-top strong {
+  color: #1f2937;
+  font-size: 12px;
+  line-height: 1.35;
+}
+
+.knowledge-search-result-top .button {
+  flex: 0 0 auto;
+  min-height: 28px;
+  padding: 0 10px;
+  font-size: 11px;
+  white-space: nowrap;
+}
+
+.knowledge-search-result-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 4px;
+  color: #667085;
+  font-size: 10px;
+}
+
+.knowledge-search-result-meta span {
+  border-radius: 999px;
+  background: #e8eff7;
+  padding: 3px 7px;
+}
+
+.knowledge-search-result-preview {
+  margin: 0;
+  color: #475467;
+  font-size: 11px;
+  line-height: 1.45;
+}
+
+.knowledge-search-empty,
+.knowledge-search-error,
+.knowledge-search-notice {
+  border-radius: 8px;
+  padding: 8px 10px;
+  font-size: 11px;
+}
+
+.knowledge-search-empty {
+  color: #667085;
+}
+
+.knowledge-search-error {
+  background: #ffe0e0;
+  color: #a51616;
+}
+
+.knowledge-search-notice {
+  background: #e8f5ec;
+  color: #17653b;
+}
+
 .composer-row {
   display: grid;
   grid-template-columns: 34px minmax(0, 1fr) auto;
@@ -3983,12 +4130,13 @@ textarea:focus {
 }
 
 .helpdesk-workspace .composer-row textarea {
-  height: 30px;
+  height: auto;
   min-height: 30px;
-  max-height: 76px;
+  max-height: 200px;
   font-size: 14px;
   padding: 0 4px;
-  line-height: 30px;
+  line-height: 1.45;
+  overflow-y: hidden;
 }
 
 .helpdesk-workspace .composer-tool {

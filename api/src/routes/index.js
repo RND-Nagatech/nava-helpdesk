@@ -175,7 +175,7 @@ apiRouter.get("/investigation/:trainingId/runs", requireHelpdeskAuth, investigat
 apiRouter.post("/investigation/:trainingId/close", requireHelpdeskAuth, closeInvestigationSessionHandler);
 apiRouter.get("/customer/:customer_id/context", getCustomerContext);
 apiRouter.delete("/chat/:session_id", resetChatSession);
-apiRouter.post("/knowledge/search", searchKnowledge);
+apiRouter.post("/knowledge/search", requireHelpdeskAuth, searchKnowledge);
 apiRouter.get("/knowledge/categories", requireHelpdeskAuth, listKnowledgeCategoriesHandler);
 apiRouter.get("/knowledge/articles", requireHelpdeskAuth, listKnowledgeArticlesHandler);
 apiRouter.post("/knowledge/articles", requireHelpdeskAuth, createKnowledgeArticleHandler);

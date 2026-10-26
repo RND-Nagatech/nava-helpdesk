@@ -1,5 +1,5 @@
 import { getHelpdeskToken } from "../lib/helpdeskAuth";
-import type { Attachment, ChatMessage, DashboardSummary, HelpdeskUser, InvestigationDefinition, InvestigationKnowledge, InvestigationPlaybook, InvestigationSession, InvestigationTarget, KnowledgeArticle, SiteCheckResult, Ticket, TrainingDraft, TrainingGenerateResult, TrainingSession } from "../types";
+import type { Attachment, ChatMessage, DashboardSummary, HelpdeskUser, InvestigationDefinition, InvestigationKnowledge, InvestigationPlaybook, InvestigationSession, InvestigationTarget, KnowledgeArticle, KnowledgeSearchResponse, SiteCheckResult, Ticket, TrainingDraft, TrainingGenerateResult, TrainingSession } from "../types";
 
 const API_URL = import.meta.env.VITE_API_URL as string;
 const REQUEST_TIMEOUT_MS = 60000;
@@ -477,6 +477,12 @@ export const api = {
   },
   knowledgeCategories() {
     return request<string[]>("/api/knowledge/categories");
+  },
+  knowledgeSearch(query: string, topK = 5) {
+    return request<KnowledgeSearchResponse>("/api/knowledge/search", {
+      method: "POST",
+      body: JSON.stringify({ query, top_k: topK }),
+    });
   },
   knowledgeArticle(articleId: string) {
     return request<KnowledgeArticle>(`/api/knowledge/articles/${encodeURIComponent(articleId)}`);

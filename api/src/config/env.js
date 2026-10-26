@@ -112,6 +112,8 @@ export const env = {
   hindsightRecallBudget: process.env.HINDSIGHT_RECALL_BUDGET || "low",
   hindsightRecallMaxTokens: numberFromEnv("HINDSIGHT_RECALL_MAX_TOKENS", 1200),
   hindsightRetainAsync: boolFromEnv("HINDSIGHT_RETAIN_ASYNC", true),
+  hindsightTrainingMemoryEnabled: boolFromEnv("HINDSIGHT_TRAINING_MEMORY_ENABLED", true),
+  hindsightTrainingMemoryScope: String(process.env.HINDSIGHT_TRAINING_MEMORY_SCOPE || "tenant").trim().toLowerCase(),
 
   // Optional Laya System-1 triage. Laya is only a fast routing hint; the
   // LangChain agent remains responsible for grounded answers and tools.

@@ -2,8 +2,10 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import {
   buildHindsightCaseContent,
+  buildHindsightTrainingContent,
   formatHindsightRecall,
   hindsightBankId,
+  hindsightTrainingBankId,
   redactSensitiveText,
 } from "../src/services/hindsight-memory.js";
 
@@ -12,6 +14,11 @@ test("customer bank ID stabil dan tidak membocorkan customer ID", () => {
   assert.equal(first, hindsightBankId("CUSTOMER-001"));
   assert.match(first, /^nava-customer-[a-f0-9]{32}$/);
   assert.doesNotMatch(first, /CUSTOMER-001/);
+});
+
+test("training bank terpisah dari customer bank", () => {
+  assert.match(hindsightTrainingBankId("italy.goldstore.id"), /^nava-training-[a-f0-9]{32}$/);
+  assert.notEqual(hindsightTrainingBankId("italy.goldstore.id"), hindsightBankId("italy.goldstore.id"));
 });
 
 test("recall Hindsight diformat sebagai konteks historis, bukan knowledge resmi", () => {
@@ -54,4 +61,19 @@ test("payload memory meredaksi credential yang tertulis di chat", () => {
   assert.doesNotMatch(safe, /SuperRahasia123/);
   assert.doesNotMatch(safe, /sk-123456789012345/);
   assert.match(safe, /REDACTED/i);
+});
+
+test("training correction menyimpan ground truth Helpdesk, bukan memory customer", () => {
+  const content = buildHindsightTrainingContent({
+    customerDomain: "italy.goldstore.id",
+    trainingId: "TRN-001",
+    question: "Berat barang tidak muncul",
+    correction: "User ID timbangan harus sama dengan user input barang.",
+    correctedAnswer: "Buka aplikasi timbangan dan gunakan User ID yang sama.",
+    layaDecision: { area: "inventory_weight" },
+  });
+  assert.match(content, /verified correction/);
+  assert.match(content, /ground truth/);
+  assert.match(content, /italy\.goldstore\.id/);
+  assert.match(content, /User ID timbangan/);
 });

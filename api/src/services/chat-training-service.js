@@ -7,6 +7,8 @@ import { runHelpdeskAgent } from "../agents/helpdesk-agent.js";
 import { createKnowledgeArticle, getKnowledgeArticle } from "./knowledge-article-service.js";
 import { retrieveKnowledge } from "./knowledge-retriever.js";
 import { normalizeGoldstoreDomain } from "./site-check-service.js";
+import { decideLaya } from "./laya-decision.js";
+import { recallTrainingMemory, retainTrainingCorrection } from "./hindsight-memory.js";
 
 const TRAINING_ROLES = new Set(["helpdesk", "assistant", "correction"]);
 const MAX_TRAINING_MESSAGES_FOR_DRAFT = 80;
@@ -232,15 +234,26 @@ function knowledgeMetadata(result) {
 }
 
 async function runTrainingAgent(trainingId, question, isFirstTurn, customerDomain = "") {
+  const [trainingMemory, layaDecision] = await Promise.all([
+    recallTrainingMemory({ customerDomain, query: question }),
+    decideLaya({ question, customerDomain }),
+  ]);
+  const memoryContext = {
+    text: trainingMemory.text || "",
+    source: trainingMemory.source || "none",
+    items: trainingMemory.items || 0,
+    hindsight: trainingMemory,
+  };
   return runHelpdeskAgent({
     sessionId: trainingThreadId(trainingId),
     customerId: null,
     question,
     attachments: [],
     isFirstTurn,
-    memoryContext: { text: "", source: "none", items: 0 },
+    memoryContext,
     trainingMode: true,
     customerDomain,
+    layaDecision,
   });
 }
 
@@ -315,6 +328,19 @@ export async function sendTrainingCorrection({ trainingId, helpdeskUser, correct
     "Gunakan koreksi tersebut bersama history training. Jawab ulang pertanyaan terkait secara ringkas dan tepat. Jangan mempertahankan jawaban lama jika bertentangan dengan koreksi.",
   ].join("\n\n");
   const result = await runTrainingAgent(trainingId, agentPrompt, false, customerDomain);
+  const targetIndex = existingMessages.findIndex((message) => message._id === targetMessage._id);
+  const sourceQuestion = [...existingMessages.slice(0, targetIndex)].reverse().find((message) => message.role === "helpdesk")?.content || "Training correction";
+  const trainingMemory = await retainTrainingCorrection({
+    customerDomain,
+    question: sourceQuestion,
+    correction: correctionText,
+    correctedAnswer: result.answer,
+    trainingId,
+    layaDecision: {
+      area: result.runtimeMeta?.laya_area,
+      reportType: result.runtimeMeta?.laya_report_type,
+    },
+  });
   const assistantMessage = await appendMessage(db, {
     trainingId,
     role: "assistant",
@@ -324,6 +350,7 @@ export async function sendTrainingCorrection({ trainingId, helpdeskUser, correct
       runtime_meta: result.runtimeMeta,
       site_check: result.runtimeMeta?.site_check || null,
       corrected_from_helpdesk: true,
+      training_memory_retained: trainingMemory.retained,
     },
   });
   await touchSession(db, trainingId);

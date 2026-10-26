@@ -288,7 +288,7 @@ async function imageAttachmentParts(attachments = []) {
   return parts;
 }
 
-function buildRuntimeMeta({ toolTrace, searches, escalation, memoryContext, modelCallCount, siteCheck, layaDecision }) {
+function buildRuntimeMeta({ toolTrace, searches, escalation, memoryContext, modelCallCount, siteCheck, layaDecision, trainingMode = false }) {
   const primary = searches.find((item) => item.primary_article)?.primary_article || null;
   const primarySearch = searches.find((item) => item.primary_article) || null;
 
@@ -307,6 +307,8 @@ function buildRuntimeMeta({ toolTrace, searches, escalation, memoryContext, mode
     hindsight_memory_used: memoryContext?.hindsight?.source === "hindsight",
     hindsight_memory_items: memoryContext?.hindsight?.items || 0,
     hindsight_memory_fact_ids: memoryContext?.hindsight?.factIds || [],
+    training_memory_used: Boolean(trainingMode && memoryContext?.text),
+    training_memory_source: trainingMode ? (memoryContext?.source || "none") : "none",
     laya_source: layaDecision?.source || "disabled",
     laya_area: layaDecision?.area || null,
     laya_report_type: layaDecision?.reportType || null,
@@ -442,6 +444,7 @@ export async function runHelpdeskAgent({
     modelCallCount,
     siteCheck: runState.siteCheck,
     layaDecision,
+    trainingMode,
   });
   runtimeMeta.recursion_fallback = Boolean(recursionFallback);
   runtimeMeta.recursion_fallback_mode = recursionFallback?.mode || null;
